@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <title>jsz - Demo: click</title>
+    <script src="@routes.Assets.versioned("javascripts/lib/jsz/core-dev.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.versioned("javascripts/demo/click.js")" type="text/javascript"></script>
+    <style>
+      span {
+        border: 1px solid blue;
+        padding: 0.5em;
+        margin: 0.5em;
+      }
+
+      span.foo {
+        border-color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>jsz</h1>
+    <h2>Demo: click</h2>
+    <p>
+      <span id="foo1">hello</span>
+      <span id="foo2">hi</span>
+    </p>
+    <hr/>
+    <p>
+      <span id="foo3">foo3</span>
+    </p>
+    <hr/>
+    <p>
+      <span id="foo4" class="foo">foo4</span>
+      <span id="foo5" class="foo">foo5</span>
+    </p>
+  </body>
+</html>
+
