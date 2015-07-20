@@ -129,7 +129,7 @@ script = function (conf, fun) {
     script._last = conf;
   }
   else {
-    if ( conf.name === undefined) {
+    if (conf.name === undefined) {
       var aux = conf;
       conf = script._last;
       script._last = aux;

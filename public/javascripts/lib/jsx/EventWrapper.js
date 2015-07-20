@@ -1,11 +1,11 @@
-namespace( "jsx" ).Prototype( 'EventWrapper', {
+namespace("jsx").Prototype('EventWrapper', {
 
-  EventWrapper:function( event) {
+  EventWrapper: function (event) {
     this.event = event;
     this.companion = null;
 
     var target = event.target ? event.target : event.srcElement;
-    if ( target === window || target === window.document) {
+    if (target === window || target === window.document) {
       // this.target = target;
       this.target = new jsx.HTMLElementWrapper();
     }
@@ -14,15 +14,15 @@ namespace( "jsx" ).Prototype( 'EventWrapper', {
     }
   },
 
-  avoidDefault: function() {
-    if ( this.event.preventDefault) {
+  avoidDefault: function () {
+    if (this.event.preventDefault) {
       this.event.preventDefault();
     } else {
       this.event.returnValue = false;
     }
   },
 
-  avoidPropagation: function() {
+  avoidPropagation: function () {
     if (this.event.stopPropagation) {
       this.event.stopPropagation();
     } else {
@@ -30,30 +30,30 @@ namespace( "jsx" ).Prototype( 'EventWrapper', {
     }
   },
 
-  getAltKey: function() {
+  getAltKey: function () {
     return this.event.altKey;
   },
 
-  getShiftKey: function() {
+  getShiftKey: function () {
     return this.event.shiftKey;
   },
 
-  getCtrlKey: function() {
+  getCtrlKey: function () {
     return this.event.ctrlKey;
   },
 
-  getKeyCode: function() {
+  getKeyCode: function () {
     return this.event.keyCode;
   },
 
-  isKeyCode: function( keyCode) {
+  isKeyCode: function (keyCode) {
     var isKeyCode;
 
-    if ( arguments.length === 1) {
+    if (arguments.length === 1) {
       isKeyCode = this.event.keyCode === keyCode;
     }
     else {
-      isKeyCode =  Array.args(arguments).some( function( keyCode) {
+      isKeyCode = Array.args(arguments).some(function (keyCode) {
         return this.event.keyCode === keyCode;
       }, this);
     }
@@ -61,25 +61,25 @@ namespace( "jsx" ).Prototype( 'EventWrapper', {
     return isKeyCode;
   },
 
-  getPageX: function() {
-    if ( typeof this.event.pageX !== 'undefined' ) {
+  getPageX: function () {
+    if (typeof this.event.pageX !== 'undefined') {
       return this.event.pageX;
     }
     return this.event.clientX + this._getScroll()[0];
   },
 
-  getPageY: function() {
-    if ( typeof this.event.pageY !== 'undefined' ) {
+  getPageY: function () {
+    if (typeof this.event.pageY !== 'undefined') {
       return this.event.pageY;
     }
     return this.event.clientY + this._getScroll()[1];
   },
 
-  getPageXY: function() {
-    return [ this.getPageX(), this.getPageY()];
+  getPageXY: function () {
+    return [this.getPageX(), this.getPageY()];
   },
 
-  _getScroll: function() {
+  _getScroll: function () {
     var dd = document.documentElement, db = document.body;
     if (dd && (dd.scrollTop || dd.scrollLeft)) {
       // return [dd.scrollTop, dd.scrollLeft];
@@ -92,32 +92,36 @@ namespace( "jsx" ).Prototype( 'EventWrapper', {
     }
   },
 
-  getElementX: function() {
+  getElementX: function () {
     var elementX = null;
 
-    if ( this.target.isFull) {
+    if (this.target.isFull) {
       elementX = this.getPageX() - this.target.positionX()
     }
 
     return elementX;
   },
 
-  getElementY: function() {
+  getElementY: function () {
     var elementX = null;
 
-    if ( this.target.isFull) {
+    if (this.target.isFull) {
       elementX = this.getPageY() - this.target.positionY()
     }
 
     return elementX;
   },
 
-  getWheelDelta: function() {
-    if ( jsx.env.ua.ff) {
-      return function() { return this.event.detail };
+  getWheelDelta: function () {
+    if (jsx.env.ua.ff) {
+      return function () {
+        return this.event.detail
+      };
     }
     else {
-      return function() { return Math.round(this.event.wheelDelta/120) * -1; }
+      return function () {
+        return Math.round(this.event.wheelDelta / 120) * -1;
+      }
     }
   }(),
 

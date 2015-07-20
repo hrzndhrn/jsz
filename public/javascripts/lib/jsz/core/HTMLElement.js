@@ -1,17 +1,18 @@
 script({
   require: ['lib/jsz/core/Namespace.js']
 }, function () {
+  'use strict';
 
-  namespace("jsz").proto("HTMLElement", {
+  namespace('jsz').proto('HTMLElement', {
 
     HTMLElement: function (element, companion) {
-      this._element = jsz.norm(element, null)
+      this._element = jsz.norm(element, null);
       this._companion = jsz.norm(companion, null);
     },
 
-    map: function( fun, args) {
+    map: function (fun, args) {
       var result = null;
-      if ( this.isNotEmpty()) {
+      if (this.isNotEmpty()) {
         result = apply(fun, this._element, args);
       }
 
@@ -22,7 +23,7 @@ script({
       return this._element === null;
     },
 
-    isNotEmpty: function() {
+    isNotEmpty: function () {
       return this._element !== null;
     },
 
@@ -30,44 +31,44 @@ script({
       return this._element;
     },
 
-    getId: function() {
-      return this.map( HTMLElement.prototype.getAttribute, ['id']);
+    getId: function () {
+      return this.map(HTMLElement.prototype.getAttribute, ['id']);
     },
 
     setStyle: function (style, value) {
-      this.map( jsz.dom.setStyle, [style, value]);
+      this.map(jsz.dom.setStyle, [style, value]);
     },
 
-    hasType: function() {
+    hasType: function () {
       return Boolean(
-        this.map( HTMLElement.prototype.hasAttribute, ['type'])
+        this.map(HTMLElement.prototype.hasAttribute, ['type'])
       ).valueOf();
     },
 
-    isType: function( type) {
-      return this.hasType()
-        && type.equalIgnoreCase( this.getType());
+    isType: function (type) {
+      return this.hasType() &&
+        type.equalIgnoreCase(this.getType());
     },
 
-    getType: function() {
-      this.map( HTMLElement.prototype.getAttribute, ['type']);
+    getType: function () {
+      this.map(HTMLElement.prototype.getAttribute, ['type']);
     },
 
-    getCssClasses: function() {
+    getCssClasses: function () {
       return this.map(
         HTMLElement.prototype.getAttribute, ['class']).split(JSZ.BLANK);
     },
 
-    addCssClass: function( cssClass) {
+    addCssClass: function (cssClass) {
       var cssClasses = this.getCssClasses();
-      cssClasses.push( cssClass);
+      cssClasses.push(cssClass);
       this.map(
         HTMLElement.prototype.setAttribute, ['class',
           cssClasses.join(JSZ.BLANK)]
       );
     },
 
-    removeCssClass: function( cssClass) {
+    removeCssClass: function (cssClass) {
       var cssClasses = this.getCssClasses();
       this.map(
         HTMLElement.prototype.setAttribute, ['class',
@@ -75,8 +76,8 @@ script({
       );
     },
 
-    toggleCssClass: function( cssClassA, cssClassB) {
-      if ( jsz.isArray(cssClassA)) {
+    toggleCssClass: function (cssClassA, cssClassB) {
+      if (jsz.isArray(cssClassA)) {
         cssClassB = cssClassA[1];
         cssClassA = cssClassA[0];
       }
@@ -85,7 +86,7 @@ script({
         removeCssClass,
         addCssClass;
 
-      if ( cssClasses.contains(cssClassB)) {
+      if (cssClasses.contains(cssClassB)) {
         addCssClass = cssClassA;
         removeCssClass = cssClassB;
       }
@@ -94,7 +95,7 @@ script({
         removeCssClass = cssClassA;
       }
 
-      cssClasses.push( addCssClass);
+      cssClasses.push(addCssClass);
       this.map(
         HTMLElement.prototype.setAttribute, ['class',
           cssClasses.filter(isNotEqual(removeCssClass)).join(JSZ.BLANK)]
@@ -103,15 +104,15 @@ script({
 
     /** Adds an event listener of type click to the element.
      */
-    onClick: function( fun, scope, config) {
-      return jsz.Listener.add( this, 'click', fun, scope, config);
+    onClick: function (fun, scope, config) {
+      return jsz.Listener.add(this, 'click', fun, scope, config);
     }
 
   });
 
-  jsz.HTMLElement.create = function(element) {
-    return new jsz.HTMLElement( element);
-  }
+  jsz.HTMLElement.create = function (element) {
+    return new jsz.HTMLElement(element);
+  };
 
 });
 

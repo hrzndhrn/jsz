@@ -5,80 +5,75 @@
  * @version  0.1.0
  *
  */
-script( {
-    require: [
-        'lib/jsz/core/Namespace.js',
-        'lib/jsz/core/String.js'
-    ]
-}, function() {
+script({
+  require: [
+    'lib/jsz/core/Namespace.js',
+    'lib/jsz/core/String.js'
+  ]
+}, function () {
+  'use strict';
 
-namespace("jsz").module('dom').def({
-
-    CURRENT_STYLE: 'currentStyle',
-    GET_COMPUTED_STYLE: 'getComputedStyle',
-    OWNER_DOCUMENT: 'ownerDocument',
-    DEFAULT_VIEW: 'defaultView',
-    CURRENT_STYLE: 'currentStyle',
+  namespace('jsz').module('dom').def({
 
     setStyle: function (element, style, value) {
-        if (jsz.isUndefined(style)) {
-            element.removeAttribute('style');
+      if (jsz.isUndefined(style)) {
+        element.removeAttribute('style');
+      }
+      else {
+        if (jsz.isDefined(value)) {
+          return this._setStyle(element, style, value);
         }
-        else {
-            if (jsz.isDefined(value)) {
-                return this._setStyle(element, style, value);
-            }
 
-            Object.keys(style).forEach(function (key) {
-                this._setStyle(element, key, style[key]);
-            }, this);
-        }
+        Object.keys(style).forEach(function (key) {
+          this._setStyle(element, key, style[key]);
+        }, this);
+      }
     },
 
     // TODO: Test with IE10
     _setStyle: function (element, style, value) {
-        if (element) {
+      if (element) {
 
-            if (typeof element.style === 'undefined') {
-                log.error("element.style is undefined! Element: " + element);
-            }
-
-            if (style === 'float') {
-                style = 'cssFloat';
-            }
-
-            value = this._getStylesDefaultUnit(style, value);
-
-            element.style[style.toCamelCase()] = value;
-        } else {
-            throw new Error("Can not set style! Element is undefined");
+        if (typeof element.style === 'undefined') {
+          log.error('element.style is undefined! Element: ' + element);
         }
 
-        return element;
+        if (style === 'float') {
+          style = 'cssFloat';
+        }
+
+        value = this._getStylesDefaultUnit(style, value);
+
+        element.style[style.toCamelCase()] = value;
+      } else {
+        throw new Error('Can not set style! Element is undefined');
+      }
+
+      return element;
     },
 
     _stylesDefaultUnit: {
-        height: 'px',
-        width: 'px',
-        top: 'px',
-        left: 'px',
-        padding: 'px',
-        margin: 'px',
-        paddingLeft: 'px',
-        paddingRight: 'px'
+      height: 'px',
+      width: 'px',
+      top: 'px',
+      left: 'px',
+      padding: 'px',
+      margin: 'px',
+      paddingLeft: 'px',
+      paddingRight: 'px'
     },
 
     _getStylesDefaultUnit: function (style, value) {
-        var unit = this._stylesDefaultUnit[style];
-        var isNum = /^-?\d*$/.test(value);
+      var unit = this._stylesDefaultUnit[style];
+      var isNum = /^-?\d*$/.test(value);
 
-        if (typeof unit === 'undefined' || !isNum) {
-            return value;
-        }
+      if (typeof unit === 'undefined' || !isNum) {
+        return value;
+      }
 
-        return value + unit;
+      return value + unit;
     }
 
-});
+  });
 
 });

@@ -1,33 +1,34 @@
 //TODO: Documentation
-script( {
-    require: [
-        'lib/jsz/core/Array.js',
-        'lib/jsz/core/HTMLElement.js',
-        'lib/jsz/core/HTMLElementsList.js'
-    ]
-}, function() {
+script({
+  require: [
+    'lib/jsz/core/Array.js',
+    'lib/jsz/core/HTMLElement.js',
+    'lib/jsz/core/HTMLElementsList.js'
+  ]
+}, function () {
+  'use strict';
 
-$id = function(id) {
+  window.$id = function (id) {
     return new jsz.HTMLElement(document.getElementById(id));
-};
+  };
 
-$ = function( selectors, element) {
+  window.$ = function (selectors, element) {
     if (element === undefined) {
-        element = document;
+      element = document;
     }
 
     return new jsz.HTMLElement(element.querySelector(selectors));
-};
+  };
 
-$$ = function( selectors, element) {
+  window.$$ = function (selectors, element) {
     if (element === undefined) {
-        element = document;
+      element = document;
     }
 
     return new jsz.HTMLElementsList(
-        Array.fromNodeList(element.querySelectorAll(selectors))
-          .map( jsz.HTMLElement.create)
+      Array.fromNodeList(element.querySelectorAll(selectors))
+        .map(jsz.HTMLElement.create)
     );
-};
+  };
 
 });

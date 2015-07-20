@@ -1,14 +1,15 @@
-script( {}, function() {
+script({}, function () {
+  'use strict';
 
-console.log("evalutae load.js");
+  console.log('evalutae load.js');
 
-module('demo').def({
+  module('demo').def({
 
-    hello: function() {
-        alert("Hello!");
+    hello: function () {
+      alert('Hello!');
     }
 
-});
+  });
 
 
 });

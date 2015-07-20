@@ -1,4 +1,5 @@
 script({}, function () {
+  'use strict';
 
   Array.fromArguments = function (args) {
     var newArray = [],
@@ -31,12 +32,12 @@ script({}, function () {
   Array.prototype.contains = function () {
     if (jsz.isFunction(arguments[0])) {
       // This is just an alias for some.
-      return this.some.apply( this, arguments);
+      return this.some.apply(this, arguments);
     }
     else {
       // Value must be a type that can be handled by ===
       var value = arguments[0];
-      return this.some( isEqual( value));
+      return this.some(isEqual(value));
     }
   };
 

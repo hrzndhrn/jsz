@@ -1,36 +1,38 @@
 // TODO: Documentation
-script( {
-    require: ['lib/jsz/core/Namespace.js']
-}, function() {
+script({
+  require: ['lib/jsz/core/Namespace.js']
+}, function () {
+  'use strict';
 
-jsz.Object = function () {};
+  jsz.Object = function () {
+  };
 
-jsz.Object.prototype.getClass = function () {
+  jsz.Object.prototype.getClass = function () {
     return _jsz_.classes[this.getClassName()];
-};
+  };
 
-jsz.Object.prototype.toString = function () {
+  jsz.Object.prototype.toString = function () {
     return '[Object ' + this.getClassName() + ']';
-};
+  };
 
-jsz.Object.prototype.getClassName = function () {
+  jsz.Object.prototype.getClassName = function () {
     return this._jsz_.namespace._jsz_.path + JSZ.DOT + this._jsz_.className;
-};
+  };
 
-jsz.Object.prototype.super = function (args) {
+  jsz.Object.prototype.super = function (args) {
     var i = 0,
-        n = this[_jsz_.META].super; // skip n constructors
+      n = this[_jsz_.META].super; // skip n constructors
 
     var extend = this[_jsz_.META].extend;
     for (i; i < n; i++) {
-        // skip constructors
-        extend = extend[_jsz_.META].extend;
+      // skip constructors
+      extend = extend[_jsz_.META].extend;
     }
     _jsz_.super++;
     this[_jsz_.META].super++;
 
     if (!extend) {
-        return;
+      return;
     }
 
 
@@ -41,20 +43,20 @@ jsz.Object.prototype.super = function (args) {
     // TODO: explain!
     var superArgs = arguments;
     if (jsz.isArguments(args)) {
-        superArgs = args;
+      superArgs = args;
     }
 
     if (baseConstructor) {
-        baseConstructor.apply(this, superArgs);
+      baseConstructor.apply(this, superArgs);
     }
     else {
-        if (extend) {
-            this.super.apply(this, superArgs);
-        }
+      if (extend) {
+        this.super.apply(this, superArgs);
+      }
     }
 
     _jsz_.super--;
     this[_jsz_.META].super--;
-};
+  };
 
 });
