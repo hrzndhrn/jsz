@@ -11,34 +11,18 @@ var _jsz_ = {
 
 // Some Constants
 var JSZ = {
-  EMPTY_STRING: "",
-  DOT: ".",
-  BLANK: " "
+  EMPTY_STRING: '',
+  DOT: '.',
+  BLANK: ' ',
+  SLASH: '/',
+  PREFIX: {
+    JS: '.js'
+  }
 };
 
-/** Detect the base of the jsz-lib
- */
-_jsz_.scriptBase = (function () {
-  var scripts = document.getElementsByTagName('script'),
-    scriptsCount = scripts.length,
-    path = JSZ.EMPTY_STRING,
-    coreRegEx = new RegExp('http.*\/\/[^\/]*(.*\/)lib\/jsz\/core.*.js'),
-    i = 0;
-
-  for (i; i < scriptsCount; i++) {
-    var result = coreRegEx.exec(scripts.item(i).src);
-    if (result !== null) {
-      path = result[1];
-      break;
-    }
-  }
-
-  return path;
-}());
-
 /**
- * This functions joins an scope with a function. In most cases this will be an object and one of his
- * methods.
+ * This functions joins an scope with a function. In most cases this will be an
+ * object and one of his methods.
  */
 function unite(fun, scope) {
   if (fun === undefined) {
@@ -112,10 +96,12 @@ function isNotEqual(valueA) {
   return fun;
 }
 
+/** ----------------------------------------------------------------------------
+ *  @section script-loader
+ */
 
 /** Adds a new script tag to the head of the site.
  */
-
 script = function (conf, fun) {
   conf.fun = fun;
   conf.evaluated = false;
@@ -125,54 +111,64 @@ script = function (conf, fun) {
     conf.require = [];
   }
 
-  if (conf.name === undefined && script._last === null) {
-    script._last = conf;
+  if (conf.name === undefined) {
+    throw new Error('Script without name!');
   }
   else {
-    if (conf.name === undefined) {
-      var aux = conf;
-      conf = script._last;
-      script._last = aux;
-      conf.name = script._nameless + script._counter++;
-    }
-    conf.require = script._defaultRequirements.concat(conf.require);
     script.list[conf.name] = conf;
+
+    // TODO: simplify
+    script._addDefaultRequirements(conf.name);
     script._defaultRequirement(conf.name);
+
     delete conf.name;
-    Object.keys(script.list).forEach(script._eval);
+
+    script._evalAll();
   }
 
 };
 
 script.list = {};
 
-script._last = null;
 script._loadedScriptName = null;
 script._defaultRequirements = [];
-script._base = _jsz_.scriptBase;
+script._base = null;
 script._counter = 0;
-script._nameless = 'script-';
 
 script.init = function (conf, fun) {
   if (conf.defaultRequirements !== undefined) {
-    script._defaultRequirements = script._defaultRequirements.concat(conf.defaultRequirements);
+    script._defaultRequirements =
+      script._defaultRequirements.concat(conf.defaultRequirements);
     delete conf.defaultRequirements;
   }
 
-  if (fun === undefined) {
-    fun = function () {
-    };
+  if (conf.name !== undefined) {
+    if (fun === undefined) {
+      fun = function () {
+      };
+    }
+
+    script(conf, fun);
   }
 
-  script(conf, fun);
+  if (conf.base !== undefined) {
+    script._base = JSZ.SLASH +
+    (/\/*(.*[^\/])\/*/).exec(conf.base)[1] +
+    JSZ.SLASH;
+
+    script._evalAll();
+  }
 };
 
 script.load = function (scriptName) {
+  if (script._base === null) {
+    throw new Error('Script-loader not initialized! base = null');
+  }
+
   var scriptTag = document.createElement('script');
 
-  scriptTag.setAttribute("src", script._base + scriptName);
+  scriptTag.setAttribute("src", script._src(scriptName));
   scriptTag.setAttribute("type", "text/javascript");
-  scriptTag.onload = script._onLoaded(scriptName);
 
   document.head.appendChild(scriptTag);
 
@@ -181,21 +177,14 @@ script.load = function (scriptName) {
   return conf;
 };
 
-script._onLoaded = function (scriptName) {
-  return function () {
-    if (script._last === null) {
-      throw new Error("Can not find script '" + scriptName + "'!");
-    }
-    else {
-      script.list[scriptName] = script._last;
-      script._last = null;
-
-      script._addDefaultRequirements(scriptName);
-
-      script._defaultRequirement(scriptName);
-
-      Object.keys(script.list).forEach(script._eval);
-    }
+script._src = function (scriptName) {
+  if ( /^[\w\.]*$/.test(scriptName)) {
+    return script._base +
+      scriptName.replace(/\./g, JSZ.SLASH) +
+      JSZ.PREFIX.JS;
+  }
+  else {
+    throw new Error('Wrong format! script-name = ' + scriptName);
   }
 };
 
@@ -221,30 +210,51 @@ script._addDefaultRequirements = function (scriptName) {
   })
 };
 
-script._eval = function (scriptName) {
-  var scriptObject = script.list[scriptName];
+script._evalAll = function () {
+  script._evalStack = [];
+  Object.keys(script.list).forEach(script._eval);
+};
 
-  if (scriptObject === undefined) {
-    // The script has to be loaded
-    scriptObject = script.load(scriptName);
-  }
-  else if (scriptObject.loaded && !scriptObject.evaluated) {
-    var evaluate = false;
-    if (scriptObject.require === undefined) {
-      evaluate = true;
+script._eval = function (scriptName) {
+  var evaluated = false;
+
+  // start with the evaluation when script._base is set
+  if (script._base !== null) {
+    if ( script._evalStack.some(isEqual(scriptName))) {
+      throw new Error("Cycle reference in script-loader! " +
+        script._evalStack.join(' > ') + ' > ' + scriptName);
     }
     else {
-      evaluate = scriptObject.require.map(script._eval).every(isTrue);
+      script._evalStack.push(scriptName);
     }
 
-    if (evaluate) {
-      scriptObject.fun.apply(window);
-      scriptObject.evaluated = true;
-      delete scriptObject.fun;
+    var scriptObject = script.list[scriptName];
+
+    if (scriptObject === undefined) {
+      // The script has to be loaded
+      scriptObject = script.load(scriptName);
     }
+    else if (scriptObject.loaded && !scriptObject.evaluated) {
+      var evaluate = false;
+      if (scriptObject.require === undefined) {
+        evaluate = true;
+      }
+      else {
+        evaluate = scriptObject.require.map(script._eval).every(isTrue);
+      }
+
+      if (evaluate) {
+        scriptObject.fun.apply(window);
+        scriptObject.evaluated = true;
+        delete scriptObject.fun;
+      }
+    }
+
+    script._evalStack.pop();
+    evaluated = scriptObject.evaluated;
   }
 
-  return scriptObject.evaluated;
+  return evaluated;
 };
 
 script._isDefault = function (scriptName) {
@@ -269,19 +279,19 @@ script._isDefault = function (scriptName) {
  */
 
 script.init({
-  name: "lib/jsz/core.js",
+  name: "lib.jsz.core",
   default: true,
   require: [
-    "lib/jsz/core/Array.js",
-    "lib/jsz/core/String.js",
-    "lib/jsz/core/Function.js",
-    "lib/jsz/core/Namespace.js",
-    "lib/jsz/core/type.js",
-    "lib/jsz/core/Object.js",
-    "lib/jsz/core/HTMLElement.js",
-    "lib/jsz/core/HTMLElementsList.js",
-    "lib/jsz/core/dollar.js",
-    "lib/jsz/core/dom.js",
-    "lib/jsz/core/Listener.js"
+    "lib.jsz.core.Array",
+    "lib.jsz.core.String",
+    "lib.jsz.core.Function",
+    "lib.jsz.core.Namespace",
+    "lib.jsz.core.type",
+    "lib.jsz.core.Object",
+    "lib.jsz.core.HTMLElement",
+    "lib.jsz.core.HTMLElementsList",
+    "lib.jsz.core.dollar",
+    "lib.jsz.core.dom",
+    "lib.jsz.core.Listener"
   ]
 });

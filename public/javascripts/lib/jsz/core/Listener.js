@@ -1,9 +1,10 @@
 // TODO: NEXT: Listener
 script({
+  name: 'lib.jsz.core.Listener',
   require: [
-    'lib/jsz/core/Array.js',
-    'lib/jsz/core/Namespace.js',
-    'lib/jsz/core/Object.js'
+    'lib.jsz.core.Array',
+    'lib.jsz.core.Namespace',
+    'lib.jsz.core.Object'
   ]
 }, function () {
   'use strict';

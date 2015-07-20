@@ -4,8 +4,9 @@
  */
 
 script({
+  name: 'lib.jsz.core.Namespace',
   require: [
-    'lib/jsz/core/Function.js'
+    'lib.jsz.core.Function'
   ]
 }, function () {
   'use strict';

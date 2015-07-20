@@ -1,4 +1,4 @@
-script({}, function () {
+script({name:'demo.click'}, function () {
   'use strict';
 
   console.log('jsz - Demo: click.js');

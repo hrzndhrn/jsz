@@ -1,4 +1,4 @@
-script({}, function () {
+script({name: 'demo.load'}, function () {
   'use strict';
 
   console.log('evalutae load.js');

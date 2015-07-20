@@ -1,5 +1,6 @@
 script({
-  require: ['lib/jsz/random.js']
+  name: 'demo.lightOuts',
+  require: ['lib.jsz.random']
 }, function () {
   'use strict';
 

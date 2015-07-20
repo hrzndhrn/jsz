@@ -6,9 +6,10 @@
  *
  */
 script({
+  name: 'lib.jsz.core.dom',
   require: [
-    'lib/jsz/core/Namespace.js',
-    'lib/jsz/core/String.js'
+    'lib.jsz.core.Namespace',
+    'lib.jsz.core.String'
   ]
 }, function () {
   'use strict';

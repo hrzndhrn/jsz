@@ -1,5 +1,6 @@
 script({
-  require: ['lib/jsz/core/Namespace.js']
+  name: 'lib.jsz.core.type',
+  require: ['lib.jsz.core.Namespace']
 }, function () {
   'use strict';
 

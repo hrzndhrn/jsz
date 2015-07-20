@@ -1,4 +1,4 @@
-script({}, function () {
+script({name: 'lib.jsz.random'}, function () {
 
   namespace('jsz').module('random').def({
 

@@ -1,4 +1,4 @@
-script({}, function () {
+script({name: 'lib.jsz.core.String'}, function () {
   'use strict';
 
   String.prototype.toCamelCase = function () {

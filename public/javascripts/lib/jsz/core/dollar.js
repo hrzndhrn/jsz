@@ -1,9 +1,10 @@
 //TODO: Documentation
 script({
+  name: 'lib.jsz.core.dollar',
   require: [
-    'lib/jsz/core/Array.js',
-    'lib/jsz/core/HTMLElement.js',
-    'lib/jsz/core/HTMLElementsList.js'
+    'lib.jsz.core.Array',
+    'lib.jsz.core.HTMLElement',
+    'lib.jsz.core.HTMLElementsList'
   ]
 }, function () {
   'use strict';

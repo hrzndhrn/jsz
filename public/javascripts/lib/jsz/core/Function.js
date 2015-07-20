@@ -1,4 +1,4 @@
-script({}, function () {
+script({name: 'lib.jsz.core.Function'}, function () {
   'use strict';
 
   Function.prototype.def = function (object) {

@@ -1,4 +1,4 @@
-script({}, function () {
+script({name:'lib.jsz.core.Array'}, function () {
   'use strict';
 
   Array.fromArguments = function (args) {
