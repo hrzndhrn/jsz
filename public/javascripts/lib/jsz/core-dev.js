@@ -1,13 +1,24 @@
 /** jsz
  * Just another JavScriptFramework
- * Version: 0.1.0
+ * Version: 0.0.1
  */
 
-/** A namespace for sim meta-data to jsz.
+/** A namespace for jsz meta-data and configuration. Will be already defined id
+ * a configuration for jsz is enabled.
+ * TODO: jsz configuration mechanism
  */
-var _jsz_ = {
-  classes: {}
-};
+if ( _jsz_ === undefined) {
+  var _jsz_ = {};
+}
+// meta-data
+_jsz_.classes = {};
+_jsz_.version = '0.0.1';
+
+if ( _jsz_.log === undefined) {
+  _jsz_.log = {
+    type: 'console'
+  }
+}
 
 // Some Constants
 var JSZ = {
@@ -96,7 +107,7 @@ function isNotEqual(valueA) {
   return fun;
 }
 
-/** ----------------------------------------------------------------------------
+/** ============================================================================
  *  @section script-loader
  */
 
@@ -169,6 +180,7 @@ script.load = function (scriptName) {
 
   scriptTag.setAttribute("src", script._src(scriptName));
   scriptTag.setAttribute("type", "text/javascript");
+  scriptTag.setAttribute("async", "true");
 
   document.head.appendChild(scriptTag);
 
