@@ -201,7 +201,7 @@ script({
         var metaClass = thisClass._jsz_;
         var newObject = null;
 
-        // TODO: singelton are not implemented coplete
+        // TODO: singelton are not implemented for now
         if (metaClass.singleton === true) {
           var fullClassName = namespace.path() + JSZ.DOT + className;
           if (_jsz_.singletons[fullClassName] === undefined) {

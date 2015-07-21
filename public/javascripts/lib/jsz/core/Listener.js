@@ -1,4 +1,3 @@
-// TODO: NEXT: Listener
 script({
   name: 'lib.jsz.core.Listener',
   require: [
