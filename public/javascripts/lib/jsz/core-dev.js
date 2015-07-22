@@ -256,7 +256,9 @@ script._eval = function (scriptName) {
       }
 
       if (evaluate) {
-        scriptObject.fun.apply(window);
+        if ( scriptObject.fun !== undefined) {
+          scriptObject.fun.apply(window);
+        }
         scriptObject.evaluated = true;
         delete scriptObject.fun;
       }

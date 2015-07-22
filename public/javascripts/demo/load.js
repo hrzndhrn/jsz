@@ -1,4 +1,7 @@
-script({name: 'demo.load'}, function () {
+script({
+  name: 'demo.load',
+  require: ['lib.jsz.log']
+}, function () {
   'use strict';
 
   log.debug('evalutae load.js');
