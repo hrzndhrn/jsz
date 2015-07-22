@@ -7,15 +7,13 @@ import play.api.mvc._
  */
 class Demo extends Controller {
 
-  def load = Action {
-    Ok(views.html.demo.load())
-  }
+  def page(page:String) = Action {
+    page match {
+      case "load" => Ok(views.html.demo.load())
+      case "click" => Ok(views.html.demo.click())
+      case "lightOut" => Ok(views.html.demo.lightOut())
+      case _ => NotFound
+    }
 
-  def click = Action {
-    Ok(views.html.demo.click())
-  }
-
-  def lightOut = Action {
-    Ok(views.html.demo.lightOut())
   }
 }
