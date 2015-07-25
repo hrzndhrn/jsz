@@ -1,6 +1,9 @@
 script({
   name: 'lib.jsz.core.HTMLElement',
-  require: ['lib.jsz.core.Namespace']
+  require: [
+    'lib.jsz.core.Namespace',
+    'lib.jsz.core.type'
+  ]
 }, function () {
   'use strict';
 
@@ -30,6 +33,50 @@ script({
 
     get: function () {
       return this._element;
+    },
+
+    append: function(element) {
+      return this.map(HTMLElement.prototype.appendChild, [element.get()]);
+    },
+
+    setAttribute: function(name, value) {
+      return this.map(HTMLElement.prototype.setAttribute, [name, value]);
+    },
+
+    getAttribute: function(name, value) {
+      return this.map(HTMLElement.prototype.getAttribute, [name, value]);
+    },
+
+    setAttributes: function(attributes) {
+      Object.keys(attributes).forEach(function(name) {
+        var value = attributes[name];
+        if (name.equalIgnoreCase('style')) {
+          this.setStyles(value); // TODO: implement setStyles
+        }
+        else if (name.equalIgnoreCase('aria')) {
+          this.setAriaAttributes(value); // TODO: implement setAriaAttributes
+        }
+        else if (name.equalIgnoreCase('jsz')) {
+          this.setJszAttributes(value); // TODO: implement setJszAttributes
+        }
+        else {
+          if (jsz.isArray(value)) {
+            value = value.join(JSZ.BLANK);
+          }
+          this.setAttribute(name, value);
+        }
+      }, this);
+    },
+
+    html: function(html) {
+      if (html === undefined) {
+        html = this._element.innerHTML;
+      }
+      else {
+        this._element.innerHTML = html;
+      }
+
+      return html;
     },
 
     getId: function () {
@@ -111,9 +158,25 @@ script({
 
   });
 
-  jsz.HTMLElement.create = function (element) {
-    return new jsz.HTMLElement(element);
+  jsz.HTMLElement.make = function (tagName, attributes, content) {
+    if ( arguments.length === 1) {
+      attributes = {};
+      content = JSZ.EMPTY_STRING;
+    }
+    else if ( arguments.length === 2) {
+      if ( jsz.isString(attributes)) {
+        content = attributes;
+        attributes = {};
+      }
+    }
+
+    var element = new jsz.HTMLElement( document.createElement(tagName));
+    element.setAttributes(attributes);
+    element.html(content);
+
+    return element;
   };
 
+  jsz.HTMLElement.empty = new jsz.HTMLElement();
 });
 
