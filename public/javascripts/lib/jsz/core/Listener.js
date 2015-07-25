@@ -17,19 +17,19 @@ script({
       this._type = type; // the event type
       this._callback = callback;
 
-      this._avoidDefault = jsz.norm(config.avoidDefault, true);
+      this._avoidDefault = jsz.default(config.avoidDefault, true);
       if (this._element.isType('FILE')) {
         // For the input element of type file its impossible to avoid
         // the default.
         this._avoidDefault = false;
       }
 
-      this._avoidPropagation = jsz.norm(config.avoidPropagation, false);
+      this._avoidPropagation = jsz.default(config.avoidPropagation, false);
 
-      this._capture = jsz.norm(config.capture, false);
+      this._capture = jsz.default(config.capture, false);
 
       // The returnType indicates the argument for the callback.
-      this._returnType = jsz.norm(config.returnType, 'listener');
+      this._returnType = jsz.default(config.returnType, 'listener');
       // possible values:
       var returnTypes = [
         'listener', // The listener that handled the event.
@@ -158,11 +158,11 @@ script({
 
       if (scope instanceof jsz.Object || scope instanceof _jsz_.Namespace) {
         object.callback = unite(object.callback, scope);
-        object.config = jsz.norm(config, {});
+        object.config = jsz.default(config, {});
       }
       else {
         // change argument scope to config
-        object.config = jsz.norm(scope, {});
+        object.config = jsz.default(scope, {});
       }
 
       if (typeof object.element === 'string') {

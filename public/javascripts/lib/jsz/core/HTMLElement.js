@@ -10,8 +10,8 @@ script({
   namespace('jsz').proto('HTMLElement', {
 
     HTMLElement: function (element, companion) {
-      this._element = jsz.norm(element, null);
-      this._companion = jsz.norm(companion, null);
+      this._element = jsz.default(element, null);
+      this._companion = jsz.default(companion, null);
     },
 
     map: function (fun, args) {

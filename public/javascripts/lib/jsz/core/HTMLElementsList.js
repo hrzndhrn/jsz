@@ -7,7 +7,7 @@ script({
   namespace('jsz').proto('HTMLElementsList', {
 
     HTMLElementsList: function (elements) {
-      this._elements = jsz.norm(elements, []);
+      this._elements = jsz.default(elements, []);
     },
 
     _apply: function (fun, scope, args) {
