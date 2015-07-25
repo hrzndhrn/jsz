@@ -105,6 +105,7 @@
       "isNotEqual": true,
       "isEqual": true,
       "isTrue": true,
-      "isFalse": true
+      "isFalse": true,
+      "noop": true
     }
 }
