@@ -12,6 +12,7 @@ class Demo extends Controller {
       case "load" => Ok(views.html.demo.load())
       case "click" => Ok(views.html.demo.click())
       case "lightOut" => Ok(views.html.demo.lightOut())
+      case "logging" => Ok(views.html.demo.logging())
       case _ => NotFound
     }
 
