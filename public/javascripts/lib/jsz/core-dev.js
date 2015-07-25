@@ -346,7 +346,7 @@
       'lib.jsz.core.String',
       'lib.jsz.core.Function',
       'lib.jsz.core.Namespace',
-      'lib.jsz.core.type',
+      'lib.jsz.core.jsz',
       'lib.jsz.core.Object',
       'lib.jsz.core.HTMLElement',
       'lib.jsz.core.HTMLElementsList',

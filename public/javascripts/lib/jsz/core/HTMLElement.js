@@ -2,7 +2,7 @@ script({
   name: 'lib.jsz.core.HTMLElement',
   require: [
     'lib.jsz.core.Namespace',
-    'lib.jsz.core.type'
+    'lib.jsz.core.jsz'
   ]
 }, function () {
   'use strict';
