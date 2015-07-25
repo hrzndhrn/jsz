@@ -17,11 +17,11 @@ script({
   namespace('jsz').module('dom').def({
 
     setStyle: function (element, style, value) {
-      if (jsz.isUndefined(style)) {
+      if (style === undefined) {
         element.removeAttribute('style');
       }
       else {
-        if (jsz.isDefined(value)) {
+        if (value !== undefined) {
           return this._setStyle(element, style, value);
         }
 
