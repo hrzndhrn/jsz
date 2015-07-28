@@ -2,6 +2,7 @@
 script({
   name: 'lib.jsz.core.Object',
   require: ['lib.jsz.core.Namespace']
+  // require: []
 }, function () {
   'use strict';
 
@@ -20,44 +21,37 @@ script({
     return this._jsz_.namespace._jsz_.path + JSZ.DOT + this._jsz_.className;
   };
 
-  jsz.Object.prototype.super = function (args) {
+  jsz.Object.prototype.super = function () {
     var i = 0,
-      n = this[_jsz_.META].super; // skip n constructors
+      skip = this._jsz_.super; // skip n constructors
 
-    var extend = this[_jsz_.META].extend;
-    for (i; i < n; i++) {
+    var extend = this._jsz_.extend;
+    for (i; i < skip; i++) {
       // skip constructors
-      extend = extend[_jsz_.META].extend;
-    }
-    _jsz_.super++;
-    this[_jsz_.META].super++;
-
-    if (!extend) {
-      return;
+      extend = extend._jsz_.extend;
     }
 
 
-    var baseClass = extend;
-    var baseClassName = baseClass[_jsz_.META].className;
-    var baseConstructor = baseClass.prototype[baseClassName];
+    if (extend !== undefined) {
+      this._jsz_.super++;
 
-    // TODO: explain!
-    var superArgs = arguments;
-    if (jsz.isArguments(args)) {
-      superArgs = args;
-    }
+      var baseClass = extend;
+      var baseClassName = baseClass._jsz_.className;
+      var baseConstructor = baseClass.prototype[baseClassName];
 
-    if (baseConstructor) {
-      baseConstructor.apply(this, superArgs);
-    }
-    else {
-      if (extend) {
-        this.super.apply(this, superArgs);
+      if (baseConstructor) {
+        baseConstructor.apply(this, arguments);
       }
+      else {
+        if (extend) {
+          this.super.apply(this, arguments);
+        }
+      }
+
+      this._jsz_.super--;
     }
 
-    _jsz_.super--;
-    this[_jsz_.META].super--;
+
   };
 
 });

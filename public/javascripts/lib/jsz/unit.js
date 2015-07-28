@@ -3,7 +3,7 @@ script({
   require: [
     'lib.jsz.unit.TestCase',
     'lib.jsz.unit.Session',
-    'lib.jsz.unit.Exception',
-    'lib.jsz.unit.Assert'
+    'lib.jsz.unit.assert',
+    'lib.jsz.unit.AssertError'
   ]
 });

@@ -95,12 +95,12 @@ script({name: 'lib.jsz.log'}, function () {
     _logStack: function (logFunctionName) {
       return function() {
         var args = Array.fromArguments(arguments);
-        var stack = jsz.log.getStack(1)[0];
+        var error = new jsz.Error(args.join(', '), 1);
 
-        var msg = stack.fileName + ':' +
-          stack.lineNumber + ':' +
+        var msg = error.fileName + ':' +
+          error.lineNumber + ':' +
           logFunctionName + ': ' +
-          args.join(', ');
+          error.message;
 
         if ( jsz.log.htmlElement.isEmpty()) {
           console.log(msg);
@@ -118,18 +118,6 @@ script({name: 'lib.jsz.log'}, function () {
       };
     },
 
-    getErrorStack: function( error, skip) {
-      return error
-        .stack
-        .split(JSZ.NEW_LINE)
-        .slice(skip === undefined ? 1 : skip + 1)
-        .map(this._parseStackEntry);
-    },
-
-    getStack: function(skip) {
-      return this.getErrorStack( new Error(), skip);
-    },
-
     /**
      * Set the html-element to append logs.
      * @param {jsz.HTMLElement} [htmlElement]
@@ -141,52 +129,6 @@ script({name: 'lib.jsz.log'}, function () {
       else {
         jsz.log.htmlElement = htmlElement;
       }
-    },
-
-    _parseStackEntry: function(entry) {
-      var entryObject = {}, codePointer;
-
-      // Get the function name and the code pointer
-      var funAtPos = (/^(.*)@(.*)$/).exec(entry);
-      if (funAtPos === null) {
-        // this entry holds just a code pointer
-        entryObject.functionName = JSZ.EMPTY_STRING;
-        codePointer = entry;
-      }
-      else {
-        entryObject.functionName = funAtPos[1];
-        codePointer = funAtPos[2];
-      }
-
-      // Split code pointer. The code pointer has usually the format:
-      // protocol://host:port/path/fileName:lineNumber:colNumber
-      //     |        |   |    |      |         |         |
-      //     |        |   |    |      |         |         +-----------+---+
-      //     |        |   |    |      |         +---------------+---+ |   |
-      //     |        |   |    |      +--------------------+--+ |   | |   |
-      //     |        |   |    +---------------------+----+|  | |   | |   |
-      //     |        |   +---------------------+---+|    ||  | |   | |   |
-      //     |        +-----------------+-----+ |   ||    ||  | |   | |   |
-      //     +-----------------+--+     |     | |   ||    ||  | |   | |   |
-      //                       |  |     |     | |   ||    ||  | |   | |   |
-      var codePointerParts = (/(.*):\/\/([^:]*):(\d*)(.*)\/(.*):(\d*):(\d*)/)
-        .exec(codePointer);
-
-      if ( codePointerParts === null) {
-        entryObject.fileName = codePointer;
-      }
-      else {
-        entryObject.codePointer = codePointerParts[0];
-        entryObject.protocl = codePointerParts[1];
-        entryObject.host = codePointerParts[2];
-        entryObject.port = codePointerParts[3];
-        entryObject.path = codePointerParts[4];
-        entryObject.fileName = codePointerParts[5];
-        entryObject.lineNumber = codePointerParts[6];
-        entryObject.colNumber = codePointerParts[7];
-      }
-
-      return entryObject;
     }
 
   });

@@ -147,30 +147,37 @@ script({
 
     _jsz_.classes[fullClassName] = newClass;
 
-    // Every class extends jsz.Object.
-    newClass.prototype = new jsz.Object();
 
     // If the class will be extended
-    if (extend !== undefined) {
-      // Extend the class with the given sub class.
+    if (extend === undefined) {
+      // Every base class extends jsz.Object.
+      newClass.prototype = new jsz.Object();
+    }
+    else {
+      // Set the extending flag to prevent applying the constructor.
       _jsz_.Namespace.extending = true;
-      /* jshint ignore:start */
+      // Extend the class with the given sub class.
       newClass.prototype = new extend();
-      /* jshint ignore:end */
       _jsz_.Namespace.extending = false;
 
       // add firms to the class
-      firms = extend._jsz_.firms;
-      if (firms !== undefined) {
-        var key;
-        for (key in firms) {
-          if (firms.hasOwnProperty(key)) {
-            newClass[key] = firms[key];
-          }
-        }
-      }
+      // TODO: implement firms
+      /*
+       firms = extend._jsz_.firms;
+       if (firms !== undefined) {
+       var key;
+       for (key in firms) {
+       if (firms.hasOwnProperty(key)) {
+       newClass[key] = firms[key];
+       }
+       }
+       }
+       */
 
-      inners = extend._jsz_.inners;
+      // TODO: implements inners
+      /*
+       inners = extend._jsz_.inners;
+       */
     }
 
     // Set meta-infos for the new class
@@ -272,7 +279,7 @@ script({
     }
 
     if (base !== null) {
-      newClass.prototype = base.prototype;
+      newClass.prototype = new base();
     }
 
     this[name] = newClass;

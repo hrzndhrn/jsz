@@ -58,20 +58,23 @@
     }
 
     if (fun.isUnited) {
-      throw new Error('Can not unite an united function!');
+      uniteFun = fun;
+    }
+    else {
+      if (scope === undefined) {
+        scope = window;
+      }
+
+      var uniteFun = function () {
+        return fun.apply(scope, arguments);
+      };
+
+      uniteFun.isUnited = true;
+
+      uniteFun = Object.freeze(uniteFun);
     }
 
-    if (scope === undefined) {
-      scope = window;
-    }
-
-    var uniteFun = function () {
-      return fun.apply(scope, arguments);
-    };
-
-    uniteFun.isUnited = true;
-
-    return Object.freeze(uniteFun);
+    return uniteFun;
   };
 
   window.apply = function(fun, scope, args) {
@@ -352,6 +355,7 @@
       'lib.jsz.core.HTMLElementsList',
       'lib.jsz.core.dollar',
       'lib.jsz.core.dom',
+      'lib.jsz.core.Error',
       'lib.jsz.core.Listener'
     ]
   });
