@@ -3,7 +3,7 @@ script({
 }, function() {
   'use strict';
 
-  console.log('eval jsz.unti.ass');
+  console.log('eval jsz.unit.assert');
 
   namespace('jsz.unit').module( 'assert').def({
 
@@ -34,6 +34,7 @@ script({
         );
       }
     }
+
 
     /*
     match: function( a, regex, msg) {

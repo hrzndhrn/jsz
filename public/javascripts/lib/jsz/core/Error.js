@@ -9,9 +9,26 @@ script({
 
   namespace('jsz').class( 'Error').def({
 
-    Error: function(value, skip) {
+    Error: function(value, skip, causedBy) {
       if (skip === undefined) {
         skip = 0;
+        causedBy = null;
+      }
+      else if (jsz.isError(skip)) {
+        causedBy = skip;
+        skip = 0;
+      }
+
+      if (causedBy === undefined) {
+        this.causedBy = null;
+      }
+      else {
+        if (causedBy instanceof Error) {
+          this.causedBy = new jsz.Error(causedBy);
+        }
+        else {
+          this.causedBy = causedBy;
+        }
       }
 
       if ( value instanceof Error) {

@@ -15,6 +15,6 @@ class Demo extends Controller {
       case "logging" => Ok(views.html.demo.logging())
       case _ => NotFound
     }
-
   }
+
 }

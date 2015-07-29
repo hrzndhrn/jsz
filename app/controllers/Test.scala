@@ -7,7 +7,13 @@ import play.api.mvc._
  */
 class Test extends Controller {
 
-  def test = Action(
-    Ok(views.html.test.test())
-  )
+  def page(page:String) = Action {
+    page match {
+      case "test" => Ok(views.html.test.test())
+      case "testCase" => Ok(views.html.test.testCase())
+      case "testSession" => Ok(views.html.test.testSession())
+      case _ => NotFound
+    }
+  }
+
 }

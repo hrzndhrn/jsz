@@ -1,0 +1,28 @@
+div.log {
+  font-family: "Bitstream Vera Sans Mono", "Courier", monospace;
+  border: 1px solid black;
+}
+
+div.log > div {
+  /* height: 1.6em; */
+  padding: 0.3em;
+  white-space: pre;
+  border-bottom: 1px solid #666;
+}
+
+div.log div.info {
+  background-color: skyblue;
+}
+
+div.log div.error {
+  background-color: orangered;
+}
+
+div.log div.success {
+  background-color: darkseagreen;
+}
+
+div.log span.location {
+  border: 1px solid black;
+  float: right;
+}

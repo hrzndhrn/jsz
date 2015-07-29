@@ -7,15 +7,17 @@ script({name: 'lib.jsz.log'}, function () {
   // The jsz.log.module
   namespace('jsz').module('log').def({
 
-    // Names of functions who are usually supported by the console.
+    // Names of functions who are usually supported by the console and a little
+    // more.
     expectedFunctions: [
       'log', 'debug', 'info', 'warn', 'exception', 'assert', 'dir', 'dirxml',
       'trace', 'group', 'groupCollapsed', 'groupEnd', 'profile', 'profileEnd',
-      'count', 'clear', 'time', 'timeEnd', 'timeStamp', 'table', 'error'
+      'count', 'clear', 'time', 'timeEnd', 'timeStamp', 'table', 'error',
+      'success'
     ],
 
     // Function names for the stack logger
-    stackFunctions: ['debug', 'info', 'warn'],
+    stackFunctions: ['debug', 'info', 'warn', 'error', 'success'],
 
     /** @member {jsz.HTMLElement} */
     htmlElement: jsz.HTMLElement.empty,
@@ -93,21 +95,42 @@ script({name: 'lib.jsz.log'}, function () {
     },
 
     _logStack: function (logFunctionName) {
-      return function() {
-        var args = Array.fromArguments(arguments);
-        var error = new jsz.Error(args.join(', '), 1);
-
-        var msg = error.fileName + ':' +
-          error.lineNumber + ':' +
-          logFunctionName + ': ' +
-          error.message;
-
-        if ( jsz.log.htmlElement.isEmpty()) {
-          console.log(msg);
+      return function(message, showLocation) {
+        showLocation = jsz.default(showLocation, true);
+        var error;
+        if (message instanceof Error) {
+          error = new jsz.Error(message);
+        }
+        else if (message instanceof jsz.Error) {
+          error = message;
         }
         else {
-          jsz.log.htmlElement.append(
-            jsz.HTMLElement.make('div', {class:['log',logFunctionName]}, msg));
+          error = new jsz.Error(message, 1);
+        }
+
+
+        var location = error.fileName + ':' +
+          error.lineNumber + ':' +
+          logFunctionName + ':';
+
+        if ( jsz.log.htmlElement.isEmpty()) {
+          if (showLocation) {
+            console.log(location + JSZ.BLANK + error.message);
+          }
+          else {
+            console.log(error.message);
+          }
+        }
+        else {
+          var row = jsz.HTMLElement.make(
+            'div', {class:[logFunctionName]});
+          if (showLocation) {
+            row.append(
+              jsz.HTMLElement.make('span', {class:'location'}, location));
+          }
+          row.append(
+            jsz.HTMLElement.make('span', {class:'message'}, error.message));
+          jsz.log.htmlElement.append( row);
         }
       };
     },
