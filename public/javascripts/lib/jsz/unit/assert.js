@@ -33,6 +33,26 @@ script({
           'expected: >' + strB + '<'
         );
       }
+    },
+
+    isTrue: function(obj, msg) {
+      msg = jsz.default(msg, JSZ.EMPTY_STRING);
+
+      if ( obj !== true ) {
+        throw new jsz.unit.AssertError(
+          'Not true! ' + msg + '\nget: >' + obj + '<'
+        );
+      }
+    },
+
+    isFalse: function(obj, msg) {
+      msg = jsz.default(msg, JSZ.EMPTY_STRING);
+
+      if ( obj !== false ) {
+        throw new jsz.unit.AssertError(
+          'Not false! ' + msg + '\nget: >' + obj + '<'
+        );
+      }
     }
 
 
@@ -85,23 +105,6 @@ script({
       }
     },
 
-    isTrue: function( a, msg) {
-      if ( typeof msg === 'undefined' ) msg = '';
-      if ( a !== true ) {
-        var e = new Error( 'Not true! ' + msg + '\nget: >' + a + '<');
-        e.type = 'Assert';
-        throw e;
-      }
-    },
-
-    isFalse: function( a, msg) {
-      if ( typeof msg === 'undefined' ) msg = '';
-      if ( a !== false ) {
-        var e = new Error( 'Not false!\nget: >' + a + '<');
-        e.type = 'Assert';
-        throw e;
-      }
-    },
 
     isEmptyArray: function( array, message) {
       var e;

@@ -16,7 +16,7 @@ script({
     // save a typeof and instanceof.
 
     isError: function (obj) {
-      return obj instanceof Error || obj instanceof jsz.Error;
+      return obj instanceof Error || obj instanceof jsz.Error;
     },
 
     isFunction: function (obj) {
