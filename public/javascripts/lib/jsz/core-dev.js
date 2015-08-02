@@ -10,7 +10,8 @@
    */
   window._jsz_ = {
     classes: {},
-    version: '0.0.1'
+    version: '0.0.1',
+    uid: 0
   };
 
   // === jsz-Configuration =====================================================
@@ -45,6 +46,25 @@
 
   // ===========================================================================
   // some global functions
+
+  /**
+   * The function uid delivers site unique id.
+   * @param {String} [prefix]
+   * @returns {String}
+   */
+  function uid(prefix) {
+    var id = _jsz_.uid.toString();
+    _jsz_.uid++;
+
+    if (prefix === undefined) {
+      id = 'ID:' + id;
+    }
+    else {
+      id = prefix + ':ID:' + id;
+    }
+
+    return id;
+  }
 
   /**
    * This functions joins an scope with a function. In most cases this will be
@@ -112,7 +132,7 @@
    * @param valueA
    * @returns {function}
    */
-  window.isEqual = function (valueA) {
+  window.isEquals = function (valueA) {
     var fun;
     if (typeof valueA.equal === 'function') {
       fun = function (valueB) {
@@ -133,7 +153,7 @@
    * @param valueA
    * @returns {function}
    */
-  window.isNotEqual = function(valueA) {
+  window.isNotEquals = function(valueA) {
     var fun;
     if (typeof valueA.equal === 'function') {
       fun = function (valueB) {
@@ -167,19 +187,18 @@
     }
 
     if (conf.name === undefined) {
-      throw new Error('Script without name!');
+      conf.name = uid('SCRIPT');
     }
-    else {
-      script.list[conf.name] = conf;
 
-      // TODO: simplify
-      script._addDefaultRequirements(conf.name);
-      script._defaultRequirement(conf.name);
+    script.list[conf.name] = conf;
 
-      delete conf.name;
+    // TODO: simplify
+    script._addDefaultRequirements(conf.name);
+    script._defaultRequirement(conf.name);
 
-      script._evalAll();
-    }
+    delete conf.name;
+
+    script._evalAll();
 
   };
 
@@ -267,7 +286,7 @@
 
     this._defaultRequirements.forEach(function (requirement) {
       var requirementObject = script.list[requirement];
-      if (!requirementObject.require.some(isEqual(scriptName))) {
+      if (!requirementObject.require.some(isEquals(scriptName))) {
         scriptObject.require.push(requirement);
       }
     });
@@ -283,7 +302,7 @@
 
     // start with the evaluation when script._base is set
     if (script._base !== null) {
-      if (script._evalStack.some(isEqual(scriptName))) {
+      if (script._evalStack.some(isEquals(scriptName))) {
         throw new Error('Cycle reference in script-loader! ' +
           script._evalStack.join(' > ') + ' > ' + scriptName);
       }
