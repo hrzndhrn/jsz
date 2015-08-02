@@ -24,7 +24,15 @@ script({
     },
 
     get: function (index) {
-      return this._elements[index];
+      var result;
+
+      if ( index === undefined) {
+        result = this._elements;
+      }
+      else {
+        result = this._elements[index];
+      }
+      return result;
     },
 
     setStyle: function (style, value) {
@@ -47,10 +55,15 @@ script({
      */
     onClick: function (fun, scope, config) {
       this.map(jsz.HTMLElement.prototype.onClick, [fun, scope, config]);
+    },
+
+    size: function() {
+      return this._elements.length;
     }
 
-
   });
+
+  jsz.HTMLElementsList.empty = new jsz.HTMLElementsList();
 
 });
 

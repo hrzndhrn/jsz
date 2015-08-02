@@ -95,7 +95,26 @@ script({
         }
         index++;
       }
+    },
+
+    instanceOf: function( object, aClass, message) {
+      message = jsz.default(message, JSZ.EMPTY_STRING);
+
+      if (aClass === undefined) {
+        throw new jsz.unit.AssertError(
+          'Class is undefined! ' + message, 1
+        );
+      }
+
+      var test = object instanceof aClass;
+
+      if (!test) {
+        throw new jsz.unit.AssertError(
+          'Is not an instance of ' + aClass.toString() + '! ' + message, 1
+        );
+      }
     }
+
 
 
     /*

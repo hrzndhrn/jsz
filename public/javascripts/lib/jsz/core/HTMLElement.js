@@ -14,6 +14,9 @@ script({
       this._companion = jsz.default(companion, null);
     },
 
+    CUSTOM_ATTRIBUTE_PREFIX: 'data-',
+    CUSTOM_JSZ_PREFIX: 'data-jsz-',
+
     map: function (fun, args) {
       var result = null;
       if (this.isNotEmpty()) {
@@ -43,8 +46,28 @@ script({
       return this.map(HTMLElement.prototype.setAttribute, [name, value]);
     },
 
-    getAttribute: function(name, value) {
-      return this.map(HTMLElement.prototype.getAttribute, [name, value]);
+    setDataAttribute: function(name, value) {
+      return this.map(HTMLElement.prototype.setAttribute,
+        [this.CUSTOM_ATTRIBUTE_PREFIX + name, value]);
+    },
+
+    setJszAttribute: function(name, value) {
+      return this.map(HTMLElement.prototype.setAttribute,
+        [this.CUSTOM_JSZ_PREFIX + name, value]);
+    },
+
+    getAttribute: function(name) {
+      return this.map(HTMLElement.prototype.getAttribute, [name]);
+    },
+
+    getDataAttribute: function(name) {
+      return this.map(HTMLElement.prototype.getAttribute,
+        [this.CUSTOM_ATTRIBUTE_PREFIX + name]);
+    },
+
+    getJszAttribute: function(name) {
+      return this.map(HTMLElement.prototype.getAttribute,
+        [this.CUSTOM_JSZ_PREFIX + name]);
     },
 
     setAttributes: function(attributes) {
@@ -150,13 +173,26 @@ script({
       );
     },
 
-    /** Adds an event listener of type click to the element.
+    /**
+     * Adds an event listener of type click to the element.
      */
     onClick: function (fun, scope, config) {
       return jsz.Listener.add(this, 'click', fun, scope, config);
+    },
+
+    $: function(selectors) {
+      return $(selectors, this);
+    },
+
+    $$: function(selectors) {
+      return  $$(selectors, this);
     }
 
   });
+
+  jsz.HTMLElement.build = function(element) {
+    return new jsz.HTMLElement(element);
+  };
 
   jsz.HTMLElement.make = function (tagName, attributes, content) {
     if ( arguments.length === 1) {
@@ -175,6 +211,10 @@ script({
     element.html(content);
 
     return element;
+  };
+
+  jsz.HTMLElement.get = function(htmlElement) {
+    return htmlElement.get();
   };
 
   jsz.HTMLElement.empty = new jsz.HTMLElement();

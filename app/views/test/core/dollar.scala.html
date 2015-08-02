@@ -1,0 +1,19 @@
+@mainTest("jsz") {
+    <script>
+    script({
+    require:['test.jsz.core.dollar']
+    }, function() {
+    jsz.unit.Session.get('jsz.core').run().logTo($('div.log'));
+    });
+    </script>
+
+    <h2>Test: test.core.dollar</h2>
+    <div id="main" class="hide" data-value="main">
+        <span id="sub" class="sub" data-value="sub-1">
+            <span data-value="sub-1-1"></span>
+            <span class="subsub" data-value="sub-1-2"></span>
+        </span>
+        <span class="sub" data-value="sub-2"></span>
+        <span class="sub" data-value="sub-3"></span>
+    </div>
+}
