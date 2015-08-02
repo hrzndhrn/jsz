@@ -11,15 +11,15 @@ div.log > div {
 }
 
 div.log div.info {
-  background-color: skyblue;
+  background-color: #3498db;
 }
 
 div.log div.error {
-  background-color: orangered;
+  background-color: #e74c3c;
 }
 
 div.log div.success {
-  background-color: darkseagreen;
+  background-color: #2ecc71;
 }
 
 div.log span.location {
