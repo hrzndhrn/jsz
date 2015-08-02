@@ -74,7 +74,7 @@ script({
       Object.keys(attributes).forEach(function(name) {
         var value = attributes[name];
         if (name.equalIgnoreCase('style')) {
-          this.setStyles(value); // TODO: implement setStyles
+          this.setStyle(value); // TODO: implement setStyle
         }
         else if (name.equalIgnoreCase('aria')) {
           this.setAriaAttributes(value); // TODO: implement setAriaAttributes
@@ -107,7 +107,7 @@ script({
     },
 
     setStyle: function (style, value) {
-      this.map(jsz.dom.setStyle, [style, value]);
+      jsz.dom.setStyle(this._element, style, value);
     },
 
     hasType: function () {

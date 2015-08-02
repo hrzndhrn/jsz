@@ -1,3 +1,11 @@
+/**
+ * An own Error object for jsz. The class Error used the non-standard attribute
+ * stack of the built-in Error object.
+ *
+ * @author   Marcus Kruse
+ * @version  0.1.0
+ *
+ */
 script({
   name: 'lib.jsz.core.Error',
   require: [
@@ -9,7 +17,43 @@ script({
 
   namespace('jsz').class( 'Error').def({
 
+    /**
+     * Create a new jsz.Error. A jsz.Error object has a stack attribute of type
+     * array. The stack array contains objects called stack frames.
+     *
+     * @member {String} filePath
+     * @member {String} fileName
+     * @member {String} protocol
+     * @member {String} host
+     * @member {String} port
+     * @member {String} path
+     * @member {String} fileName
+     * @member {Integer} lineNumber
+     * @member {Integer} colNumber
+     * @member {StackFrame[]} stack
+     *
+     * @typedef {Object} StackFrame
+     * {String} StackFrame.filePath
+     * {String} StackFrame.fileName
+     * {String} StackFrame.protocol
+     * {String} StackFrame.host
+     * {String} StackFrame.port
+     * {String} StackFrame.path
+     * {String} StackFrame.fileName
+     * {Integer} StackFrame.lineNumber
+     * {Integer} StackFrame.colNumber
+     *
+     * @param {Error} value - An Error object.
+     * @param {String} value - The error message.
+     * @param {Integer} skip [some=0] stack frames.
+     * @param {Error} [causedBy=null] - An error that is the cause of this
+     *   error.
+     * @param {jsz.Error} [causedBy=null] - An error that is the cause of this
+     *   error.
+     * @constructor
+     */
     Error: function(value, skip, causedBy) {
+      // check argument skip
       if (skip === undefined) {
         skip = 0;
         causedBy = null;
@@ -19,6 +63,7 @@ script({
         skip = 0;
       }
 
+      // check argument causedBy
       if (causedBy === undefined) {
         this.causedBy = null;
       }
@@ -31,14 +76,21 @@ script({
         }
       }
 
+      // check argument value
       if ( value instanceof Error) {
+        // the argument value is an Error
         var error = value;
 
         this.message = error.message;
         this.name = error.name;
-        this._setStack(this._getStack(error), false, skip);
+
+        // setup the stack
+        this._setStack(
+          this._getStack(error, false, skip)
+        );
       }
       else {
+        // the argument value is a message;
         var message = value;
         if (message === undefined) {
           message = JSZ.EMPTY_STRING;
@@ -46,12 +98,18 @@ script({
 
         this.message = message;
         this.name = this._jsz_.className;
+
+        // setup the stack
         this._setStack(
           this._getStack(new Error(), true, skip)
         );
       }
     },
 
+    /**
+     * Set this.stack an copies the first frame from the stack to this error.
+     * @param {StackFrame[]} stack
+     */
     _setStack: function( stack) {
       this.stack = stack;
       if ( !stack.isEmpty()) {
@@ -66,6 +124,13 @@ script({
       }
     },
 
+    /**
+     * Get an array of stack frames from the Error.stack string.
+     * @param {Error} error
+     * @param {Boolean} jszError
+     * @param {Integer} skip
+     * @returns {StackFrame[]}
+     */
     _getStack: function( error, jszError, skip) {
       var stack =  error
         .stack
@@ -81,14 +146,20 @@ script({
 
     _skip: function(stack, jszError, skip) {
       if (jszError) {
+        // skip all stack frames until reaching the frame related to this
+        // object.
         while(stack.length > 0 && stack[0].functionName !== this.name) {
           stack.shift();
         }
+        // skip two frames more to reach the frame they is related to the point
+        // where jsz.Error was created.
         if (stack.length > 2) {
           stack = stack.slice(2);
         }
       }
 
+      // skip the number of frames that was provided by the creation of
+      // jsz.Error.
       if ( skip > 0 && skip < stack.length) {
         stack = stack.slice(skip);
       }

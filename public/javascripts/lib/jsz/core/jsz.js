@@ -121,7 +121,7 @@ script({
         for ( key in obj) {
           // empty
         }
-        console.log('key: ' + key);
+
         is = (key === undefined || obj.hasOwnProperty(key));
       }
 

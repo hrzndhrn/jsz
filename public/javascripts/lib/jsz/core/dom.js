@@ -16,22 +16,45 @@ script({
 
   namespace('jsz').module('dom').def({
 
+    /**
+     * The function jsz.dom.setStyle sets a style attribute for an element. The
+     * can be set by a key value pair or by an object.
+     *
+     * @example
+     * // e.g. by key value pair
+     * jsz.dom.setStyle(element, color, 'green');
+     * // e.g. by object
+     * jsz.dom.setStyle(element, {color:'green'});
+     * 
+     * @param {HTMLElement} element
+     * @param {String} style
+     * @param {Object} style
+     * @param {String} [value]
+     */
     setStyle: function (element, style, value) {
-      if (style === undefined) {
-        element.removeAttribute('style');
-      }
-      else {
+      if (style !== undefined) {
         if (value !== undefined) {
+          // set style by key value pair
           return this._setStyle(element, style, value);
         }
-
-        Object.keys(style).forEach(function (key) {
-          this._setStyle(element, key, style[key]);
-        }, this);
+        else {
+          // set style by object
+          Object.keys(style).forEach(function (key) {
+            this._setStyle(element, key, style[key]);
+          }, this);
+        }
       }
     },
 
-    // TODO: Test with IE10
+    /**
+     * The function jsz.dom._setStyle sets a style attribute for an element.
+     *
+     * @param {HTMLElement} element
+     * @param {String} style
+     * @param {String} [value]
+     *
+     * @todo Test with IE10
+     */
     _setStyle: function (element, style, value) {
       if (element) {
 
@@ -53,26 +76,40 @@ script({
       return element;
     },
 
-    _stylesDefaultUnit: {
-      height: 'px',
-      width: 'px',
-      top: 'px',
-      left: 'px',
-      padding: 'px',
-      margin: 'px',
-      paddingLeft: 'px',
-      paddingRight: 'px'
+    /**
+     * The constant jsz.dom.STYLES_DEFAULT_UNIT holds default units for some css
+     * attributes. This default will be used bj setStyle if the specified
+     * attributes missing an unit.
+     */
+    STYLES_DEFAULT_UNIT: {
+      height: 'em',
+      width: 'em',
+      top: 'em',
+      left: 'em',
+      padding: 'em',
+      margin: 'em',
+      paddingLeft: 'em',
+      paddingRight: 'em'
     },
 
+    /**
+     * The function jsz.dom._getStyleDefaultUnit extends a value with a unit if
+     * the unit is missing. The lookup table is hosted in
+     * jsz.dom.STYLES_DEFAULT_UNIT.
+     *
+     * @param {String} style
+     * @param {String} value
+     * @returns {String}
+     */
     _getStylesDefaultUnit: function (style, value) {
-      var unit = this._stylesDefaultUnit[style];
-      var isNum = /^-?\d*$/.test(value);
+      var unit = this.STYLES_DEFAULT_UNIT[style],
+        isNum = /^-?\d*$/.test(value);
 
-      if (typeof unit === 'undefined' || !isNum) {
-        return value;
+      if (typeof unit !== undefined && isNum) {
+        return value + unit;
       }
 
-      return value + unit;
+      return value;
     }
 
   });

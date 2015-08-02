@@ -1,6 +1,9 @@
 script({
   name: 'lib.jsz.core.HTMLElementsList',
-  require: ['lib.jsz.core.Namespace']
+  require: [
+    'lib.jsz.core.Namespace',
+    'lib.jsz.core.jsz'
+  ]
 }, function () {
   'use strict';
 
