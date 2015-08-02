@@ -1,5 +1,5 @@
 /**
- * Some toold for the dom
+ * Some tools for the Document Object Model.
  *
  * @author   Marcus Kruse
  * @version  0.1.0

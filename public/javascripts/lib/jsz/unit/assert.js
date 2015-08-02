@@ -40,7 +40,7 @@ script({
 
       if ( object !== true ) {
         throw new jsz.unit.AssertError(
-          'Not true! ' + message + '\nget: >' + object + '<'
+          'Not true! ' + message + '\nget: >' + object + '<', 1
         );
       }
     },
@@ -50,7 +50,7 @@ script({
 
       if ( object !== false ) {
         throw new jsz.unit.AssertError(
-          'Not false! ' + message + '\nget: >' + object + '<'
+          'Not false! ' + message + '\nget: >' + object + '<', 1
         );
       }
     },
