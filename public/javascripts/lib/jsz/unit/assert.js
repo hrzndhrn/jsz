@@ -3,55 +3,97 @@ script({
 }, function() {
   'use strict';
 
-  console.log('eval jsz.unit.assert');
-
   namespace('jsz.unit').module( 'assert').def({
 
-    equals: function( objA, objB, msg) {
-      if ( typeof msg === 'undefined' ) {
-        msg = JSZ.EMPTY_STRING;
+    SKIP_STACK_FRAMES: 1,
+
+    equals: function( objectGet, objectExpected, message) {
+      if ( typeof message === 'undefined' ) {
+        message = JSZ.EMPTY_STRING;
       }
 
-      if ( objA !== objB ) {
+      if ( objectGet !== objectExpected ) {
         throw new jsz.unit.AssertError(
-          'Not equal! ' + msg + '\n' +
-          'get     : >' + objA + '<\n' +
-          'expected: >' + objB + '<', 1);
+          'Not equal! ' + message + '\n' +
+          'get     : >' + objectGet + '<\n' +
+          'expected: >' + objectExpected + '<', 1);
       }
     },
 
-    equalsIgnoreCase: function( strA, strB, msg) {
-      if ( typeof msg === 'undefined' ) {
-        msg = '';
+    equalsIgnoreCase: function( stringGet, stringExpected, message) {
+      if ( typeof message === 'undefined' ) {
+        message = '';
       }
 
-      if ( !jsz.isString(strA) || !jsz.isString(strB) ||
-        !strA.equalsIgnoreCase(strA)) {
+      if ( !jsz.isString(stringGet) || !jsz.isString(stringExpected) ||
+        !stringGet.equalsIgnoreCase(stringGet)) {
         throw new jsz.unit.AssertError(
-          'Not equal! ' + msg + '\n' +
-          'get     : >' + strA + '<\n' +
-          'expected: >' + strB + '<'
+          'Not equal! ' + message + '\n' +
+          'get     : >' + stringGet + '<\n' +
+          'expected: >' + stringExpected + '<'
         );
       }
     },
 
-    isTrue: function(obj, msg) {
-      msg = jsz.default(msg, JSZ.EMPTY_STRING);
+    isTrue: function(object, message) {
+      message = jsz.default(message, JSZ.EMPTY_STRING);
 
-      if ( obj !== true ) {
+      if ( object !== true ) {
         throw new jsz.unit.AssertError(
-          'Not true! ' + msg + '\nget: >' + obj + '<'
+          'Not true! ' + message + '\nget: >' + object + '<'
         );
       }
     },
 
-    isFalse: function(obj, msg) {
-      msg = jsz.default(msg, JSZ.EMPTY_STRING);
+    isFalse: function(object, message) {
+      message = jsz.default(message, JSZ.EMPTY_STRING);
 
-      if ( obj !== false ) {
+      if ( object !== false ) {
         throw new jsz.unit.AssertError(
-          'Not false! ' + msg + '\nget: >' + obj + '<'
+          'Not false! ' + message + '\nget: >' + object + '<'
         );
+      }
+    },
+
+    equalsArray: function(arrayGet, arrayExpected, message) {
+      message = jsz.default(message, JSZ.EMPTY_STRING);
+
+      if (!jsz.isArray(arrayGet)) {
+        throw new jsz.unit.AssertError(
+          'The first argument is not an array! ' + message,
+          this.SKIP_STACK_FRAMES
+        );
+      }
+
+      if (!jsz.isArray(arrayExpected)) {
+        throw new jsz.unit.AssertError(
+          'The second argument is not an array! ' + message,
+          this.SKIP_STACK_FRAMES
+        );
+      }
+
+      if (arrayGet.length !== arrayExpected.length) {
+        throw new jsz.unit.AssertError(
+          'The arrays have not the same length! ' + message +'\n' +
+          'get     : >' + arrayGet.length + '<\n' +
+          'expected: >' + arrayExpected.length + '<',
+          this.SKIP_STACK_FRAMES
+        );
+      }
+
+      var index = 0, length = arrayGet.length;
+
+      while(index < length) {
+        if (arrayGet[index] !== arrayExpected[index]) {
+          throw new jsz.unit.AssertError(
+            'The arrays are not equal at index ' + index + '! ' +
+              message + '\n' +
+              'get     : >' + arrayGet[index] + '<\n' +
+              'expected: >' + arrayExpected[index] + '<',
+            this.SKIP_STACK_FRAMES
+          );
+        }
+        index++;
       }
     }
 
@@ -125,15 +167,14 @@ script({
       }
     },
 
-    _isArray: function(value) {
-      return value && Object.prototype.toString.apply(value) === JSX.ARRAY_TO_STRING;
-    },
 
     isFunction: function( func, message) {
       if ( typeof message === 'undefined') message = JSX.EMPTY_STRING;
 
       if ( !jsx.type.isFunction(func)) {
-        if ( message === JSX.EMPTY_STRING) message = 'Is not a function! [' + typeof func + ']';
+        if ( message === JSX.EMPTY_STRING) {
+          message = 'Is not a function! [' + typeof func + ']';
+        }
         var e = new Error( message);
         e.type = 'Assert';
         throw e;
@@ -144,7 +185,9 @@ script({
       if ( typeof message === 'undefined') message = JSX.EMPTY_STRING;
 
       if ( jsx.type.isFunction(func)) {
-        if ( message === JSX.EMPTY_STRING) message = 'Is a function! [' + typeof func + ']';
+        if ( message === JSX.EMPTY_STRING) {
+          message = 'Is a function! [' + typeof func + ']';
+        }
         var e = new Error( message);
         e.type = 'Assert';
         throw e;
@@ -155,7 +198,9 @@ script({
       if ( typeof message === 'undefined') message = JSX.EMPTY_STRING;
 
       if ( !jsx.type.isInstanceOf(instance, aClass)) {
-        if ( message === JSX.EMPTY_STRING) message = 'Is not an instance of ' + aClass;
+        if ( message === JSX.EMPTY_STRING) {
+          message = 'Is not an instance of ' + aClass;
+        }
         var e = new Error( message);
         e.type = 'Assert';
         throw e;

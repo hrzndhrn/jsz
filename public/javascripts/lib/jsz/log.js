@@ -59,7 +59,7 @@ script({name: 'lib.jsz.log'}, function () {
     _createLogStack: function () {
       // TODO: Experiment: log with error.stack
       // log.type.stack is just an experiment for now.
-      console.warn('log.type.stack is just an experiment for now.');
+      // console.warn('log.type.stack is just an experiment for now.');
       window.log = {};
       // The omitted function will be used to write on the console.
       var omittedFunction = 'log';

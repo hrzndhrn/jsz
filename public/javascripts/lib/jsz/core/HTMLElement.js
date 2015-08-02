@@ -120,7 +120,7 @@ script({
       var cssClasses = this.getCssClasses();
       this.map(
         HTMLElement.prototype.setAttribute, ['class',
-          cssClasses.filter(isNotEqual(cssClass)).join(JSZ.BLANK)]
+          cssClasses.filter(isNotEquals(cssClass)).join(JSZ.BLANK)]
       );
     },
 
@@ -146,7 +146,7 @@ script({
       cssClasses.push(addCssClass);
       this.map(
         HTMLElement.prototype.setAttribute, ['class',
-          cssClasses.filter(isNotEqual(removeCssClass)).join(JSZ.BLANK)]
+          cssClasses.filter(isNotEquals(removeCssClass)).join(JSZ.BLANK)]
       );
     },
 

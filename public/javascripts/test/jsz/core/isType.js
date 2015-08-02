@@ -7,9 +7,9 @@ script({
 }, function () {
   'use strict';
 
-  jsz.unit.Session.add(
+  jsz.unit.Session.get('jsz.core').add(
     new jsz.unit.TestCase({
-      name: 'jsz.core.isType',
+      name: 'isType',
       setup: function () {
         this.assert = jsz.unit.assert;
         this.isFalse = this.assert.isFalse;
@@ -42,9 +42,5 @@ script({
       }
     })
   );
-
-  jsz.log.setType('stack');
-  jsz.log.setLogTo($('div.log'));
-  jsz.unit.Session.run().log();
 
 });

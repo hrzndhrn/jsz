@@ -1,11 +1,16 @@
 @mainTest("jsz") {
     <script>
     script({
-        require:['test.jsz.core.isType']
+        require:['test.jsz.core.array']
     }, function() {
         jsz.unit.Session.get('jsz.core').run().logTo($('div.log'));
     });
     </script>
 
-    <h2>Test: test.core.isType</h2>
+    <h2>Test: test.core.Array</h2>
+    <ul class="hide">
+        <li>1
+        <li>2
+        <li>3
+    </ul>
 }

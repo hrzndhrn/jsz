@@ -54,22 +54,29 @@ script({
 
     _setStack: function( stack) {
       this.stack = stack;
-      var stackFrame = this.stack[0];
-      this.protocol = stackFrame.protocol;
-      this.host = stackFrame.host;
-      this.port = stackFrame.port;
-      this.path = stackFrame.path;
-      this.fileName = stackFrame.fileName;
-      this.lineNumber = stackFrame.lineNumber;
-      this.colNumber = stackFrame.colNumber;
+      if ( !stack.isEmpty()) {
+        var stackFrame = this.stack[0];
+        this.protocol = stackFrame.protocol;
+        this.host = stackFrame.host;
+        this.port = stackFrame.port;
+        this.path = stackFrame.path;
+        this.fileName = stackFrame.fileName;
+        this.lineNumber = stackFrame.lineNumber;
+        this.colNumber = stackFrame.colNumber;
+      }
     },
 
     _getStack: function( error, jszError, skip) {
       var stack =  error
         .stack
-        .split(JSZ.NEW_LINE)
-        .map(this._parseStackEntry);
-      return this._skip(stack, jszError, skip);
+        .split(JSZ.NEW_LINE);
+
+      // Opera stack starts with 'Error\n'
+      if ( stack[0] === 'Error') {
+        stack.shift();
+      }
+
+      return this._skip(stack.map(this._parseStackEntry), jszError, skip);
     },
 
     _skip: function(stack, jszError, skip) {
@@ -90,17 +97,39 @@ script({
     },
 
     _parseStackEntry: function(entry) {
-      var entryObject = {}, codePointer;
+      // console.log('entry: ' + entry);
+      var entryObject = {}, codePointer, funAtPos;
 
-      // Get the function name and the code pointer
-      var funAtPos = (/^(.*)@(.*)$/).exec(entry);
+      // Get the function name and the code pointer. The format of the stack
+      // differs from browser to browser.
+      if ( (/^\s*at\s/).test(entry)) {
+        // Opera
+        funAtPos = (/^\s*at\s+(.*)\s*\((.*)\)/).exec(entry);
+        if (funAtPos === null) {
+          funAtPos = (/^\s*at(\s+)(.*)/).exec(entry);
+        }
+      }
+      else {
+        // FireFox, Safari
+        funAtPos = (/(.*)@(.*)$/).exec(entry);
+      }
+
       if (funAtPos === null) {
         // this entry holds just a code pointer
         entryObject.functionName = JSZ.EMPTY_STRING;
         codePointer = entry;
       }
       else {
-        entryObject.functionName = funAtPos[1];
+        var funPathName = (/(.*)\.(.*)/).exec(funAtPos[1]);
+        if (funPathName !== null) {
+          entryObject.functionPath = funPathName[1].trim();
+          entryObject.functionName = funPathName[2].trim();
+        }
+        else {
+          entryObject.functionPath = JSZ.EMPTY_STRING;
+          entryObject.functionName = funAtPos[1].trim();
+        }
+
         codePointer = funAtPos[2];
       }
 
@@ -120,6 +149,13 @@ script({
 
       if ( codePointerParts === null) {
         entryObject.fileName = codePointer;
+        entryObject.protocol = JSZ.EMPTY_STRING;
+        entryObject.host = JSZ.EMPTY_STRING;
+        entryObject.port = JSZ.EMPTY_STRING;
+        entryObject.path = JSZ.EMPTY_STRING;
+        entryObject.fileName = JSZ.EMPTY_STRING;
+        entryObject.lineNumber = JSZ.EMPTY_STRING;
+        entryObject.colNumber = JSZ.EMPTY_STRING;
       }
       else {
         entryObject.codePointer = codePointerParts[0];

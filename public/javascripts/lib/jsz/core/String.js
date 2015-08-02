@@ -33,4 +33,11 @@ script({name: 'lib.jsz.core.String'}, function () {
     return result;
   };
 
+  if (String.prototype.startsWith === undefined) {
+    String.prototype.startsWith = function(searchString, position) {
+      position = jsz.default(position, 0);
+      return this.indexOf(searchString, position) === position;
+    };
+  }
+
 });

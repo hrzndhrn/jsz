@@ -3,10 +3,9 @@ script({
 }, function () {
   'use strict';
 
-  console.log('eval lib.jsz.unit.Session');
-
   namespace('jsz.unit').class('Session').def({
-    Session: function () {
+    Session: function (name) {
+      this.name = name;
       this._testCases = [];
       this._testNameRegExp = new RegExp('.*');
     },
@@ -40,21 +39,34 @@ script({
     },
 
     log: function() {
+      log.info('TestSession: ' + this.name, false);
       this._testCases.forEach(this._logTestCase, this);
     },
 
     _logTestCase: function(testCase) {
       testCase.log();
+    },
+
+    logTo: function(htmlElement) {
+      jsz.log.setType('stack');
+      jsz.log.setLogTo(htmlElement);
+      this.log();
     }
 
   }).static({
-      _defaultSession: null,
+      _sessions: {},
+      DEFAULT_SESSION_NAME: 'default',
 
       getDefaultSession: function() {
-        if (this._defaultSession === null) {
-          this._defaultSession = new jsz.unit.Session();
+        return this.get(this.DEFAULT_SESSION_NAME);
+      },
+    
+      get: function(name) {
+        if (this._sessions[name] === undefined) {
+          this._sessions[name] =
+            new jsz.unit.Session(name);
         }
-        return this._defaultSession;
+        return this._sessions[name];
       },
 
       add: function (testCase) {

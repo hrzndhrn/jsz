@@ -2,7 +2,6 @@ script({
   name: 'lib.jsz.unit.TestCase'
 }, function() {
   'use strict';
-  console.log('eval lib.jsz.unit.TestCase');
 
   namespace('jsz.unit').class( 'TestCase').def({
     TestCase: function(config) {
@@ -17,7 +16,7 @@ script({
     },
 
     _setupTests: function(methodName) {
-      var contains = this._tests.contains( function(test) {
+      var contains = this._tests.some( function(test) {
         return test.name === methodName;
       }); 
       

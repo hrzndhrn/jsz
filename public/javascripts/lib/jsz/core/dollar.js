@@ -27,7 +27,7 @@ script({
     }
 
     return new jsz.HTMLElementsList(
-      Array.fromNodeList(element.querySelectorAll(selectors))
+      Array.from(element.querySelectorAll(selectors))
         .map(jsz.HTMLElement.create)
     );
   };
