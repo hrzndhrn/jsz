@@ -14,7 +14,7 @@ script({
   };
 
   jsz.Object.prototype.toString = function () {
-    return '[Object ' + this.getClassName() + ']';
+    return '[object ' + this.getClassName() + ']';
   };
 
   jsz.Object.prototype.getClassName = function () {
