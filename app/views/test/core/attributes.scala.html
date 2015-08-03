@@ -1,0 +1,12 @@
+@mainTest("jsz") {
+    <script>
+    script({
+    require:['test.jsz.core.HTMLElementAttributes']
+    }, function() {
+    jsz.unit.Session.get('jsz.core').run().logTo($('div.log'));
+    });
+    </script>
+
+    <h2>Test: test.core.HTMLElement:attributes</h2>
+    <div id="attributes" class="hide" data-value="main"></div>
+}
