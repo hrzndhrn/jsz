@@ -97,6 +97,16 @@ script({
       }
     },
 
+    isNull: function( object, message) {
+      message = jsz.default(message, JSZ.EMPTY_STRING);
+
+      if ( object !== null ) {
+        throw new jsz.unit.AssertError(
+          'Not null! ' + message + '\nget: >' + object + '<', 1
+        );
+      }
+    },
+
     instanceOf: function( object, aClass, message) {
       message = jsz.default(message, JSZ.EMPTY_STRING);
 
@@ -113,6 +123,8 @@ script({
           'Is not an instance of ' + aClass.toString() + '! ' + message, 1
         );
       }
+
+
     }
 
 

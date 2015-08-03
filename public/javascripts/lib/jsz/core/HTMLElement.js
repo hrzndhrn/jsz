@@ -1,3 +1,9 @@
+/**
+ * This script holds the jsz.HTMLElement class.
+ *
+ * @author   Marcus Kruse
+ * @version  0.1.0
+ */
 script({
   name: 'lib.jsz.core.HTMLElement',
   require: [
@@ -7,17 +13,40 @@ script({
 }, function () {
   'use strict';
 
+  /**
+   * The jsz.HTMLElement class is a wrapper for all html elements.
+   */
   namespace('jsz').proto('HTMLElement', {
 
-    HTMLElement: function (element, companion) {
+    /**
+     * The constructor to wrap a html element.
+     *
+     * @param {HTMLElement} element
+     */
+    HTMLElement: function (element) {
       this._element = jsz.default(element, null);
-      this._companion = jsz.default(companion, null);
     },
 
+    /**
+     * A constant for the prefix of custom attributes in HTML.
+     * @const {String}
+     */
     CUSTOM_ATTRIBUTE_PREFIX: 'data-',
+    /**
+     * A constant for the prefix of custom jsz-attributes in HTML.
+     * @const {String}
+     */
     CUSTOM_JSZ_PREFIX: 'data-jsz-',
 
-    map: function (fun, args) {
+    /**
+     * This function calls a given function with the wrapped element as scope.
+     * If the jsz.HTMLElement is empty this methods returns null.
+     * 
+     * @param {Function} fun
+     * @param {Array} args
+     * @returns {*}
+     */
+    _apply: function (fun, args) {
       var result = null;
       if (this.isNotEmpty()) {
         result = apply(fun, this._element, args);
@@ -26,61 +55,155 @@ script({
       return result;
     },
 
+    /**
+     * isEmpty returns true if the wrapped element is null.
+     *
+     * @returns {boolean}
+     */
     isEmpty: function () {
       return this._element === null;
     },
 
+    /**
+     * isNotEmpty returns true if the wrapped element is not null.
+     *
+     * @returns {boolean}
+     */
     isNotEmpty: function () {
       return this._element !== null;
     },
 
+    /**
+     * The method get returns the wrapped element or null if the jsz.HTMLElement
+     * is empty.
+     *
+     * @returns {HTMLElement|null}
+     */
     get: function () {
       return this._element;
     },
 
+    /**
+     * The jsz.HTMLElement.append method adds a jsz.HTMLElement to
+     * the end of the list of children of this jsz.HTMLElement.
+     *
+     * @param {jsz.HTMLElement} element
+     * @returns {*}
+     */
     append: function(element) {
-      return this.map(HTMLElement.prototype.appendChild, [element.get()]);
+      return this._apply(HTMLElement.prototype.appendChild, [element.get()]);
     },
 
+    /**
+     * Adds a new attribute or changes the value of an existing attribute.
+     * @example
+     * <button id="foo">Hello</button>
+     * @example
+     * $id('foo').setAttribute('disabled', 'disabled');
+     *
+     * @param {String} name
+     * @param {String} value
+     * @returns {*}
+     */
     setAttribute: function(name, value) {
-      return this.map(HTMLElement.prototype.setAttribute, [name, value]);
+      return this._apply(HTMLElement.prototype.setAttribute, [name, value]);
     },
 
-    setDataAttribute: function(name, value) {
-      return this.map(HTMLElement.prototype.setAttribute,
+    /**
+     * Adds a new custom attribute or changes the value of an existing custom
+     * attribute.
+     * @example
+     * <button id="foo" data-my="world">Hello</button>
+     * @example
+     * $id('foo').setCustomAttribute('my', 'universe');
+     *
+     * @param {String} name
+     * @param {String} value
+     * @returns {*}
+     */
+    setCustomAttribute: function(name, value) {
+      return this._apply(HTMLElement.prototype.setAttribute,
         [this.CUSTOM_ATTRIBUTE_PREFIX + name, value]);
     },
 
+    /**
+     * Adds a new jsz-attribute or changes the value of an existing
+     * jsz-attribute.
+     * @example
+     * <button id="foo" data-jsz-my="world">Hello</button>
+     * @example
+     * $id('foo').setJszAttribute('my', 'universe');
+     *
+     * @param {String} name
+     * @param {String} value
+     * @returns {*}
+     */
     setJszAttribute: function(name, value) {
-      return this.map(HTMLElement.prototype.setAttribute,
+      return this._apply(HTMLElement.prototype.setAttribute,
         [this.CUSTOM_JSZ_PREFIX + name, value]);
     },
 
+    /**
+     * This method returns the value of a specified attribute.
+     *
+     * @param {String} name
+     * @returns {String|null}
+     */
     getAttribute: function(name) {
-      return this.map(HTMLElement.prototype.getAttribute, [name]);
+      var value = this._apply(HTMLElement.prototype.getAttribute, [name]);
+      return value === JSZ.EMPTY_STRING ? null : value;
     },
 
-    getDataAttribute: function(name) {
-      return this.map(HTMLElement.prototype.getAttribute,
+    /**
+     * This method returns the value of a specified custom attribute.
+     * @example
+     * <button id="foo" data-my="world">Hello</button>
+     * @example
+     * $id('foo').getCustomAttribute('my'); // returns 'world'
+     *
+     * @param {String} name
+     * @returns {String|null}
+     */
+    getCustomAttribute: function(name) {
+      var value = this._apply(HTMLElement.prototype.getAttribute,
         [this.CUSTOM_ATTRIBUTE_PREFIX + name]);
+      return value === JSZ.EMPTY_STRING ? null : value;
     },
 
+    /**
+     * This method returns the value of a specified jsz-attribute.
+     * @example
+     * <button id="foo" data-jsz-my="world">Hello</button>
+     * @example
+     * $id('foo').getJszAttribute('my'); // returns 'world'
+     *
+     * @param {String} name
+     * @returns {String|null}
+     */
     getJszAttribute: function(name) {
-      return this.map(HTMLElement.prototype.getAttribute,
+      var value = this._apply(HTMLElement.prototype.getAttribute,
         [this.CUSTOM_JSZ_PREFIX + name]);
+      return value === JSZ.EMPTY_STRING ? null : value;
     },
 
+    /**
+     * This methods set several attributes specified by a hash object.
+     *
+     * @todo documentation and example
+     *
+     * @param {Object} attributes
+     */
     setAttributes: function(attributes) {
       Object.keys(attributes).forEach(function(name) {
         var value = attributes[name];
-        if (name.equalIgnoreCase('style')) {
-          this.setStyle(value); // TODO: implement setStyle
+        if (name.equalsIgnoreCase('style')) {
+          this.setStyles(value); // TODO: implement setStyles
         }
-        else if (name.equalIgnoreCase('aria')) {
-          this.setAriaAttributes(value); // TODO: implement setAriaAttributes
+        else if (name.equalsIgnoreCase('jsz')) {
+          this.setJszAttributes(value);
         }
-        else if (name.equalIgnoreCase('jsz')) {
-          this.setJszAttributes(value); // TODO: implement setJszAttributes
+        else if (name.equalsIgnoreCase('custom')) {
+          this.setCustomAttributes(value);
         }
         else {
           if (jsz.isArray(value)) {
@@ -90,6 +213,21 @@ script({
         }
       }, this);
     },
+
+    setJszAttributes: function(attributes) {
+      Object.keys(attributes).forEach(function(name) {
+        var value = attributes[name];
+        this.setJszAttribute(name, value);
+      }, this);
+    },
+
+    setCustomAttributes: function(attributes) {
+      Object.keys(attributes).forEach(function(name) {
+        var value = attributes[name];
+        this.setCustomAttribute(name, value);
+      }, this);
+    },
+
 
     html: function(html) {
       if (html === undefined) {
@@ -103,37 +241,41 @@ script({
     },
 
     getId: function () {
-      return this.map(HTMLElement.prototype.getAttribute, ['id']);
+      return this._apply(HTMLElement.prototype.getAttribute, ['id']);
     },
 
     setStyle: function (style, value) {
       jsz.dom.setStyle(this._element, style, value);
     },
 
+    setStyles: function(object) {
+      // TODO: implement setStyles
+    },
+
     hasType: function () {
       return Boolean(
-        this.map(HTMLElement.prototype.hasAttribute, ['type'])
+        this._apply(HTMLElement.prototype.hasAttribute, ['type'])
       ).valueOf();
     },
 
     isType: function (type) {
       return this.hasType() &&
-        type.equalIgnoreCase(this.getType());
+        type.equalsIgnoreCase(this.getType());
     },
 
     getType: function () {
-      this.map(HTMLElement.prototype.getAttribute, ['type']);
+      this._apply(HTMLElement.prototype.getAttribute, ['type']);
     },
 
     getCssClasses: function () {
-      return this.map(
+      return this._apply(
         HTMLElement.prototype.getAttribute, ['class']).split(JSZ.BLANK);
     },
 
     addCssClass: function (cssClass) {
       var cssClasses = this.getCssClasses();
       cssClasses.push(cssClass);
-      this.map(
+      this._apply(
         HTMLElement.prototype.setAttribute, ['class',
           cssClasses.join(JSZ.BLANK)]
       );
@@ -141,7 +283,7 @@ script({
 
     removeCssClass: function (cssClass) {
       var cssClasses = this.getCssClasses();
-      this.map(
+      this._apply(
         HTMLElement.prototype.setAttribute, ['class',
           cssClasses.filter(isNotEquals(cssClass)).join(JSZ.BLANK)]
       );
@@ -167,7 +309,7 @@ script({
       }
 
       cssClasses.push(addCssClass);
-      this.map(
+      this._apply(
         HTMLElement.prototype.setAttribute, ['class',
           cssClasses.filter(isNotEquals(removeCssClass)).join(JSZ.BLANK)]
       );

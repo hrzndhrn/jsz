@@ -1,41 +1,73 @@
+/**
+ * The script String.js contains some extensions to the built-in String.
+ *
+ * @author Marcus Kruse
+ * @version 0.1.0
+ */
 script({name: 'lib.jsz.core.String'}, function () {
   'use strict';
 
+  /**
+   * The method String.toCamelCase returns this string in a camel case style.
+   * @example
+   * 'snake-case'.toCamelCase(); // returns 'snakeCase'
+   * 'kebab_case'.toCamelCase(); // returns 'kebabCase'
+   * 'kebab_snake-case'.toCamelCase(); // returns 'kebabSnakeCase'
+   *
+   * @returns {string}
+   */
   String.prototype.toCamelCase = function () {
-    var string = this;
+    var splits = this.split(/[-|_]/);
+    var newString = splits.shift().toLowerCase();
 
-    ['-', '_'].forEach(function (_char) {
-      var splits = string.split(_char);
-      if (splits.length > 1) {
-        string = splits.shift().toLowerCase();
-        splits.forEach(function (s) {
-          string = string + s.substr(0, 1).toUpperCase() +
-          s.substr(1).toLowerCase();
-        });
-      }
+    splits.forEach( function(string) {
+      newString = newString + string.substr(0, 1).toUpperCase() +
+        string.substr(1).toLowerCase();
     });
 
-    if (/^[A-Z,0-9]*$/.test(string)) {
-      string = string.toLowerCase();
-    }
-
-    return string;
+    return newString;
   };
 
-  String.prototype.equalIgnoreCase = function (str) {
+  /**
+   * Compares this string with the given string and ignoring the case.
+   *
+   * @param {String} str
+   * @returns {boolean}
+   */
+  String.prototype.equalsIgnoreCase = function (str) {
     var result = false;
 
     if (!(str === undefined || str === null)) {
-      var regex = new RegExp('/^' + str + '$/', 'i');
-      result = this.match(regex);
+      var regex = new RegExp('^' + str + '$', 'i');
+      result = regex.test(this);
     }
 
     return result;
   };
 
   if (String.prototype.startsWith === undefined) {
+    /**
+     * The startsWith method determines whether a string begins with the
+     * characters of another string, returning true or false as appropriate.
+     *
+     * @param {String} searchString
+     * @param {Integer} [position]
+     * @returns {boolean}
+     * ------------------------------------------------------------------------
+     * @compatibility
+     * @timestamp 2015-08-03
+     * @reference {@link https://developer.mozilla.org/en-US/docs/Web/
+     *   JavaScript/Reference/Global_Objects/String/startsWith#
+     *   Browser_compatibility}
+     * @ES 6
+     * @FF 17
+     * @CH 41, 36
+     * @IE not supported
+     * @OP not supported
+     * @SF not supported
+     */
     String.prototype.startsWith = function(searchString, position) {
-      position = jsz.default(position, 0);
+      position = jsz.default(position, 0  );
       return this.indexOf(searchString, position) === position;
     };
   }

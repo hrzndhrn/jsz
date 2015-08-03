@@ -144,6 +144,15 @@ script({
       return this._skip(stack.map(this._parseStackEntry), jszError, skip);
     },
 
+    /**
+     * This method skips some stack frames to point to the right position in
+     * the code.
+     *
+     * @param {StackFrame[]} stack
+     * @param {Boolean} jszError indicates if the Error a new jsz.Error
+     * @param {Integer} skip holds an integer to skip some additional frames.
+     * @returns {StackFrame[]}
+     */
     _skip: function(stack, jszError, skip) {
       if (jszError) {
         // skip all stack frames until reaching the frame related to this
@@ -167,6 +176,14 @@ script({
       return stack;
     },
 
+    /**
+     * The method _parseStackEntry parsed the stack string of the built-in
+     * Error and generates a StackFrame.
+     *
+     * @param {String} entry
+     * @returns {StackFrame}
+     * @private
+     */
     _parseStackEntry: function(entry) {
       // console.log('entry: ' + entry);
       var entryObject = {}, codePointer, funAtPos;
@@ -191,6 +208,7 @@ script({
         codePointer = entry;
       }
       else {
+        // split the function string in a path part and a name part.
         var funPathName = (/(.*)\.(.*)/).exec(funAtPos[1]);
         if (funPathName !== null) {
           entryObject.functionPath = funPathName[1].trim();
@@ -242,6 +260,12 @@ script({
       return entryObject;
     },
 
+    /**
+     * The toString method returns a string representing the specified
+     * jsz.Error object.
+     *
+     * @returns {string}
+     */
     toString: function() {
       return this.name + ':' +
         this.fileName + ':' +

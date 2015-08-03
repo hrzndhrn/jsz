@@ -16,6 +16,7 @@ class Test extends Controller {
       case "core/isType" => Ok(views.html.test.core.isType())
       case "core/array" => Ok(views.html.test.core.array())
       case "core/dollar" => Ok(views.html.test.core.dollar())
+      case "core/attributes" => Ok(views.html.test.core.attributes())
       case _ => NotFound
     }
   }

@@ -1,9 +1,9 @@
 @mainTest("jsz") {
     <script>
     script({
-    require:['test.jsz.core.HTMLElementAttributes']
+        require:['test.jsz.core.HTMLElementAttributes']
     }, function() {
-    jsz.unit.Session.get('jsz.core').run().logTo($('div.log'));
+        jsz.unit.Session.get('jsz.core').run().logTo($('div.log'));
     });
     </script>
 
