@@ -51,7 +51,24 @@ script({
       this._jsz_.super--;
     }
 
+  };
 
+  // ===========================================================================
+  // Static functions for the built-in Object.
+
+  /**
+   * Creates an identical object form the specified object.
+   *
+   * @note For teh moment its works just right fro plain objects.
+   *
+   * @param {*} object
+   * @returns {*}
+   */
+  Object.clone = function(object) {
+    if (object === undefined) {
+      throw new Error('Can not clone undefined!');
+    }
+    return JSON.parse(JSON.stringify(object));
   };
 
 });
