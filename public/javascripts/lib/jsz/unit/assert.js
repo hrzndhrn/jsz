@@ -40,7 +40,8 @@ script({
 
       if ( object !== true ) {
         throw new jsz.unit.AssertError(
-          'Not true! ' + message + '\nget: >' + object + '<', 1
+          'Not true! ' + message + '\nget: >' + object + '<',
+          this.SKIP_STACK_FRAMES
         );
       }
     },
@@ -50,7 +51,8 @@ script({
 
       if ( object !== false ) {
         throw new jsz.unit.AssertError(
-          'Not false! ' + message + '\nget: >' + object + '<', 1
+          'Not false! ' + message + '\nget: >' + object + '<',
+          this.SKIP_STACK_FRAMES
         );
       }
     },
@@ -102,7 +104,8 @@ script({
 
       if ( object !== null ) {
         throw new jsz.unit.AssertError(
-          'Not null! ' + message + '\nget: >' + object + '<', 1
+          'Not null! ' + message + '\nget: >' + object + '<',
+          this.SKIP_STACK_FRAMES
         );
       }
     },
@@ -112,7 +115,7 @@ script({
 
       if (aClass === undefined) {
         throw new jsz.unit.AssertError(
-          'Class is undefined! ' + message, 1
+          'Class is undefined! ' + message, this.SKIP_STACK_FRAMES
         );
       }
 
@@ -120,12 +123,36 @@ script({
 
       if (!test) {
         throw new jsz.unit.AssertError(
-          'Is not an instance of ' + aClass.toString() + '! ' + message, 1
+          'Is not an instance of ' + aClass.toString() + '! ' + message,
+          this.SKIP_STACK_FRAMES
         );
       }
 
+    },
 
+    isUndefined: function( object, message) {
+      message = jsz.default(message, JSZ.EMPTY_STRING);
+
+      if (object !== undefined) {
+        throw new jsz.unit.AssertError(
+          'Not undefined! ' + message + '\nget: >' + object + '<',
+          this.SKIP_STACK_FRAMES
+        );
+      }
+    },
+
+    isDefined: function( object, message) {
+      message = jsz.default(message, JSZ.EMPTY_STRING);
+
+      if (object === undefined) {
+        throw new jsz.unit.AssertError(
+          'Not defined! ' + message + '\nget: >' + object + '<',
+          this.SKIP_STACK_FRAMES
+        );
+      }
     }
+
+
 
 
 
@@ -160,14 +187,6 @@ script({
       }
     },
 
-    isUndefined: function( a, msg) {
-      if ( typeof msg === 'undefined' ) msg = '';
-      if ( typeof a !== 'undefined' ) {
-        var e = new Error( 'Not undefined! ' + msg + '\nget: >' + a + '<');
-        e.type = 'Assert';
-        throw e;
-      }
-    },
 
     isDefined: function( a, msg) {
       if ( typeof msg === 'undefined' ) msg = '';

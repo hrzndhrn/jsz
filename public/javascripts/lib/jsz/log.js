@@ -94,6 +94,10 @@ script({name: 'lib.jsz.log'}, function () {
       }
     },
 
+    getType: function() {
+      return _jsz_.log.type;
+    },
+
     _logStack: function (logFunctionName) {
       return function(message, showLocation) {
         showLocation = jsz.default(showLocation, true);

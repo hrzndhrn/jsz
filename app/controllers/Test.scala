@@ -12,11 +12,13 @@ class Test extends Controller {
       case "test" => Ok(views.html.test.test())
       case "testCase" => Ok(views.html.test.testCase())
       case "testSession" => Ok(views.html.test.testSession())
+      case "unit/testCase" => Ok(views.html.test.unit.testCase())
       case "core/all" => Ok(views.html.test.core.all())
       case "core/isType" => Ok(views.html.test.core.isType())
       case "core/array" => Ok(views.html.test.core.array())
       case "core/dollar" => Ok(views.html.test.core.dollar())
       case "core/attributes" => Ok(views.html.test.core.attributes())
+      case "core/default" => Ok(views.html.test.core.default())
       case _ => NotFound
     }
   }

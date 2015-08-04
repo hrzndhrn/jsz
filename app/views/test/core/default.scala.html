@@ -1,0 +1,12 @@
+@mainTest("jsz") {
+    <script>
+    script({
+    require:['test.jsz.core.default']
+    }, function() {
+    jsz.unit.Session.get('jsz.core').run().logTo($('div.log'));
+    });
+    </script>
+
+    <h2>Test: test.core.default</h2>
+    Tests for jsz.default and jsz.defaults.
+}

@@ -15,8 +15,9 @@ script({
     ARGUMENTS_TO_STRING: '[object Arguments]',
 
     /**
-     * The jsz.default functions returns a default value if the value is
+     * The jsz.default function returns a default value if the value is
      * undefined.
+     *
      * @param {*} value
      * @param {*} defaultValue
      * @returns {*}
@@ -25,6 +26,51 @@ script({
       return value === undefined ? defaultValue : value;
     },
 
+    /**
+     * The jsz.defaults function returns a copy of object extended by missing
+     * key value pairs from the default object. If the object is undefined then
+     * the default object will be returned.
+     *
+     * @example
+     * var hash = {a:1};
+     * jsz.defaults(hash, {a:9,b:2}); // returns {a:1,b:2}
+     *
+     * @example
+     * var hash = {a:{x:1,y:2},b:{x:1}};
+     * jsz.defaults(hash, {a:{x:0,y:0}, b:{x:0, y:0}, c:{x:0, y:0}});
+     * // returns {a:{x:1,y:2}, b:{x:1, y:0}, c:{x:0, y:0}}
+     *
+     * @param object
+     * @param defaultObject
+     * @returns {{}}
+     */
+    defaults: function(object, defaultObject) {
+      // The original object will be cloned and the keys of the default objects
+      // will be iterate to find missing key value pairs in the original object.
+      var newObject = Object.clone(object);
+
+      Object.keys(defaultObject).forEach(function(key) {
+        if (object[key] === undefined) {
+          // Take the value form the default object
+          newObject[key] = defaultObject[key];
+        }
+        else {
+          if (jsz.isPlainObject(defaultObject[key])) {
+            // If the value of the default object is a plain object then go
+            // deeper.
+            newObject[key] = jsz.defaults(object[key], defaultObject[key]);
+          }
+          else {
+            // Take the value from the original object.
+            newObject[key] = object[key];
+          }
+        }
+      });
+
+      return newObject;
+    },
+
+    // =========================================================================
     // All isType functions are just convenience functions. These functions
     // save a typeof or instanceof.
 
@@ -119,7 +165,7 @@ script({
       if (is) {
         var key;
         for ( key in obj) {
-          // empty
+          /* empty */
         }
 
         is = (key === undefined || obj.hasOwnProperty(key));
@@ -165,7 +211,7 @@ script({
      * The jsz.isBoolean function returns true if an object is an integer,
      * false if it is not.
      *
-     * @param {*} obj
+     * @param {*} object
      * @return {boolean}
      */
     isInt: function (object) {

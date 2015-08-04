@@ -8,10 +8,13 @@ script({
       this.name = name;
       this._testCases = [];
       this._testNameRegExp = new RegExp('.*');
+      this._onReady = noop;
     },
 
     add: function (testCase) {
+      testCase.onReady( this._onReadyTestCase, this);
       this._testCases.push(testCase);
+      return this;
     },
 
     run: function (testNameRegEx) {
@@ -26,6 +29,10 @@ script({
       }
     },
 
+    onReady: function(fun, scope) {
+      this._onReady = unite(fun, scope);
+    },
+
     isSuccessful: function() {
       return this._testCases.every(this._isSuccessfulTestCase, this);
     },
@@ -33,13 +40,33 @@ script({
     _isSuccessfulTestCase: function(testCase) {
       var successful = true;
       if (this._testNameRegExp.test(testCase.name)) {
+        console.log('_isSuccessfulTestCase: ' + testCase.name);
         successful = testCase.isSuccessful();
       }
       return successful;
     },
 
+    _onReadyTestCase: function() {
+      if (this.isReady()) {
+        this._onReady(this);
+      }
+    },
+
+    isReady: function() {
+      return this._testCases.every(function(testCase) {
+        return testCase.isReady();
+      });
+    },
+
     log: function() {
-      log.info('TestSession: ' + this.name, false);
+      var message = 'TestSession: ' + this.name;
+      if ( this.isSuccessful()) {
+        log.success(message, false);
+      }
+      else {
+        log.error(message, false);
+      }
+
       this._testCases.forEach(this._logTestCase, this);
     },
 
@@ -48,9 +75,20 @@ script({
     },
 
     logTo: function(htmlElement) {
-      jsz.log.setType('stack');
-      jsz.log.setLogTo(htmlElement);
-      this.log();
+      if (this.isReady()) {
+        var logType = jsz.log.getType();
+        jsz.log.setType('stack');
+        jsz.log.setLogTo(htmlElement);
+        this.log();
+        jsz.log.setType(logType);
+      }
+      else {
+        throw new Error('jsz.unit.Session is not ready!');
+      }
+    },
+
+    toString: function() {
+      return '[' + this.name + JSZ.BLANK + this.getClassName() + ']';
     }
 
   }).static({
