@@ -75,6 +75,7 @@
    * an object and one of his methods.
    */
   window.unite = function (fun, scope) {
+    var uniteFun;
 
     if (fun === undefined) {
       fun = noop;
@@ -88,7 +89,7 @@
         scope = window;
       }
 
-      var uniteFun = function () {
+      uniteFun = function () {
         return fun.apply(scope, arguments);
       };
 
@@ -135,7 +136,7 @@
    * @param valueA
    * @returns {function}
    */
-  window.isEquals = function (valueA) {
+  window.isEqual = function (valueA) {
     var fun;
     if (typeof valueA.equal === 'function') {
       fun = function (valueB) {
@@ -156,7 +157,7 @@
    * @param valueA
    * @returns {function}
    */
-  window.isNotEquals = function(valueA) {
+  window.isNotEqual = function(valueA) {
     var fun;
     if (typeof valueA.equal === 'function') {
       fun = function (valueB) {
@@ -289,7 +290,7 @@
 
     this._defaultRequirements.forEach(function (requirement) {
       var requirementObject = script.list[requirement];
-      if (!requirementObject.require.some(isEquals(scriptName))) {
+      if (!requirementObject.require.some(isEqual(scriptName))) {
         scriptObject.require.push(requirement);
       }
     });
@@ -305,7 +306,7 @@
 
     // start with the evaluation when script._base is set
     if (script._base !== null) {
-      if (script._evalStack.some(isEquals(scriptName))) {
+      if (script._evalStack.some(isEqual(scriptName))) {
         throw new Error('Cycle reference in script-loader! ' +
           script._evalStack.join(' > ') + ' > ' + scriptName);
       }

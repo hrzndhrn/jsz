@@ -31,8 +31,8 @@ script({
       methods: {
 
         fromArguments: function () {
-          this.assert.equalsArray(this.fromArguments(1, 2, 3), [1, 2, 3]);
-          this.assert.equalsArray(
+          this.assert.isEqualArray(this.fromArguments(1, 2, 3), [1, 2, 3]);
+          this.assert.isEqualArray(
             this.fromArgumentsAddValue(1, 2, 3),
             [4, 5, 6]);
         },
@@ -40,15 +40,15 @@ script({
         fromNodeList: function() {
           var ul = document.getElementsByTagName('ul')[0];
           var childNodes = ul.childNodes;
-          this.assert.equalsArray(
+          this.assert.isEqualArray(
             Array.from(childNodes),
             [childNodes[0], childNodes[1], childNodes[2], childNodes[3]]
           );
         },
 
         fromString: function() {
-          this.assert.equalsArray(Array.from('abc'), ['a', 'b', 'c']);
-          this.assert.equalsArray(
+          this.assert.isEqualArray(Array.from('abc'), ['a', 'b', 'c']);
+          this.assert.isEqualArray(
             Array.from('abc', function(char) { return char.toUpperCase();}),
             ['A', 'B', 'C']);
         },

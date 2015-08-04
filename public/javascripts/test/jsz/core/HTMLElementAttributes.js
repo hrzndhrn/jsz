@@ -31,9 +31,9 @@ script({
         },
 
         read: function () {
-          this.assert.equals(this.element.getAttribute('align'), 'left');
-          this.assert.equals(this.element.getCustomAttribute('foo'), 'foo');
-          this.assert.equals(this.element.getJszAttribute('bar'), 'bar');
+          this.assert.isEqual(this.element.getAttribute('align'), 'left');
+          this.assert.isEqual(this.element.getCustomAttribute('foo'), 'foo');
+          this.assert.isEqual(this.element.getJszAttribute('bar'), 'bar');
         },
 
         write: function() {
@@ -55,9 +55,9 @@ script({
         },
 
         readMulti: function() {
-          this.assert.equals(this.element.getAttribute('align'), 'right');
-          this.assert.equals(this.element.getJszAttribute('bar'), 'foo');
-          this.assert.equals(this.element.getCustomAttribute('foo'), 'bar');
+          this.assert.isEqual(this.element.getAttribute('align'), 'right');
+          this.assert.isEqual(this.element.getJszAttribute('bar'), 'foo');
+          this.assert.isEqual(this.element.getCustomAttribute('foo'), 'bar');
         }
 
       }

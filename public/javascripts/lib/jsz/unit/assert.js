@@ -7,7 +7,7 @@ script({
 
     SKIP_STACK_FRAMES: 1,
 
-    equals: function( objectGet, objectExpected, message) {
+    isEqual: function( objectGet, objectExpected, message) {
       if ( typeof message === 'undefined' ) {
         message = JSZ.EMPTY_STRING;
       }
@@ -20,7 +20,7 @@ script({
       }
     },
 
-    equalsIgnoreCase: function( stringGet, stringExpected, message) {
+    isEqualIgnoreCase: function( stringGet, stringExpected, message) {
       if ( typeof message === 'undefined' ) {
         message = '';
       }
@@ -57,7 +57,7 @@ script({
       }
     },
 
-    equalsArray: function(arrayGet, arrayExpected, message) {
+    isEqualArray: function(arrayGet, arrayExpected, message) {
       message = jsz.default(message, JSZ.EMPTY_STRING);
 
       if (!jsz.isArray(arrayGet)) {
@@ -110,7 +110,7 @@ script({
       }
     },
 
-    instanceOf: function( object, aClass, message) {
+    isInstanceOf: function( object, aClass, message) {
       message = jsz.default(message, JSZ.EMPTY_STRING);
 
       if (aClass === undefined) {

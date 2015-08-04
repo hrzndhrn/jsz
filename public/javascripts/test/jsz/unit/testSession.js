@@ -20,11 +20,11 @@ script({
       methods: {
 
         isThree: function () {
-          this.assert.equals(this.aValue, 3, 'is three');
+          this.assert.isEqual(this.aValue, 3, 'is three');
         },
 
         isFour: function () {
-          this.assert.equals(this.aValue, 4, 'is four');
+          this.assert.isEqual(this.aValue, 4, 'is four');
         }
 
       }

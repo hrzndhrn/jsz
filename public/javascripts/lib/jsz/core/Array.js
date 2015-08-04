@@ -143,7 +143,7 @@ script({name:'lib.jsz.core.Array'}, function () {
   Array.prototype.contains = function (value, callback, scope) {
     // Value must be a type that can be handled by ===
     if (callback === undefined) {
-      return this.some(isEquals(value));
+      return this.some(isEqual(value));
     }
     else {
       return this.some(function(currentValue, index, array) {

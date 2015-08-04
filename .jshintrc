@@ -102,8 +102,8 @@
       "namespace": true,
       "log": true,
       "apply": true,
-      "isNotEquals": true,
-      "isEquals": true,
+      "isNotEqual": true,
+      "isEqual": true,
       "isTrue": true,
       "isFalse": true,
       "noop": true

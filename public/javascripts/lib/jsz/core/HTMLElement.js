@@ -285,7 +285,7 @@ script({
       var cssClasses = this.getCssClasses();
       this._apply(
         HTMLElement.prototype.setAttribute, ['class',
-          cssClasses.filter(isNotEquals(cssClass)).join(JSZ.BLANK)]
+          cssClasses.filter(isNotEqual(cssClass)).join(JSZ.BLANK)]
       );
     },
 
@@ -311,7 +311,7 @@ script({
       cssClasses.push(addCssClass);
       this._apply(
         HTMLElement.prototype.setAttribute, ['class',
-          cssClasses.filter(isNotEquals(removeCssClass)).join(JSZ.BLANK)]
+          cssClasses.filter(isNotEqual(removeCssClass)).join(JSZ.BLANK)]
       );
     },
 
