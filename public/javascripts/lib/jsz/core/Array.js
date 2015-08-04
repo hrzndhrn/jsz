@@ -75,7 +75,47 @@ script({name:'lib.jsz.core.Array'}, function () {
     };
   }
 
-  /**
+  if (Array.find === undefined) {
+    /**
+     * This method returns the first item of the array that match the specified
+     * predicate.
+     *
+     * @param {Funtion} predicate
+     * @param {Object} scope
+     * @returns {*}
+     * ------------------------------------------------------------------------
+     * @compatibility
+     * @timestamp 2015-08-04
+     * @reference {@link https://developer.mozilla.org/en-US/docs/Web/
+     *   JavaScript/Reference/Global_Objects/Array/find#Browser_compatibility|
+     *   Array.find - Browser compatibility}
+     * @ES 6
+     * @FF 25
+     * @CH not supported
+     * @IE not supported
+     * @OP not supported
+     * @SF not supported
+     */
+    Array.prototype.find = function(predicate, scope) {
+      var callback = unite(predicate, scope);
+
+      var list = this,
+        index = 0,
+        length = list.length,
+        item;
+
+      while(index < length && item === undefined) {
+        if (callback(list[index]) === true) {
+          item = list[index];
+        }
+        index++;
+      }
+
+      return item;
+    };
+  }
+
+    /**
    * Array.isEmpty returns true if an array contains no values.
    * @returns {boolean}
    */
