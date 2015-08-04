@@ -6,6 +6,10 @@
 (function () {
   'use strict';
 
+  if (console !== undefined) {
+    console.clear();
+  }
+
   /** A namespace for jsz meta-data and configuration.
    */
   window._jsz_ = {
@@ -70,7 +74,6 @@
    * This functions joins an scope with a function. In most cases this will be
    * an object and one of his methods.
    */
-  /*jshint unused:false */
   window.unite = function (fun, scope) {
 
     if (fun === undefined) {
