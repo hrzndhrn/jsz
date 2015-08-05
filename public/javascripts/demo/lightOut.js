@@ -6,13 +6,13 @@ script({
 
   console.log('jsz - Demo: lightOut.js');
 
-  module('lo').def({
+  module('lightOut').def({
 
     lightsSize: Object.freeze({
       width: 5, height: 5
     }),
 
-    lo: function () {
+    lightOut: function () {
       this.lights = $$('.light');
 
       this.lights.forEach(function (element) {
