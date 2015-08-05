@@ -1,6 +1,7 @@
-script({name: 'lib.jsz.random'}, function () {
+script({name: 'lib.jsz.util.random'}, function () {
+  'use strict';
 
-  namespace('jsz').module('random').def({
+  namespace('jsz.util').module('random').def({
 
     int: function (min, max) {
       if (max === undefined) {
@@ -13,7 +14,7 @@ script({name: 'lib.jsz.random'}, function () {
     int_: function (min, max) {
       return function () {
         return jsz.random.int(min, max);
-      }
+      };
     },
 
     bool: function () {
@@ -27,7 +28,7 @@ script({name: 'lib.jsz.random'}, function () {
     array_: function (array) {
       return function () {
         return jsz.random.array(array);
-      }
+      };
     }
 
   });

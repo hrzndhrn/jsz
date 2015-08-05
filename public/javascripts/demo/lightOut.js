@@ -1,6 +1,6 @@
 script({
   name: 'demo.lightOuts',
-  require: ['lib.jsz.random']
+  require: ['lib.jsz.util.random']
 }, function () {
   'use strict';
 
@@ -16,7 +16,7 @@ script({
       this.lights = $$('.light');
 
       this.lights.forEach(function (element) {
-        element.addCssClass(jsz.random.array(['on', 'off']));
+        element.addCssClass(jsz.util.random.array(['on', 'off']));
       }, this);
 
       this.lights.onClick(this._onClick, this, {
