@@ -3,6 +3,8 @@
  * Just another JavScriptFramework
  *
  */
+
+
 (function () {
   'use strict';
 
@@ -56,7 +58,7 @@
    * @param {String} [prefix]
    * @returns {String}
    */
-  function uid(prefix) {
+  window.uid = function(prefix) {
     var id = _jsz_.uid.toString();
     _jsz_.uid++;
 
@@ -370,6 +372,7 @@
     require: [
       'lib.jsz.core.Array',
       'lib.jsz.core.String',
+      'lib.jsz.core.Date',
       'lib.jsz.core.Function',
       'lib.jsz.core.Namespace',
       'lib.jsz.core.jsz',

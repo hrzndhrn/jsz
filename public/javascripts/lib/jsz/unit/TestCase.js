@@ -113,11 +113,16 @@ script({
     isReady: function(methodName) {
       var is;
 
-      if (methodName === undefined) {
-        is = Object.keys(this._tests).every(this.isReady, this);
+      if ( this._error === null) {
+        if (methodName === undefined) {
+          is = Object.keys(this._tests).every(this.isReady, this);
+        }
+        else {
+          is = this._tests[methodName].ready;
+        }
       }
       else {
-        is = this._tests[methodName].ready;
+        is = true;
       }
 
       return is;
@@ -144,6 +149,7 @@ script({
       catch(error) {
         this._error = new jsz.Error('Setup of test case ' +
           this._name + ' failed!', error);
+        this._onReady(this);
       }
     },
 
@@ -219,6 +225,12 @@ script({
       }
       else {
         log.error(message, false);
+        if (this._error !== null) {
+          log.error(this._error);
+          if (this._error.causedBy) {
+            log.error(this._error.causedBy);
+          }
+        }
       }
 
       this._testsOrder.forEach(this._logTest, this);

@@ -106,6 +106,7 @@
       "isEqual": true,
       "isTrue": true,
       "isFalse": true,
-      "noop": true
+      "noop": true,
+      "uid": true
     }
 }

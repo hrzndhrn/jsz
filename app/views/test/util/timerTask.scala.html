@@ -1,0 +1,15 @@
+@mainTest("jsz") {
+    <script>
+        script({
+            require:['test.jsz.util.timerTask']
+        },
+        function() {
+            jsz.unit.Session.get('jsz.util').onReady( function(session) {
+                session.logTo($('div.log'));
+            }).run();
+        });
+    </script>
+
+    <h2>Test: test.jsz.util.timerTask</h2>
+    <p>This test session takes some seconds.</p>
+}

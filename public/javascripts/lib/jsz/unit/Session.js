@@ -18,6 +18,9 @@ script({
     },
 
     run: function (testNameRegEx) {
+      if (this._testCases.length === 0) {
+        throw new Error('No test cases in this session!');
+      }
       this._testNameRegExp = new RegExp(jsz.default( testNameRegEx, '.*'));
       this._testCases.forEach(this._runTestCase, this);
       return this;
@@ -31,6 +34,7 @@ script({
 
     onReady: function(fun, scope) {
       this._onReady = unite(fun, scope);
+      return this;
     },
 
     isSuccessful: function() {
@@ -40,7 +44,6 @@ script({
     _isSuccessfulTestCase: function(testCase) {
       var successful = true;
       if (this._testNameRegExp.test(testCase.name)) {
-        console.log('_isSuccessfulTestCase: ' + testCase.name);
         successful = testCase.isSuccessful();
       }
       return successful;

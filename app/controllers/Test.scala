@@ -13,6 +13,7 @@ class Test extends Controller {
       case "testCase" => Ok(views.html.test.testCase())
       case "testSession" => Ok(views.html.test.testSession())
       case "unit/testCase" => Ok(views.html.test.unit.testCase())
+      case "util/timerTask" => Ok(views.html.test.util.timerTask())
       case "core/all" => Ok(views.html.test.core.all())
       case "core/isType" => Ok(views.html.test.core.isType())
       case "core/array" => Ok(views.html.test.core.array())
