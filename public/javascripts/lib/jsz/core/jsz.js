@@ -70,6 +70,53 @@ script({
       return newObject;
     },
 
+    /**
+     * @todo documentation and test
+     * @experimental
+     * @returns {Object}
+     */
+    args: function() {
+      var argsDef = Array.from(arguments);
+      var argsList = Array.from(argsDef.shift()),
+        args = {};
+
+      if (argsDef.length === argsList.length) {
+        argsDef.forEach( function(argDef) {
+          args[argDef.name] = argsList.shift;
+        });
+      }
+      else {
+        argsDef.forEach( function(argDef, index) {
+          var name = argDef.name;
+          args[name] = undefined;
+
+          if ( argDef.type === String && jsz.isString(argsList[0])) {
+            args[name] = argsList.shift();
+          }
+          else if (argsList[0] instanceof argDef.type) {
+            args[name] = argsList.shift();
+          }
+          /* else if (argDef.type === Function && jsz.isFunction(argsList[0])) {
+            args[name] = argsList.shift();
+          }
+          else if (argDef.type === Object && jsz.isObject(argsList[0])) {
+            args[name] = argsList.shift();
+          }*/
+          else if (argDef.optional !== true) {
+            throw new Error('Missing argument ' + name + '!');
+          }
+
+          if (argDef.default && args[name] === undefined) {
+            args[name] = argDef.default;
+          }
+
+          console.log(name + ' = ' + args[name]);
+        });
+      }
+
+      return args;
+    },
+
     // =========================================================================
     // All isType functions are just convenience functions. These functions
     // save a typeof or instanceof.
