@@ -1,0 +1,19 @@
+@require 'normalize'
+@require 'common'
+@require 'colors'
+
+dark-background = palette['midnight']
+text-background = palette['clouds']
+$border-color = palette['asbestos']
+
+body
+  background-color text-background
+
+header
+  background-color dark-background
+  .logo
+    margin .5em
+    height 3.5em
+
+section
+  margin .5em

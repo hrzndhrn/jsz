@@ -1,0 +1,31 @@
+@require '../normalize'
+@require '../colors'
+@require '../common'
+
+color = {
+  info: palette['clouds'],
+  error: palette['alizarin'],
+  success: palette['emerald']
+}
+
+div.log
+  font-family "Bitstream Vera Sans Mono" "Courier" monospace
+  border 1px solid $border-color
+  > div
+    padding 0.3em
+    border-bottom 1px solid $border-color
+  div.info
+    background-color color['info']
+  div.error
+    background-color color['error']
+  div.success
+    background-color color['success']
+  span.location
+    border: 1px solid white;
+    padding .1em .2em
+    margin-right .5em
+    border-radius 5px
+    opacity .5
+    background-color white
+
+
