@@ -1,0 +1,13 @@
+@mainTest("jsz") {
+    <script>
+    script({
+    require:['test.jsz.core.http']
+    }, function() {
+    jsz.unit.Session.get('jsz.core').run().logTo($('div.log'));
+    });
+    </script>
+
+    <h2>Test: jsz.Http</h2>
+    <p>File:<br>lib.jsz.Http.js</p>
+    <p>Comment:<br>Reverse a string via rpc.</p>
+}

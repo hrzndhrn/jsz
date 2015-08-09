@@ -43,12 +43,6 @@ script({name: 'lib.jsz.util.TimerTask'}, function () {
 
       this._startTimestamp = null;
 
-      // check configuration
-      if (this._interval < 0 && this._delay < 0) {
-        throw new Error('One of the two values "delay" and ' +
-        '"interval " must be set.');
-      }
-
       if (this._interval > 0 && this._delay >= 0) {
         throw new Error('Just one of the two values "delay" or ' +
         '"interval " can be set.');
@@ -56,37 +50,43 @@ script({name: 'lib.jsz.util.TimerTask'}, function () {
     },
 
     /**
-     * Starts this time task. The callback will be applied aber the specified
+     * Starts this timer task. The callback will be applied aber the specified
      * delay or interval.
      */
     start: function () {
-      // The time task can not be started twice.
-      if (this._timeoutId === null) {
+      // The timer task can not be started twice and it must be active.
+      if (this._timeoutId === null && this.isActive()) {
         this._timeoutId = setTimeout(this._handle(), this._getTimeSpan());
         this._startTimestamp = Date.now();
       }
+
+      return this;
     },
 
     /**
-     * Stops this time task. The callback will not be applied and an interval
-     * time task stops completely.
+     * Stops this timer task. The callback will not be applied and an interval
+     * timer task stops completely.
      */
     stop: function () {
       clearTimeout(this._timeoutId);
       this._timeoutId = null;
       this._startTimestamp = null;
+
+      return this;
     },
 
     /**
-     * Restarts this time task.
+     * Restarts this timer task.
      */
     restart: function () {
       this.stop();
       this.start();
+
+      return this;
     },
 
     /**
-     * Get the time span for a delay time task or interval time task.
+     * Get the time span for a delay timer task or interval timer task.
      * @returns {*}
      * @private
      */
@@ -94,11 +94,11 @@ script({name: 'lib.jsz.util.TimerTask'}, function () {
       var timeSpan;
 
       if (this.isDelay()) {
-        // For a delay time task the time span is just the specified value.
+        // For a delay timer task the time span is just the specified value.
         timeSpan = this._delay;
       }
       else {
-        // For an interval time task the time span must be calculated.
+        // For an interval timer task the time span must be calculated.
         if (this._startTimestamp) {
           // The period from the last start.
           var period = Date.now() - this._startTimestamp;
@@ -118,7 +118,7 @@ script({name: 'lib.jsz.util.TimerTask'}, function () {
     },
 
     /**
-     * Returns true if the time task is a interval time task.
+     * Returns true if the timer task is a interval timer task.
      * @returns {boolean}
      */
     isInterval: function () {
@@ -126,11 +126,30 @@ script({name: 'lib.jsz.util.TimerTask'}, function () {
     },
 
     /**
-     * Returns true if the time task is a delay time task.
+     * Returns true if the timer task is a delay timer task.
      * @returns {boolean}
      */
     isDelay: function () {
       return this._delay >= 0;
+    },
+
+    /**
+     * Returns true if the timer task is active. A timer task is active if it
+     * is a delay timer task or a interval timer task (isActive = isDelay ||
+     * isInterval).
+     *
+     * @returns {boolean}
+     */
+    isActive: function() {
+      return this.isDelay() || this.isInterval();
+    },
+
+    /**
+     * Sets the delay for the timer task.
+     * @param delay
+     */
+    setDelay: function (delay) {
+      this._delay = delay;
     },
 
     /**
