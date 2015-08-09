@@ -175,6 +175,16 @@
     return fun;
   };
 
+  /**
+   * A toString method for jsz classes.
+   * @returns {string}
+   */
+  window._jsz_.classToString = function() {
+    var path = this._jsz_.namespace._jsz_.path;
+    var name = this._jsz_.className;
+    return '[' + path + '.' + name + ' Class]';
+  };
+
   // ===========================================================================
   /**
    * script-loader

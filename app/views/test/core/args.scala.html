@@ -1,0 +1,13 @@
+@mainTest("jsz") {
+    <script>
+    script({
+        require:['test.jsz.core.args']
+    }, function() {
+        jsz.unit.Session.get('jsz.core').run().logTo($('div.log'));
+    });
+    </script>
+
+    <h2>Test: jsz.args</h2>
+    <p>File:<br>lib.jsz.core.jsz</p>
+    <p>Comment:<br>Experimental feature</p>
+}

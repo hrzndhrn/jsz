@@ -20,6 +20,7 @@ class Test extends Controller {
       case "core/dollar" => Ok(views.html.test.core.dollar())
       case "core/attributes" => Ok(views.html.test.core.attributes())
       case "core/default" => Ok(views.html.test.core.default())
+      case "core/args" => Ok(views.html.test.core.args())
       case _ => NotFound
     }
   }

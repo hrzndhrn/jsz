@@ -71,7 +71,7 @@ script({
     },
 
     /**
-     * @todo documentation and test
+     * @todo documentation
      * @experimental
      * @returns {Object}
      */
@@ -82,7 +82,7 @@ script({
 
       if (argsDef.length === argsList.length) {
         argsDef.forEach( function(argDef) {
-          args[argDef.name] = argsList.shift;
+          args[argDef.name] = argsList.shift();
         });
       }
       else {
@@ -110,7 +110,6 @@ script({
             args[name] = argDef.default;
           }
 
-          console.log(name + ' = ' + args[name]);
         });
       }
 

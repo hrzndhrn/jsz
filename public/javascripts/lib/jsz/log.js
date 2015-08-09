@@ -112,10 +112,13 @@ script({name: 'lib.jsz.log'}, function () {
           error = new jsz.Error(message, 1);
         }
 
+        // Variation 1
+        // var location = error.fileName + ':' +
+        //   error.lineNumber + ':' +
+        //  logFunctionName + ':';
 
-        var location = error.fileName + ':' +
-          error.lineNumber + ':' +
-          logFunctionName + ':';
+        // Variation 2
+        var location = error.fileName + ':' + error.lineNumber;
 
         if ( jsz.log.htmlElement.isEmpty()) {
           if (showLocation) {

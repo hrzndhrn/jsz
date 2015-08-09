@@ -147,6 +147,8 @@ script({
 
     _jsz_.classes[fullClassName] = newClass;
 
+    // toString for the class
+    newClass.toString = _jsz_.classToString;
 
     // If the class will be extended
     if (extend === undefined) {

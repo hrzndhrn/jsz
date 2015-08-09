@@ -123,7 +123,8 @@ script({
 
       if (!test) {
         throw new jsz.unit.AssertError(
-          'Is not an instance of ' + aClass.toString() + '! ' + message,
+          'Is not an instance of ' + aClass.toString() + '!' +
+          '\nget >' + object + '<' + message,
           this.SKIP_STACK_FRAMES
         );
       }
