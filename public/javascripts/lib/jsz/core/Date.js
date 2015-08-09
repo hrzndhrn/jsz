@@ -7,4 +7,6 @@ script({name: 'lib.jsz.core.Date'}, function () {
    * @type {Integer}
    */
   Date.MILLIS_PER_SECOND = 1000;
+
 });
+

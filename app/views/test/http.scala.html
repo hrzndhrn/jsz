@@ -1,9 +1,11 @@
 @mainTest("jsz") {
     <script>
     script({
-    require:['test.jsz.core.http']
+        require:['test.jsz.core.http']
     }, function() {
-    jsz.unit.Session.get('jsz.core').run().logTo($('div.log'));
+        jsz.unit.Session.get('jsz.core').run().onReady( function(session) {
+            session.logTo($('div.log'));
+        });
     });
     </script>
 

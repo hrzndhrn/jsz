@@ -107,6 +107,7 @@
       "isTrue": true,
       "isFalse": true,
       "noop": true,
-      "uid": true
+      "uid": true,
+      "$http": true
     }
 }

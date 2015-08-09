@@ -1,13 +1,15 @@
 package controllers
 
 import play.api.mvc._
-import play.api.libs.json.Json
+import play.api.libs.json._
 
-class Reverser {
+class Reverser extends Controller {
 
-  def reverse(string:String) = Action {
-    Ok(Json.obj(
-      "string" -> string.reverse
-    ))
+  def reverse = Action(parse.json) { request =>
+    (request.body \ "text").asOpt[String].map { text =>
+      Ok(Json.obj("text" -> text.reverse))
+    }.getOrElse {
+      BadRequest("Missing parameter [text]")
+    }
   }
 }

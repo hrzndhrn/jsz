@@ -392,7 +392,8 @@
       'lib.jsz.core.dollar',
       'lib.jsz.core.dom',
       'lib.jsz.core.Error',
-      'lib.jsz.core.Listener'
+      'lib.jsz.core.Listener',
+      'lib.jsz.core.time'
     ]
   });
 

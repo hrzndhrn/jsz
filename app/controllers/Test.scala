@@ -21,6 +21,7 @@ class Test extends Controller {
       case "core/attributes" => Ok(views.html.test.core.attributes())
       case "core/default" => Ok(views.html.test.core.default())
       case "core/args" => Ok(views.html.test.core.args())
+      case "http" => Ok(views.html.test.http())
       case _ => NotFound
     }
   }

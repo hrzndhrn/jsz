@@ -83,6 +83,7 @@ script({
    */
   _jsz_.Namespace.prototype.module = function (name) {
     if (this[name] !== undefined) {
+      console.trace();
       throw new Error(name + ' ist not a valid name for a module!');
     }
 
