@@ -1,5 +1,8 @@
 script({
-  name: 'lib.jsz.unit.TestCase'
+  name: 'lib.jsz.unit.TestCase',
+  require: [
+    'lib.jsz.util.TimerTask'
+  ]
 }, function() {
   'use strict';
 
@@ -10,6 +13,13 @@ script({
       this._setup = jsz.default(config.setup, noop);
       this._teardown = jsz.default(config.teardown, noop);
       this._methods = jsz.default(config.methods, {});
+
+      this._timeoutTask = new jsz.util.TimerTask({
+        callback: this._onTimeout,
+        delay: jsz.default(config.timeout, -1),
+        scope: this
+      }).start();
+
 
       var tests = jsz.default(config.tests, []);
       /**
@@ -100,7 +110,13 @@ script({
     },
 
     _ready: function() {
+      this._timeoutTask.stop();
       this._onReady(this);
+    },
+
+    _onTimeout: function() {
+      this._error = new jsz.Error('Timeout!');
+      this._ready();
     },
 
     /**
@@ -153,7 +169,7 @@ script({
       }
     },
 
-    _runTest: function(test, callback) {
+    _runTest: function(test, callback, args) {
       callback = jsz.default(callback, false);
       var interrupt = false;
 
@@ -163,7 +179,7 @@ script({
       else if (test.callback === false || callback === true) {
         var method = this._methods[test.name];
         try {
-          method.apply(this._environment);
+          method.apply(this._environment, args);
           test.successful = true;
         }
         catch(error) {
@@ -203,7 +219,7 @@ script({
       test.callback = true;
 
       return function() {
-        self._runTest(test, true);
+        self._runTest(test, true, arguments);
       };
     },
 
