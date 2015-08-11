@@ -17,7 +17,7 @@
   window._jsz_ = {
     classes: {},
     version: '0.0.1',
-    uid: 0
+    uniqueId: 0
   };
 
   // === jsz-Configuration =====================================================
@@ -54,22 +54,14 @@
   // some global functions
 
   /**
-   * The function uid delivers site unique id.
+   * The function uniqueId delivers site unique id.
    * @param {String} [prefix]
    * @returns {String}
    */
-  window.uid = function(prefix) {
-    var id = _jsz_.uid.toString();
-    _jsz_.uid++;
+  window.uniqueId = function(prefix) {
+    var id = ++_jsz_.uniqueId;
+    return prefix === undefined ? 'ID:' + id : prefix + ':ID:' + id;
 
-    if (prefix === undefined) {
-      id = 'ID:' + id;
-    }
-    else {
-      id = prefix + ':ID:' + id;
-    }
-
-    return id;
   }
 
   /**
@@ -203,7 +195,7 @@
     }
 
     if (conf.name === undefined) {
-      conf.name = uid('SCRIPT');
+      conf.name = uniqueId('SCRIPT');
     }
 
     script.list[conf.name] = conf;

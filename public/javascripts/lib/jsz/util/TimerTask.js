@@ -14,7 +14,7 @@ script({name: 'lib.jsz.util.TimerTask'}, function () {
     TimerTask: function (name, config) {
       if (arguments.length === 1) {
         config = name;
-        name = uid('TIMER_TASK');
+        name = uniqueId('TIMER_TASK');
       }
 
       if (!jsz.isPlainObject(config)) {
@@ -141,7 +141,7 @@ script({name: 'lib.jsz.util.TimerTask'}, function () {
      * @returns {boolean}
      */
     isActive: function() {
-      return this.isDelay() || this.isInterval();
+      return this.isDelay() || this.isInterval();
     },
 
     /**

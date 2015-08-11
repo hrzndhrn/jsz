@@ -17,7 +17,7 @@ script({
      * @param config
      */
     HttpRequest: function (config) {
-      this.id = uid('HTTP');
+      this.id = uniqueId('HTTP');
       this._method = jsz.default(config.method, 'POST');
       this._user = jsz.default(config.user, JSZ.EMPTY_STRING);
       this._password = jsz.default(config.password, JSZ.EMPTY_STRING);
