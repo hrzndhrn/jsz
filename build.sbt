@@ -20,3 +20,6 @@ resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 routesGenerator := InjectedRoutesGenerator
 
 includeFilter in (Assets, StylusKeys.stylus) := "*.styl"
+
+
+fork in run := true
