@@ -8,7 +8,7 @@ script({
 }, function () {
   'use strict';
 
-  jsz.unit.Session.get('jsz.core').add(
+  jsz.unit.Session.get('jsz.HttpRequest').add(
     new jsz.unit.TestCase({
       name: 'http:reverse01',
       timeout: jsz.time.second().millis(),

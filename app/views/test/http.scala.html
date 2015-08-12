@@ -3,7 +3,7 @@
     script({
         require:['test.jsz.core.http']
     }, function() {
-        jsz.unit.Session.get('jsz.core').run().onReady( function(session) {
+        jsz.unit.Session.get('jsz.HttpRequest').run().onReady( function(session) {
             session.logTo($('div.log'));
         });
     });
