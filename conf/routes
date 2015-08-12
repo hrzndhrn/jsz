@@ -1,18 +1,25 @@
 # Routes
 # This file defines all application routes (Higher priority routes first)
-# ~~~~
+# ------------------------------------------------------------------------------
 
 # Home page
-GET        /                    controllers.Application.index
+GET           /                           controllers.Application.index
 
-GET        /demo/:page          controllers.Demo.page(page:String)
+# Demos
+GET           /demo/:page                 controllers.Demo.page(page:String)
 
-GET        /test/*page          controllers.Test.page(page:String)
+# Tests
+GET           /test/*page                 controllers.Test.page(page:String)
+POST          /json/reverse               controllers.Reverser.reverse
 
-POST     /json/reverse          controllers.Reverser.reverse
+# ItemStore
+GET           /itemStore/items            controllers.itemStore.Items.list
+POST          /itemStore/items            controllers.itemStore.Items.create
+GET           /itemStore/items/:id        controllers.itemStore.Items.read(id:String)
+POST          /itemStore/items/:id        controllers.itemStore.Items.update(id:String)
+DELETE        /itemStore/items/:id        controllers.itemStore.Items.delete(id:String)
 
 # Map static resources from the /public folder to the /assets URL path
-GET        /assets/*file        controllers.Assets.versioned(path="/public", file: Asset)
-
-GET  /favicon.png   controllers.Assets.at(path="/public/images", file="favicon.png")
+GET           /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET           /favicon.png                controllers.Assets.at(path="/public/images", file="favicon.png")
 
