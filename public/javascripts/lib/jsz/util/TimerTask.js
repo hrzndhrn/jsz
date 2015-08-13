@@ -23,7 +23,6 @@ script({name: 'lib.jsz.util.TimerTask'}, function () {
 
       this.name = name;
 
-      this._timeoutId = null;
       /**
        * @member {jsz.unite}
        */
@@ -41,13 +40,18 @@ script({name: 'lib.jsz.util.TimerTask'}, function () {
 
       this._params = jsz.default(config.params, []);
 
-      this._startTimestamp = null;
-
       if (this._interval > 0 && this._delay >= 0) {
         throw new Error('Just one of the two values "delay" or ' +
         '"interval " can be set.');
       }
     },
+
+    _timeoutId: null,
+    _callback: noop,
+    _delay: -1,
+    _interval: -1,
+    _params: [],
+    _startTimestamp: null,
 
     /**
      * Starts this timer task. The callback will be applied aber the specified

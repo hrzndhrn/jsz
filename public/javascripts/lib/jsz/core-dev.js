@@ -17,7 +17,8 @@
   window._jsz_ = {
     classes: {},
     version: '0.0.1',
-    uniqueId: 0
+    uniqueId: 0,
+    sealObjects: true
   };
 
   // === jsz-Configuration =====================================================
@@ -47,7 +48,8 @@
     NEW_LINE: '\n',
     PREFIX: {
       JS: '.js'
-    }
+    },
+    META: '_jsz_'
   };
 
   // ===========================================================================

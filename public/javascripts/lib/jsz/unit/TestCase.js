@@ -20,7 +20,6 @@ script({
         scope: this
       }).start();
 
-
       var tests = jsz.default(config.tests, []);
       /**
        * @member {String[]}

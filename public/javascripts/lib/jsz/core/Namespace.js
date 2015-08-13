@@ -60,15 +60,6 @@ script({
   };
 
   /**
-   * @type boolean
-   * A flag to turn debuging for namespaces on and off
-   */
-  _jsz_.Namespace.debug = false;
-
-// TODO: Documentation!
-  _jsz_.Namespace.extending = false;
-
-  /**
    * toString
    */
   _jsz_.Namespace.prototype.toString = function () {
@@ -154,14 +145,10 @@ script({
     // If the class will be extended
     if (extend === undefined) {
       // Every base class extends jsz.Object.
-      newClass.prototype = new jsz.Object();
+      newClass.prototype = Object.create(jsz.Object.prototype);
     }
     else {
-      // Set the extending flag to prevent applying the constructor.
-      _jsz_.Namespace.extending = true;
-      // Extend the class with the given sub class.
-      newClass.prototype = new extend();
-      _jsz_.Namespace.extending = false;
+      newClass.prototype = Object.create(extend.prototype);
 
       // add firms to the class
       // TODO: implement firms
@@ -184,13 +171,18 @@ script({
     }
 
     // Set meta-infos for the new class
-    newClass._jsz_ = {
-      className: className,
-      namespace: namespace,
-      extend: extend,
-      inners: inners,
-      firms: firms
-    };
+    Object.defineProperty(newClass, JSZ.META, {
+      enumerable: false,
+      configurable: false,
+      writable: false,
+      value: {
+        className: className,
+        namespace: namespace,
+        extend: extend,
+        inners: inners,
+        firms: firms
+      }
+    });
 
     // Add new class to the namespace.
     this[className] = newClass;
@@ -205,50 +197,60 @@ script({
   _jsz_.Namespace.getNewClass = function (namespace, className, extension) {
     // Returns the function that will be our class and constructor.
     return function () {
-      // Build an object when the extending-mode is not active.
-      if (!_jsz_.Namespace.extending) {
-        var thisClass = namespace[className];
-        var metaClass = thisClass._jsz_;
-        var newObject = null;
+      var thisClass = namespace[className];
+      var metaClass = thisClass[JSZ.META];
+      var newObject = null;
 
-        // TODO: singelton are not implemented for now
-        if (metaClass.singleton === true) {
-          var fullClassName = namespace.path() + JSZ.DOT + className;
-          if (_jsz_.singletons[fullClassName] === undefined) {
-            _jsz_.singletons[fullClassName] = this;
-          }
-          else {
-            newObject = _jsz_.singletons[fullClassName];
-          }
+      // TODO: singelton is not implemented for now. !old jsx stuff!
+      if (metaClass.singleton === true) {
+        var fullClassName = namespace.path() + JSZ.DOT + className;
+        if (_jsz_.singletons[fullClassName] === undefined) {
+          _jsz_.singletons[fullClassName] = this;
         }
         else {
-          newObject = this;
+          newObject = _jsz_.singletons[fullClassName];
+        }
+      }
+      else {
+        // Create a new object.
+        newObject = Object.create(thisClass.prototype, metaClass.properties);
 
-          // Set meta-info for the new object
-          newObject._jsz_ = {
+        // Set meta-info for the new object
+        Object.defineProperty(newObject, JSZ.META, {
+          enumerable: false,
+          configurable: false,
+          writable: true,
+          value: {
             className: className,
             namespace: namespace,
             extend: extension || false,
             super: 0 // auxiliary variable for the constructor chain
-          };
-
-          // handle inners
-          /* TODO: handle inners
-           if ( metaClass.inners) {
-           jsz.util.inners( this, metaClass.inners);
-           }
-           */
-
-          // call the constructor
-          if (newObject[className]) {
-            newObject[className].apply(newObject, arguments);
           }
+        });
 
-          delete newObject._jsz_.super;
+        // handle inners
+        /* TODO: handle inners
+         if ( metaClass.inners) {
+         jsz.util.inners( this, metaClass.inners);
+         }
+         */
+
+        // call the constructor
+        if (newObject[className]) {
+          newObject[className].apply(newObject, arguments);
         }
 
-        return newObject;
+        delete newObject[JSZ.META].super;
       }
+
+
+
+      if (_jsz_.sealObjects) {
+        Object.seal(newObject);
+      }
+
+      return newObject;
+
     };
   };
 
@@ -282,7 +284,7 @@ script({
     }
 
     if (base !== null) {
-      newClass.prototype = new base();
+      newClass.prototype = Object.create(base.prototype);
     }
 
     this[name] = newClass;
