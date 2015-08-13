@@ -368,8 +368,8 @@
     return isDefault;
   };
 
-  // In core-dev.js the other core scripts will be loaded here. 
-  // The original core.js will have the code inserted.
+  // In core.js the other core scripts will be loaded here.
+  // The packed core-pack.js will have the code inserted.
   script.init({
     name: 'lib.jsz.core',
     default: true,
