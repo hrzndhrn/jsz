@@ -8,5 +8,11 @@ script({name: 'lib.jsz.core.Date'}, function () {
    */
   Date.MILLIS_PER_SECOND = 1000;
 
+  Date.prototype.equals = function(date) {
+    console.log('Date.equals: ' + this.getTime() + ' = ' + date.getTime());
+    console.log(this.getTime() === date.getTime());
+    return this.getTime() === date.getTime();
+  };
+
 });
 

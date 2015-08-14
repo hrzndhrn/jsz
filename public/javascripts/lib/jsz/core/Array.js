@@ -115,13 +115,22 @@ script({name:'lib.jsz.core.Array'}, function () {
     };
   }
 
-    /**
+  /**
    * Array.isEmpty returns true if an array contains no values.
    * @returns {boolean}
    */
   Array.prototype.isEmpty = function () {
     return this.length === 0;
   };
+
+  /**
+   * Array.isNotEmpty returns true if an array contains any value.
+   * @returns {boolean}
+   */
+  Array.prototype.isNotEmpty = function () {
+    return !this.isEmpty();
+  };
+
 
   /**
    * The contains method returns true if the given value is in the array. If the

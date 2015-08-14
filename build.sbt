@@ -21,5 +21,7 @@ routesGenerator := InjectedRoutesGenerator
 
 includeFilter in (Assets, StylusKeys.stylus) := "*.styl"
 
-
 fork in run := true
+
+
+javaOptions := Seq("-Duser.timezone=GMT")

@@ -1,0 +1,14 @@
+@mainTest("jsz") {
+    <script>
+    script({
+        require:['test.itemStore.items']
+    }, function() {
+        jsz.unit.Session.get('ItemStore').run().onReady( function(session) {
+            session.logTo($('div.log'));
+        });
+    });
+    </script>
+
+    <h2>Test: jsz.HttpRequest itemStore.items</h2>
+    <p>Comment:<br>A REST-API Test..</p>
+}

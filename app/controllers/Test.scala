@@ -1,5 +1,6 @@
 package controllers
 
+import _root_.itemStore.Items
 import play.api.mvc._
 
 /**
@@ -22,6 +23,10 @@ class Test extends Controller {
       case "core/default" => Ok(views.html.test.core.default())
       case "core/args" => Ok(views.html.test.core.args())
       case "http" => Ok(views.html.test.http())
+      case "itemStore" => {
+        Items.drop
+        Ok(views.html.test.itemStore.items())
+      }
       case _ => NotFound
     }
   }

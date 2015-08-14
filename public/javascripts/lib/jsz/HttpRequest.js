@@ -33,6 +33,7 @@ script({
       this._data = config.data;
       this._request = null;
       this._abortFlag = false;
+      this._jsonReviver = null;
     },
 
     send: function( data) {
@@ -44,14 +45,26 @@ script({
 
       this._request = this._newRequest();
 
+      var uri = this._uri;
+      if (this._method !== $http.POST) {
+        uri = this._uri + this._prepareUriData(data);
+      }
+
       this._request.open(
-        this._method, this._uri, this._async, this._user, this._password);
+        this._method, uri, this._async, this._user, this._password);
 
       Object.keys(jsz.HttpRequest.DEFAULT_HEADER).forEach(function(key){
-        this._request.setRequestHeader(key, jsz.HttpRequest.DEFAULT_HEADER[key]);
+        this._request.setRequestHeader(key,
+          jsz.HttpRequest.DEFAULT_HEADER[key]);
       }, this);
 
-      this._request.send( this._prepareData(data));
+      if (this._method === $http.POST) {
+        this._request.send( this._preparePostData(data));
+      }
+      else {
+        this._request.send();
+      }
+
 
       return this;
     },
@@ -66,7 +79,7 @@ script({
       return this;
     },
 
-    _prepareData: function(data) {
+    _preparePostData: function(data) {
       var preparedData;
 
       if ( this._dataType === jsz.HttpRequest.JSON) {
@@ -74,6 +87,24 @@ script({
       }
 
       return preparedData;
+    },
+
+    _prepareUriData: function(data) {
+      var uriExtension = JSZ.EMPTY_STRING;
+
+      if (data !== undefined) {
+        if ( jsz.isPlainObject(data)) {
+          throw new Error('Not implemented!');
+        }
+        else if(jsz.isArray(data)) {
+          throw new Error('Not implemented!');
+        }
+        else {
+          uriExtension = '/' + data.toString();
+        }
+      }
+
+      return uriExtension;
     },
 
     _newRequest: function() {
@@ -92,10 +123,12 @@ script({
       if ( jsz.HttpRequest.ON_LOADING === true) {
         listener = function() {
           if (this.readyState === XMLHttpRequest.LOADING) {
-            jsz.HttpRequest.transactions[transactionId]._onResponseLoading(this);
+            jsz.HttpRequest.transactions[transactionId]
+              ._onResponseLoading(this);
           }
           if (this.readyState === XMLHttpRequest.DONE ) {
-            jsz.HttpRequest.transactions[transactionId]._onResponseDone(this);
+            jsz.HttpRequest.transactions[transactionId]
+              ._onResponseDone(this);
             delete jsz.HttpRequest.transactions[transactionId];
           }
         };
@@ -135,7 +168,13 @@ script({
           data = {};
         }
         else {
-          data = JSON.parse(request.responseText);
+          if ( JSON.reviver !== undefined && JSON.reviver !== null) {
+            console.log('with reviver');
+            data = JSON.parse(request.responseText, JSON.reviver);
+          }
+          else {
+            data = JSON.parse(request.responseText);
+          }
         }
       }
 
@@ -172,7 +211,15 @@ script({
 
     post: function(config) {
       return (new jsz.HttpRequest(config)).send();
-    }
+    },
+
+    get: function(config) {
+      config.method = 'GET';
+      return (new jsz.HttpRequest(config).send());
+    },
+
+    GET: 'GET',
+    POST: 'POST'
   });
 
 });

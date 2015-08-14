@@ -15,7 +15,7 @@ trait Items {
   def create(name: String,
              description: Option[String],
              price: Double,
-             quantity: Integer): Option[Item]
+             quantity: Int): Option[Item]
 
   def get(id: String): Option[Item]
 
@@ -23,7 +23,7 @@ trait Items {
              name: String,
              description: Option[String],
              price: Double,
-             quantity: Integer): Option[Item]
+             quantity: Int): Option[Item]
 
 
   def delete(id: String): Boolean
@@ -39,10 +39,10 @@ object Items extends Items {
   def create(name: String,
              description: Option[String],
              price: Double,
-             quantity: Integer): Option[Item] = {
+             quantity: Int): Option[Item] = {
 
     val id = seq.single.transformAndGet(_ + 1).toString
-    val item = Item(id, name, description, price, quantity, new DateTime)
+    val item = Item(id, name, description, price, quantity, DateTime.now)
     items.single.transform(_ + (id -> item))
     Some(item)
   }
@@ -53,10 +53,10 @@ object Items extends Items {
              name: String,
              description: Option[String],
              price: Double,
-             quantity: Integer): Option[Item] = atomic { implicit txn =>
+             quantity: Int): Option[Item] = atomic { implicit txn =>
     if (items().get(id).isDefined) {
       items.transform(_.updated(
-        id, Item(id, name, description, price, quantity, new DateTime)))
+        id, Item(id, name, description, price, quantity, DateTime.now)))
     }
     items().get(id)
   }
@@ -68,6 +68,10 @@ object Items extends Items {
     } else {
       false
     }
+  }
+
+  def drop = atomic { implicit txn =>
+    items.transform(_ drop items.single().size)
   }
 
 }
