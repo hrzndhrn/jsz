@@ -168,13 +168,7 @@ script({
           data = {};
         }
         else {
-          if ( JSON.reviver !== undefined && JSON.reviver !== null) {
-            console.log('with reviver');
-            data = JSON.parse(request.responseText, JSON.reviver);
-          }
-          else {
-            data = JSON.parse(request.responseText);
-          }
+          data = JSON.parse(request.responseText);
         }
       }
 

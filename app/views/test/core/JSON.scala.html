@@ -1,0 +1,11 @@
+@mainTest("jsz") {
+    <script>
+    script({
+        require:['test.jsz.core.JSON']
+    }, function() {
+        jsz.unit.Session.get('jsz.core').run().logTo($('div.log'));
+    });
+    </script>
+
+    <h2>Test: test.jsz.core.JSON</h2>
+}

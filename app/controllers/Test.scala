@@ -22,11 +22,9 @@ class Test extends Controller {
       case "core/attributes" => Ok(views.html.test.core.attributes())
       case "core/default" => Ok(views.html.test.core.default())
       case "core/args" => Ok(views.html.test.core.args())
+      case "core/json" => Ok(views.html.test.core.JSON())
       case "http" => Ok(views.html.test.http())
-      case "itemStore" => {
-        Items.drop
-        Ok(views.html.test.itemStore.items())
-      }
+      case "itemStore" => Ok(views.html.test.itemStore.items())
       case _ => NotFound
     }
   }

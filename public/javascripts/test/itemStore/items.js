@@ -8,7 +8,7 @@ script({
 }, function () {
   'use strict';
 
-  // The JSON.reviver will be used by jsz.HttpRequest to parse JSON.
+  // The JSON.reviver will be used by JSON.parse.
   console.log('items.js');
   JSON.reviver = JSON.reviverZuluTime;
 
@@ -85,7 +85,7 @@ script({
   ).add(
     new jsz.unit.TestCase({
       name: 'ItemStore: get an item',
-      timeout: jsz.time.second().millis(),
+      timeout: jsz.time.seconds(3).millis(),
       setup: function (testCase) {
         this.assert = jsz.unit.assert;
         this.successList = testCase.callback('successList');

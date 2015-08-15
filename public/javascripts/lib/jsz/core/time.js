@@ -15,7 +15,7 @@ script({
     },
 
     seconds: function(seconds) {
-      return new jsz.time.Second(seconds);
+      return new jsz.time.Seconds(seconds);
     }
 
   });
