@@ -80,7 +80,7 @@ script({name:'lib.jsz.core.Array'}, function () {
      * This method returns the first item of the array that match the specified
      * predicate.
      *
-     * @param {Funtion} predicate
+     * @param {Function} predicate
      * @param {Object} scope
      * @returns {*}
      * ------------------------------------------------------------------------
@@ -160,6 +160,32 @@ script({name:'lib.jsz.core.Array'}, function () {
       });
     }
 
+  };
+
+  /**
+   * The method flatten returns a new array that is a one dimensional array of
+   * it self.
+   *
+   * @example
+   * [1,2,[3,4],5].flatten(); //=> [1,2,3,4,5]
+   * [1,[2,[3,[4,5]]]].flatten(); //=> [1,2,3,4,5]
+   *
+   * @returns {Array}
+   */
+  Array.prototype.flatten = function() {
+    var array = [];
+
+    this.forEach(function(item) {
+      if (Array.isArray(item)) {
+        var flat = item.flatten();
+        log.debug('> ' + flat.join(','));
+        array = array.concat(item.flatten());
+      } else {
+        array.push(item);
+      }
+    });
+
+    return array;
   };
 
 });
