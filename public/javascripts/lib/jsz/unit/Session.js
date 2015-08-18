@@ -11,29 +11,57 @@ script({
       this._onReady = noop;
     },
 
+    /**
+     * The method add adds a new test case to the test session. The test cases
+     * will be executed in the same order as they added.
+     *
+     * @param testCase
+     * @returns {jsz.unit.Session}
+     */
     add: function (testCase) {
       testCase.onReady( this._onReadyTestCase, this);
       this._testCases.push(testCase);
       return this;
     },
 
+
     run: function (testNameRegEx) {
-      if (this._testCases.length === 0) {
+      this._testNameRegExp = new RegExp(jsz.default( testNameRegEx, '.*'));
+
+      var firstTestCase = this._nextTestCase();
+
+      if (firstTestCase === undefined) {
         throw new Error('No test cases in this session!');
       }
-      this._testNameRegExp = new RegExp(jsz.default( testNameRegEx, '.*'));
-      this._testCases.forEach(this._runTestCase, this);
+      else {
+        firstTestCase.run();
+      }
+
       return this;
     },
-    
-    _runTestCase: function(testCase) {
-      if (this._testNameRegExp.test(testCase.name)) {
-        testCase.run();
-      }
+
+    /**
+     * The method _nextTestCase returns the next unused test case.
+     *
+     * @returns {jsz.unit.TestCase}
+     * @private
+     */
+    _nextTestCase: function() {
+      return this._testCases.find(function(testCase) {
+        return this._testNameRegExp.test(testCase.name) && !testCase.isReady();
+      }, this);
     },
 
-    onReady: function(fun, scope) {
-      this._onReady = unite(fun, scope);
+    /**
+     * The method onReady sets the callback that's will be fired if all test
+     * cases are ready.
+     *
+     * @param {Function} fn
+     * @param {Object} scope
+     * @returns {jsz.unit.Session}
+     */
+    onReady: function(fn, scope) {
+      this._onReady = unite(fn, scope);
       return this;
     },
 
@@ -52,6 +80,9 @@ script({
     _onReadyTestCase: function() {
       if (this.isReady()) {
         this._onReady(this);
+      }
+      else {
+        this._nextTestCase().run();
       }
     },
 
