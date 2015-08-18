@@ -82,7 +82,7 @@ script({
   ).add(
     new jsz.unit.TestCase({
       name: 'ItemStore: get an item',
-      timeout: jsz.time.seconds(3).millis(),
+      timeout: jsz.time.second().millis(),
       setup: function (testCase) {
         this.assert = jsz.unit.assert;
         this.successList = testCase.callback('successList');
@@ -129,11 +129,11 @@ script({
   ).add(
     new jsz.unit.TestCase({
       name: 'ItemStore: update an item',
-      timeout: jsz.time.seconds(3).millis(),
+      timeout: jsz.time.second().millis(),
       setup: function (testCase) {
         this.assert = jsz.unit.assert;
         this.successList = testCase.callback('successList');
-        this.successGet = testCase.callback('successGet');
+        this.successUpdate = testCase.callback('successUpdate');
       },
       tests: [
         {name: 'requestList'},
@@ -154,23 +154,97 @@ script({
           this.item = data[0];
         },
 
-        requestGet: function() {
-          $http.get({
-            uri:'/itemStore/items',
-            onSuccess: this.successGet,
+        requestUpdate: function() {
+          this.timestamp = Date.now();
+
+          this.item.name = 'bar';
+          this.item.amount = 42;
+
+          $http.post({
+            uri:'/itemStore/items/$'.format(this.item.id),
+            onSuccess: this.successUpdate,
             scope: this,
-            data: this.item.id
+            data: this.item
           });
         },
 
-        successGet: function(data) {
+        successUpdate: function(data) {
           this.assert.isEqual(data.id, this.item.id);
           this.assert.isEqual(data.name, this.item.name);
           this.assert.isEqual(data.description, this.item.description);
           this.assert.isEqual(data.price, this.item.price);
           this.assert.isEqual(data.quantity, this.item.quantity);
-          this.assert.isEqual(data.updatedAt, this.item.updatedAt);
+          this.assert.isTrue( data.updatedAt.getTime() >= this.timestamp);
+        }
+      }
+    })
+  ).add(
+    new jsz.unit.TestCase({
+      name: 'ItemStore: delete an item',
+      timeout: jsz.time.second().millis(),
+      setup: function (testCase) {
+        this.assert = jsz.unit.assert;
+        this.successList = testCase.callback('successList');
+        this.successDelete = testCase.callback('successDelete');
+      },
+      tests: [
+        {name: 'requestList'},
+        {name: 'successList'},
+        {name: 'requestDelete'},
+        {name: 'successDelete'},
+      ],
+      methods: {
 
+        requestList: function () {
+          $http.get({
+            uri:'/itemStore/items',
+            onSuccess: this.successList,
+            scope: this
+          });
+        },
+
+        successList: function(data) {
+          this.assert.isTrue(data.isNotEmpty());
+          this.item = data[0];
+        },
+
+        requestDelete: function() {
+          $http.delete({
+            uri:'/itemStore/items/$'.format(this.item.id),
+            onSuccess: this.successDelete,
+            scope: this
+          });
+        },
+
+        successDelete: function(data) {
+          this.assert.isEqual(data.deleted, this.item.id);
+        }
+      }
+    })
+  ).add(
+    new jsz.unit.TestCase({
+      name: 'ItemStore: get empty list again',
+      timeout: jsz.time.second().millis(),
+      setup: function (testCase) {
+        this.assert = jsz.unit.assert;
+        this.success = testCase.callback('success');
+      },
+      tests: [
+        {name: 'request'},
+        {name: 'success'}
+      ],
+      methods: {
+
+        request: function () {
+          $http.get({
+            uri:'/itemStore/items',
+            onSuccess: this.success,
+            scope: this
+          });
+        },
+
+        success: function(data) {
+          this.assert.isTrue(data.isEmpty());
         }
       }
     })

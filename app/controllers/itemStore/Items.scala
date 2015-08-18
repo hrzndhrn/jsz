@@ -3,6 +3,7 @@ package controllers.itemStore
 import itemStore.models.Item
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
+import play.api.Logger
 import play.api.mvc._
 import play.api.libs.json._
 import play.api.libs.json.Writes._
@@ -57,12 +58,29 @@ class Items extends Controller {
     }
   }
 
-  def update(id: String) = Action {
-    NotImplemented
+  def update(id: String) = Action(parse.json) { implicit request =>
+    request.body.validate[CreateItem] match {
+      case JsSuccess(updateItem, _) =>
+        itemStore.Items.update(id,
+          updateItem.name,
+          Option(updateItem.description),
+          updateItem.price,
+          updateItem.quantity) match {
+          case Some(item) => Ok(Json.toJson(item))
+          case None => InternalServerError
+        }
+      case JsError(errors) =>
+        BadRequest
+    }
   }
 
+
   def delete(id: String) = Action {
-    NotImplemented
+    if (itemStore.Items.delete(id)) {
+      Ok(Json.obj("deleted" -> id))
+    } else {
+      BadRequest
+    }
   }
 
 }

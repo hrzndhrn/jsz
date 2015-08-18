@@ -177,8 +177,6 @@ script({name:'lib.jsz.core.Array'}, function () {
 
     this.forEach(function(item) {
       if (Array.isArray(item)) {
-        var flat = item.flatten();
-        log.debug('> ' + flat.join(','));
         array = array.concat(item.flatten());
       } else {
         array.push(item);

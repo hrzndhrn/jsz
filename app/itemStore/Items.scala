@@ -2,6 +2,7 @@ package itemStore
 
 import itemStore.models.Item
 import org.joda.time.DateTime
+import play.api.Logger
 
 import scala.collection.immutable.SortedMap
 import scala.concurrent.stm._
@@ -34,16 +35,22 @@ object Items extends Items {
   private val items = Ref(SortedMap.empty[String, Item])
   private val seq = Ref(0L)
 
-  def list: Iterable[Item] = items.single().values
+  def list: Iterable[Item] = {
+    Logger.debug("Return list - Items count : %d".format(items.single().size))
+    items.single().values
+  }
 
   def create(name: String,
              description: Option[String],
              price: Double,
              quantity: Int): Option[Item] = {
 
+    Logger.debug("Create an item.")
     val id = seq.single.transformAndGet(_ + 1).toString
     val item = Item(id, name, description, price, quantity, DateTime.now)
     items.single.transform(_ + (id -> item))
+    items.single().size
+    Logger.debug("Items count : %d".format(items.single().size))
     Some(item)
   }
 
@@ -63,6 +70,7 @@ object Items extends Items {
 
   def delete(id: String): Boolean = atomic { implicit txn =>
     if (items().isDefinedAt(id)) {
+      Logger.debug("delete " + id);
       items.transform(_ - id)
       true
     } else {

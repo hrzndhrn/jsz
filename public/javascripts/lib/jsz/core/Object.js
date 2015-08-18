@@ -59,7 +59,7 @@ script({
   /**
    * Creates an identical object form the specified object.
    *
-   * @note For teh moment its works just right fro plain objects.
+   * @note For the moment its works just right for plain objects.
    *
    * @param {*} object
    * @returns {*}
@@ -69,6 +69,10 @@ script({
       throw new Error('Can not clone undefined!');
     }
     return JSON.parse(JSON.stringify(object));
+  };
+
+  Object.isEmpty = function(object) {
+    return Object.keys(object).isEmpty();
   };
 
 });

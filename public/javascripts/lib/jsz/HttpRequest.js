@@ -33,7 +33,6 @@ script({
       this._data = config.data;
       this._request = null;
       this._abortFlag = false;
-      this._jsonReviver = null;
     },
 
     send: function( data) {
@@ -89,20 +88,14 @@ script({
       return preparedData;
     },
 
+    /**
+     * @todo: Implementation
+     * @param data
+     * @returns {Window.JSZ.EMPTY_STRING|*}
+     * @private
+     */
     _prepareUriData: function(data) {
       var uriExtension = JSZ.EMPTY_STRING;
-
-      if (data !== undefined) {
-        if ( jsz.isPlainObject(data)) {
-          throw new Error('Not implemented!');
-        }
-        else if(jsz.isArray(data)) {
-          throw new Error('Not implemented!');
-        }
-        else {
-          uriExtension = '/' + data.toString();
-        }
-      }
 
       return uriExtension;
     },
@@ -208,12 +201,18 @@ script({
     },
 
     get: function(config) {
-      config.method = 'GET';
+      config.method = this.GET;
+      return (new jsz.HttpRequest(config).send());
+    },
+
+    delete: function(config) {
+      config.method = this.DELETE;
       return (new jsz.HttpRequest(config).send());
     },
 
     GET: 'GET',
-    POST: 'POST'
+    POST: 'POST',
+    DELETE: 'DELETE'
   });
 
 });
