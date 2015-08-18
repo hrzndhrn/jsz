@@ -1,42 +1,32 @@
-<!DOCTYPE html>
-
-<html lang="en">
-  <head>
-    <title>jsz - Demo: click</title>
-    <script src="@routes.Assets.versioned("javascripts/lib/jsz/core.js")" type="text/javascript"></script>
-    <script>
-      script.init({base:'/assets/javascripts'});
-    </script>
-
-    <script src="@routes.Assets.versioned("javascripts/demo/click.js")" type="text/javascript"></script>
+@mainHead("jsz"){
     <style>
       span {
         border: 1px solid blue;
         padding: 0.5em;
         margin: 0.5em;
-      }
+        }
 
-      span.foo {
+        span.foo {
         border-color: green;
-      }
+        }
     </style>
-  </head>
-  <body>
-    <h1>jsz</h1>
-    <h2>Demo: click</h2>
+    <script>
+        script.load('demo.click')
+    </script>
+}{
+    <h1>Demo: click</h1>
     <p>
-      <span id="foo1">hello</span>
-      <span id="foo2">hi</span>
+        <span id="foo1">hello</span>
+        <span id="foo2">hi</span>
     </p>
     <hr/>
     <p>
-      <span id="foo3">foo3</span>
+        <span id="foo3">foo3</span>
     </p>
     <hr/>
     <p>
-      <span id="foo4" class="foo">foo4</span>
-      <span id="foo5" class="foo">foo5</span>
+        <span id="foo4" class="foo">foo4</span>
+        <span id="foo5" class="foo">foo5</span>
     </p>
-  </body>
-</html>
+}
 

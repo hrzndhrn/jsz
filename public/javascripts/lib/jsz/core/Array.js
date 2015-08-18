@@ -34,50 +34,45 @@ script({name:'lib.jsz.core.Array'}, function () {
      * @OP not supported
      * @SF not supported
      */
-    Object.defineProperty( Array.prototype, 'from', {
-      enumerable: false,
-      configurable: false,
-      writable: false,
-      value: function (arrayLike, mapCallback, scope) {
-        if (arrayLike === undefined || arrayLike === null) {
-          throw new TypeError('Array.from requires an array-like object' +
-          ' - not null or undefined.');
-        }
-
-        var length = arrayLike.length;
-
-        if (!(jsz.isInt(length) && length >= 0)) {
-          throw new TypeError('Array.from requires an array-like object. ' +
-          'Can not find length of array-like not found.');
-        }
-
-        // set a flag for the mapping
-        var mapFlag = mapCallback !== undefined,
-          newArray = new Array(length),
-          index = 0,
-          value;
-
-
-        if (mapFlag) {
-          scope = jsz.default(scope, window);
-        }
-
-        while (index < length) {
-          if (mapFlag) {
-            value = mapCallback.apply(scope, [arrayLike[index]]);
-          }
-          else {
-            value = arrayLike[index];
-          }
-
-          newArray[index] = value;
-
-          index++;
-        }
-
-        return newArray;
+    Array.from = function (arrayLike, mapCallback, scope) {
+      if (arrayLike === undefined || arrayLike === null) {
+        throw new TypeError('Array.from requires an array-like object' +
+        ' - not null or undefined.');
       }
-    });
+
+      var length = arrayLike.length;
+
+      if (!(jsz.isInt(length) && length >= 0)) {
+        throw new TypeError('Array.from requires an array-like object. ' +
+        'Can not find length of array-like not found.');
+      }
+
+      // set a flag for the mapping
+      var mapFlag = mapCallback !== undefined,
+        newArray = new Array(length),
+        index = 0,
+        value;
+
+
+      if (mapFlag) {
+        scope = jsz.default(scope, window);
+      }
+
+      while (index < length) {
+        if (mapFlag) {
+          value = mapCallback.apply(scope, [arrayLike[index]]);
+        }
+        else {
+          value = arrayLike[index];
+        }
+
+        newArray[index] = value;
+
+        index++;
+      }
+
+      return newArray;
+    };
   }
 
   if (Array.find === undefined) {

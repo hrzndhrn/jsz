@@ -6,8 +6,7 @@ script({
 }, function () {
   'use strict';
 
-  jsz.Object = function () {
-  };
+  jsz.Object = function () {};
 
   jsz.Object.prototype.getClass = function () {
     return _jsz_.classes[this.getClassName()];
@@ -64,14 +63,14 @@ script({
    * @param {*} object
    * @returns {*}
    */
-  Object.clone = function(object) {
+  Object.clone = function (object) {
     if (object === undefined) {
       throw new Error('Can not clone undefined!');
     }
     return JSON.parse(JSON.stringify(object));
   };
 
-  Object.isEmpty = function(object) {
+  Object.isEmpty = function (object) {
     return Object.keys(object).isEmpty();
   };
 
