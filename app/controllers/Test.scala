@@ -15,6 +15,7 @@ class Test extends Controller {
       case "testSession" => Ok(views.html.test.testSession())
       case "unit/testCase" => Ok(views.html.test.unit.testCase())
       case "util/timerTask" => Ok(views.html.test.util.timerTask())
+      case "jsz/util/format" => Ok(views.html.test.jsz.util.format())
       case "core/all" => Ok(views.html.test.core.all())
       case "core/isType" => Ok(views.html.test.core.isType())
       case "core/array" => Ok(views.html.test.core.array())
@@ -24,7 +25,11 @@ class Test extends Controller {
       case "core/args" => Ok(views.html.test.core.args())
       case "core/json" => Ok(views.html.test.core.JSON())
       case "http" => Ok(views.html.test.http())
-      case "itemStore" => Ok(views.html.test.itemStore.items())
+      case "itemStore" => {
+        // Drop all items in item store for the test.
+        Items.drop
+        Ok(views.html.test.itemStore.items())
+      }
       case _ => NotFound
     }
   }

@@ -1,0 +1,12 @@
+@mainTest("jsz") {
+    <script>
+    script({
+        require:['test.jsz.util.format']
+    },
+    function() {
+        jsz.unit.Session.get('jsz.util').run().logTo($('div.log'));
+    });
+    </script>
+
+    <h2>Test: test.jsz.util.format</h2>
+}

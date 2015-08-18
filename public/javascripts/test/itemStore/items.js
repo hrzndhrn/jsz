@@ -3,13 +3,13 @@ script({
   require: [
     'lib.jsz.HttpRequest',
     'lib.jsz.unit',
+    'lib.jsz.util.format',
     'lib.jsz.log'
   ]
 }, function () {
   'use strict';
 
   // The JSON.reviver will be used by JSON.parse.
-  console.log('items.js');
   JSON.reviver = JSON.reviverZuluTime;
 
   jsz.unit.Session.get('ItemStore').add(
@@ -35,8 +35,6 @@ script({
         },
 
         success: function(data) {
-          console.log('get empty list');
-          console.dir({data:data});
           this.assert.isTrue(data.isEmpty());
         }
       }
@@ -73,7 +71,6 @@ script({
           },
 
           success: function(data) {
-            console.dir({data:data});
             this.assert.isEqual(data.name, this.item.name);
             this.assert.isEqual(data.description, this.item.description);
             this.assert.isEqual(data.price, this.item.price);
@@ -106,8 +103,53 @@ script({
         },
 
         successList: function(data) {
-          console.log('successList');
-          console.dir({data:data});
+          this.assert.isTrue(data.isNotEmpty());
+          this.item = data[0];
+        },
+
+        requestGet: function() {
+          $http.get({
+            uri:'/itemStore/items/$'.format(this.item.id),
+            onSuccess: this.successGet,
+            scope: this
+          });
+        },
+
+        successGet: function(data) {
+          this.assert.isEqual(data.id, this.item.id);
+          this.assert.isEqual(data.name, this.item.name);
+          this.assert.isEqual(data.description, this.item.description);
+          this.assert.isEqual(data.price, this.item.price);
+          this.assert.isEqual(data.quantity, this.item.quantity);
+          this.assert.isEqual(data.updatedAt, this.item.updatedAt);
+
+        }
+      }
+    })
+  ).add(
+    new jsz.unit.TestCase({
+      name: 'ItemStore: update an item',
+      timeout: jsz.time.seconds(3).millis(),
+      setup: function (testCase) {
+        this.assert = jsz.unit.assert;
+        this.successList = testCase.callback('successList');
+        this.successGet = testCase.callback('successGet');
+      },
+      tests: [
+        {name: 'requestList'},
+        {name: 'successList'}
+      ],
+      methods: {
+
+        requestList: function () {
+          $http.get({
+            uri:'/itemStore/items',
+            onSuccess: this.successList,
+            scope: this
+          });
+        },
+
+        successList: function(data) {
           this.assert.isTrue(data.isNotEmpty());
           this.item = data[0];
         },
@@ -122,8 +164,6 @@ script({
         },
 
         successGet: function(data) {
-          console.log('successGet');
-          console.dir({data:data});
           this.assert.isEqual(data.id, this.item.id);
           this.assert.isEqual(data.name, this.item.name);
           this.assert.isEqual(data.description, this.item.description);
