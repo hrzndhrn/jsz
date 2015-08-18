@@ -34,45 +34,50 @@ script({name:'lib.jsz.core.Array'}, function () {
      * @OP not supported
      * @SF not supported
      */
-    Array.from = function(arrayLike, mapCallback, scope) {
-      if (arrayLike === undefined || arrayLike === null) {
-        throw new TypeError('Array.from requires an array-like object' +
+    Object.defineProperty( Array.prototype, 'from', {
+      enumerable: false,
+      configurable: false,
+      writable: false,
+      value: function (arrayLike, mapCallback, scope) {
+        if (arrayLike === undefined || arrayLike === null) {
+          throw new TypeError('Array.from requires an array-like object' +
           ' - not null or undefined.');
-      }
+        }
 
-      var length = arrayLike.length;
+        var length = arrayLike.length;
 
-      if (!(jsz.isInt(length) && length >= 0)) {
-        throw new TypeError('Array.from requires an array-like object. ' +
+        if (!(jsz.isInt(length) && length >= 0)) {
+          throw new TypeError('Array.from requires an array-like object. ' +
           'Can not find length of array-like not found.');
-      }
+        }
 
-      // set a flag for the mapping
-      var mapFlag = mapCallback !== undefined,
-        newArray = new Array(length),
-        index = 0,
-        value;
+        // set a flag for the mapping
+        var mapFlag = mapCallback !== undefined,
+          newArray = new Array(length),
+          index = 0,
+          value;
 
 
-      if (mapFlag) {
-        scope = jsz.default(scope, window);
-      }
-
-      while(index < length) {
         if (mapFlag) {
-          value = mapCallback.apply(scope, [arrayLike[index]]);
-        }
-        else {
-          value = arrayLike[index];
+          scope = jsz.default(scope, window);
         }
 
-        newArray[index] = value;
+        while (index < length) {
+          if (mapFlag) {
+            value = mapCallback.apply(scope, [arrayLike[index]]);
+          }
+          else {
+            value = arrayLike[index];
+          }
 
-        index++;
+          newArray[index] = value;
+
+          index++;
+        }
+
+        return newArray;
       }
-
-      return newArray;
-    };
+    });
   }
 
   if (Array.find === undefined) {
@@ -96,40 +101,55 @@ script({name:'lib.jsz.core.Array'}, function () {
      * @OP not supported
      * @SF not supported
      */
-    Array.prototype.find = function(predicate, scope) {
-      var callback = unite(predicate, scope);
+    Object.defineProperty(Array.prototype, 'find', {
+      enumerable: false,
+      configurable: false,
+      writable: false,
+      value: function (predicate, scope) {
+        var callback = unite(predicate, scope);
 
-      var list = this,
-        index = 0,
-        length = list.length,
-        item;
+        var list = this,
+          index = 0,
+          length = list.length,
+          item;
 
-      while(index < length && item === undefined) {
-        if (callback(list[index]) === true) {
-          item = list[index];
+        while (index < length && item === undefined) {
+          if (callback(list[index]) === true) {
+            item = list[index];
+          }
+          index++;
         }
-        index++;
-      }
 
-      return item;
-    };
+        return item;
+      }
+    });
   }
 
   /**
    * Array.isEmpty returns true if an array contains no values.
    * @returns {boolean}
    */
-  Array.prototype.isEmpty = function () {
-    return this.length === 0;
-  };
+  Object.defineProperty( Array.prototype, 'isEmpty', {
+    enumerable: false,
+    configurable: false,
+    writable: false,
+    value: function () {
+      return this.length === 0;
+    }
+  });
 
   /**
    * Array.isNotEmpty returns true if an array contains any value.
    * @returns {boolean}
    */
-  Array.prototype.isNotEmpty = function () {
-    return !this.isEmpty();
-  };
+  Object.defineProperty( Array.prototype, 'isNotEmpty', {
+    enumerable: false,
+    configurable: false,
+    writable: false,
+    value: function () {
+      return !this.isEmpty();
+    }
+  });
 
 
   /**
@@ -149,18 +169,22 @@ script({name:'lib.jsz.core.Array'}, function () {
    * @param {Array} array The array contains was called upon.
    * @returns {boolean}
    */
-  Array.prototype.contains = function (value, callback, scope) {
-    // Value must be a type that can be handled by ===
-    if (callback === undefined) {
-      return this.some(isEqual(value));
+  Object.defineProperty( Array.prototype, 'contains', {
+    enumerable: false,
+    configurable: false,
+    writable: false,
+    value: function (value, callback, scope) {
+      // Value must be a type that can be handled by ===
+      if (callback === undefined) {
+        return this.some(isEqual(value));
+      }
+      else {
+        return this.some(function (currentValue, index, array) {
+          return apply(callback, scope, [value, currentValue, index, array]);
+        });
+      }
     }
-    else {
-      return this.some(function(currentValue, index, array) {
-        return apply(callback, scope, [value, currentValue, index, array]);
-      });
-    }
-
-  };
+  });
 
   /**
    * The method flatten returns a new array that is a one dimensional array of
@@ -172,18 +196,23 @@ script({name:'lib.jsz.core.Array'}, function () {
    *
    * @returns {Array}
    */
-  Array.prototype.flatten = function() {
-    var array = [];
+  Object.defineProperty( Array.prototype, 'flatten', {
+    enumerable: false,
+    configurable: false,
+    writable: false,
+    value: function() {
+      var array = [];
 
-    this.forEach(function(item) {
-      if (Array.isArray(item)) {
-        array = array.concat(item.flatten());
-      } else {
-        array.push(item);
-      }
-    });
+      this.forEach(function(item) {
+        if (Array.isArray(item)) {
+          array = array.concat(item.flatten());
+        } else {
+          array.push(item);
+        }
+      });
 
-    return array;
-  };
+      return array;
+    }
+  });
 
 });
