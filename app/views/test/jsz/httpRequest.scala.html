@@ -1,7 +1,7 @@
 @mainTest("jsz") {
     <script>
     script({
-        require:['test.jsz.core.http']
+        require:['test.jsz.httpRequest']
     }, function() {
         jsz.unit.Session.get('jsz.HttpRequest').run().onReady( function(session) {
             session.logTo($('div.log'));
@@ -9,7 +9,7 @@
     });
     </script>
 
-    <h2>Test: jsz.HttpRequest</h2>
-    <p>File:<br>lib.jsz.Http.js</p>
-    <p>Comment:<br>Reverse a string via rpc.</p>
+    <h1>Test: jsz.HttpRequest</h1>
+    <p>script: lib.jsz.Http.js</p>
+    <p>Reverse a string via rpc.</p>
 }

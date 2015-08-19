@@ -1,5 +1,5 @@
 script({
-  name: 'test.jsz.core.http',
+  name: 'test.jsz.httpRequest',
   require: [
     'lib.jsz.HttpRequest',
     'lib.jsz.unit',
