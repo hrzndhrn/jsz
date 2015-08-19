@@ -1,5 +1,5 @@
 script({
-  name: 'test.jsz.unit.testSession',
+  name: 'demo.jsz.unit.testSession',
   require: [
     'lib.jsz.unit',
     'lib.jsz.log'

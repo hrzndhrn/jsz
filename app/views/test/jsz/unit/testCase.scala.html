@@ -1,0 +1,15 @@
+@mainTest("jsz") {
+    <script>
+    script({
+        require:['test.jsz.unit.testCase.callback']
+    }, function() {
+        jsz.unit.Session.get('jsz.unit').run( ).onReady(function(session) {
+            session.logTo($('div.log'));
+        });
+    });
+    </script>
+
+    <h1>Test: test.jsz.unit.TestCase:callback</h1>
+    <p>script: <a href="@routes.Assets.versioned("javascripts/test/jsz/unit/testCase/callback.js")">test/jsz/unit/testCase.js</a></p>
+    <p>Test cases with callbacks will be used for tests of asynchronous processes.</p>
+}

@@ -10,10 +10,8 @@ class Test extends Controller {
 
   def page(page:String) = Action {
     page match {
-      case "testCase" => Ok(views.html.test.testCase())
-      case "testSession" => Ok(views.html.test.testSession())
-      case "unit/testCase" => Ok(views.html.test.unit.testCase())
-      case "util/timerTask" => Ok(views.html.test.util.timerTask())
+      case "jsz/unit/testCase" => Ok(views.html.test.jsz.unit.testCase())
+      case "jsz/util/timerTask" => Ok(views.html.test.jsz.util.timerTask())
       case "jsz/util/format" => Ok(views.html.test.jsz.util.format())
       case "core/all" => Ok(views.html.test.core.all())
       case "core/isType" => Ok(views.html.test.core.isType())
