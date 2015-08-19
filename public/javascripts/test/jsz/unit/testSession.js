@@ -7,8 +7,6 @@ script({
 }, function () {
   'use strict';
 
-  log.debug('eval test.jsz.unit.testSession');
-
   jsz.unit.Session.add(
     new jsz.unit.TestCase({
       name: 'test.testCase',
@@ -17,6 +15,10 @@ script({
         this.assert = jsz.unit.assert;
         this.aValue = 3;
       },
+      tests: [
+        {name: 'isThree'},
+        {name: 'isFour'}
+      ],
       methods: {
 
         isThree: function () {
@@ -31,8 +33,6 @@ script({
     })
   );
 
-  jsz.log.setType('stack');
-  jsz.log.setLogTo($('div.log'));
-  jsz.unit.Session.run().log();
+  jsz.unit.Session.run().logTo($('div.log'));
 
 });

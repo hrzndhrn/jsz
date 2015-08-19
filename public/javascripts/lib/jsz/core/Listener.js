@@ -17,6 +17,8 @@ script({
       this._type = type; // the event type
       this._callback = callback;
 
+      this._avoidPropagation = jsz.default(config.avoidPropagation, false);
+
       this._avoidDefault = jsz.default(config.avoidDefault, true);
       if (this._element.isType('FILE')) {
         // For the input element of type file its impossible to avoid
@@ -24,7 +26,6 @@ script({
         this._avoidDefault = false;
       }
 
-      this._avoidPropagation = jsz.default(config.avoidPropagation, false);
 
       this._capture = jsz.default(config.capture, false);
 
@@ -48,6 +49,9 @@ script({
       }
     },
 
+    _avoidDefault: true,
+    _avoidPropagation: false,
+
     activate: function () {
       jsz.Listener.activate(this.id);
     },
@@ -57,6 +61,14 @@ script({
     },
 
     fire: function (event) {
+      if (this._avoidDefault) {
+        event.preventDefault();
+      }
+
+      if (this._avoidPropagation) {
+        event.stopPropagation();
+      }
+
       this._callback(this._getReturnType(event));
     },
 

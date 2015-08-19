@@ -1,9 +1,11 @@
-@main("jsz") {
+@mainHead("jsz"){
+    <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/lib/jsz/unit/log.css")">
     <script>
-    script.load('demo.logging')
+        script.load('demo.logging')
     </script>
-
+}{
     <h1>jsz</h1>
     <h2>Demo: logging</h2>
-    <div id="log"></div>
+    <p>script: <a href="@routes.Assets.versioned("javascripts/demo/logging.js")">demo/logging.js</a></p>
+    <div id="log" class="log"></div>
 }

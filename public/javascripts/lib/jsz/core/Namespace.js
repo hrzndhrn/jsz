@@ -201,49 +201,35 @@ script({
       var metaClass = thisClass[JSZ.META];
       var newObject = null;
 
-      // TODO: singelton is not implemented for now. !old jsx stuff!
-      if (metaClass.singleton === true) {
-        var fullClassName = namespace.path() + JSZ.DOT + className;
-        if (_jsz_.singletons[fullClassName] === undefined) {
-          _jsz_.singletons[fullClassName] = this;
+      // Create a new object.
+      newObject = Object.create(thisClass.prototype, metaClass.properties);
+
+      // Set meta-info for the new object
+      Object.defineProperty(newObject, JSZ.META, {
+        enumerable: false,
+        configurable: false,
+        writable: true,
+        value: {
+          className: className,
+          namespace: namespace,
+          extend: extension || false,
+          super: 0 // auxiliary variable for the constructor chain
         }
-        else {
-          newObject = _jsz_.singletons[fullClassName];
-        }
-      }
-      else {
-        // Create a new object.
-        newObject = Object.create(thisClass.prototype, metaClass.properties);
+      });
 
-        // Set meta-info for the new object
-        Object.defineProperty(newObject, JSZ.META, {
-          enumerable: false,
-          configurable: false,
-          writable: true,
-          value: {
-            className: className,
-            namespace: namespace,
-            extend: extension || false,
-            super: 0 // auxiliary variable for the constructor chain
-          }
-        });
+      // handle inners
+      /* TODO: handle inners
+       if ( metaClass.inners) {
+       jsz.util.inners( this, metaClass.inners);
+       }
+       */
 
-        // handle inners
-        /* TODO: handle inners
-         if ( metaClass.inners) {
-         jsz.util.inners( this, metaClass.inners);
-         }
-         */
-
-        // call the constructor
-        if (newObject[className]) {
-          newObject[className].apply(newObject, arguments);
-        }
-
-        delete newObject[JSZ.META].super;
+      // call the constructor
+      if (newObject[className]) {
+        newObject[className].apply(newObject, arguments);
       }
 
-
+      delete newObject[JSZ.META].super;
 
       if (_jsz_.sealObjects) {
         Object.seal(newObject);

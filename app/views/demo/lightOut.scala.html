@@ -1,69 +1,62 @@
-<!DOCTYPE html>
-
-<html lang="en">
-    <head>
-        <title>jsz - Demo: lightOu</title>
-        <script src="@routes.Assets.versioned("javascripts/lib/jsz/core.js")" type="text/javascript"></script>
-        <script>
-            script.init({base:'/assets/javascripts'});
-        </script>
-        <script src="@routes.Assets.versioned("javascripts/demo/lightOut.js")" type="text/javascript"></script>
-        <style>
+@mainHead("jsz") {
+    <style>
         div.light {
-            border: 1px solid black;
-            margin: 0.1em;
-            width: 2em;
-            height: 2em;
+            border : 1px solid black ;
+            margin : 0.1em ;
+            width : 2em ;
+            height : 2em ;
         }
 
         div.light.on {
-            background-color: #ffff00 ;
+            background-color : #ffff00 ;
         }
-        div.light.off {
-            background-color: #faf8d9 ;
-        }
-        </style>
-    </head>
-    <body>
-        <h1>jsz</h1>
-        <h2>Demo: lightOut</h2>
-        <table>
-            <tr>
-                <td><div class="light"></div></td>
-                <td><div class="light"></div></td>
-                <td><div class="light"></div></td>
-                <td><div class="light"></div></td>
-                <td><div class="light"></div></td>
-            </tr>
-            <tr>
-                <td><div class="light"></div></td>
-                <td><div class="light"></div></td>
-                <td><div class="light"></div></td>
-                <td><div class="light"></div></td>
-                <td><div class="light"></div></td>
-            </tr>
-            <tr>
-                <td><div class="light"></div></td>
-                <td><div class="light"></div></td>
-                <td><div class="light"></div></td>
-                <td><div class="light"></div></td>
-                <td><div class="light"></div></td>
-            </tr>
-            <tr>
-                <td><div class="light"></div></td>
-                <td><div class="light"></div></td>
-                <td><div class="light"></div></td>
-                <td><div class="light"></div></td>
-                <td><div class="light"></div></td>
-            </tr>
-            <tr>
-                <td><div class="light"></div></td>
-                <td><div class="light"></div></td>
-                <td><div class="light"></div></td>
-                <td><div class="light"></div></td>
-                <td><div class="light"></div></td>
-            </tr>
-        </table>
-    </body>
-</html>
 
+        div.light.off {
+            background-color : #faf8d9 ;
+        }
+    </style>
+    <script>
+        script.load('demo.lightOut');
+    </script>
+}{
+    <h1>Demo: lightOut</h1>
+    <p>script: <a href="@routes.Assets.versioned("javascripts/demo/lightOut.js")">demo/lightOut.js</a></p>
+
+    <table>
+        <tr>
+            <td><div class="light"></div></td>
+            <td><div class="light"></div></td>
+            <td><div class="light"></div></td>
+            <td><div class="light"></div></td>
+            <td><div class="light"></div></td>
+        </tr>
+        <tr>
+            <td><div class="light"></div></td>
+            <td><div class="light"></div></td>
+            <td><div class="light"></div></td>
+            <td><div class="light"></div></td>
+            <td><div class="light"></div></td>
+        </tr>
+        <tr>
+            <td><div class="light"></div></td>
+            <td><div class="light"></div></td>
+            <td><div class="light"></div></td>
+            <td><div class="light"></div></td>
+            <td><div class="light"></div></td>
+        </tr>
+        <tr>
+            <td><div class="light"></div></td>
+            <td><div class="light"></div></td>
+            <td><div class="light"></div></td>
+            <td><div class="light"></div></td>
+            <td><div class="light"></div></td>
+        </tr>
+        <tr>
+            <td><div class="light"></div></td>
+            <td><div class="light"></div></td>
+            <td><div class="light"></div></td>
+            <td><div class="light"></div></td>
+            <td><div class="light"></div></td>
+        </tr>
+    </table>
+}

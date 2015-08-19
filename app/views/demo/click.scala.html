@@ -1,13 +1,13 @@
 @mainHead("jsz"){
     <style>
       span {
-        border: 1px solid blue;
-        padding: 0.5em;
-        margin: 0.5em;
+            border: 1px solid blue;
+            padding: 0.5em;
+            margin: 0.5em;
         }
 
         span.foo {
-        border-color: green;
+            border-color: green;
         }
     </style>
     <script>
@@ -15,15 +15,17 @@
     </script>
 }{
     <h1>Demo: click</h1>
+    <p>script: <a href="@routes.Assets.versioned("javascripts/demo/load.js")">demo/click.js</a></p>
+    <hr>
     <p>
         <span id="foo1">hello</span>
         <span id="foo2">hi</span>
     </p>
-    <hr/>
+    <hr>
     <p>
         <span id="foo3">foo3</span>
     </p>
-    <hr/>
+    <hr>
     <p>
         <span id="foo4" class="foo">foo4</span>
         <span id="foo5" class="foo">foo5</span>
