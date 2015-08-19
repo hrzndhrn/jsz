@@ -1,5 +1,5 @@
 script({
-  name: 'demo.lightOut',
+  name: 'demo.lightsOut',
   require: ['lib.jsz.util.random']
 }, function () {
   'use strict';
@@ -7,7 +7,7 @@ script({
   /**
    * A module for lights-out
    */
-  module('lightOut').def({
+  module('lightsOut').def({
 
     /** The size of the game board. */
     lightsSize: Object.freeze({
@@ -18,7 +18,7 @@ script({
      * The init function of the module will be executed after the creation of
      * the module.
      */
-    lightOut: function () {
+    lightsOut: function () {
       // Get all lights or get all HTML elements with the class light.
       this.lights = $$('.light');
 
