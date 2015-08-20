@@ -27,32 +27,13 @@ script({name: 'lib.jsz.core.Function'}, function () {
 
         isNoop = isFunction && object[key] === noop;
 
-        // If key starts with '_' then set enumerable to false.
-        enumerable = key.indexOf('_') !== 0;
-
-        // If property a function and enumerable then writeable is false.
-        // Overwrite protection for 'public' functions.
-        writeable = !(enumerable && isFunction);
-
-        // If key indicates a constant then set writeable to false.
-        writeable = writeable && !(/^[A-Z][A-Z|_]*$/).test(key);
-
-
         if ( !isFunction || isNoop) {
-          this._jsz_.properties[key] = {
-            enumerable: enumerable,
-            configurable: false,
-            writable: writeable,
-            value: object[key]
-          };
+          // The _jsz_.properties will be defined on every new instance.
+          this._jsz_.properties[key] =
+            Object.createDescriptor(key, object[key]);
         }
         else {
-          Object.defineProperty(this.prototype, key, {
-            enumerable: enumerable,
-            configurable: false,
-            writable: writeable,
-            value: object[key]
-          });
+          Object.addProperty( this.prototype, key, object[key]);
         }
 
       }

@@ -1,4 +1,9 @@
 // TODO: Documentation
+
+/**
+ * This script contains the implementation of jsz.Object and some static
+ * functions for the built-in Object.
+ */
 script({
   name: 'lib.jsz.core.Object',
   require: ['lib.jsz.core.Namespace']
@@ -70,8 +75,76 @@ script({
     return JSON.parse(JSON.stringify(object));
   };
 
+  /**
+   * Returns true if the given object has no enumerable keys.
+   *
+   * @param {Object} object
+   * @returns {boolean}
+   */
   Object.isEmpty = function (object) {
     return Object.keys(object).isEmpty();
   };
+
+  /**
+   * The addProperty function is a special form of defineProperty. This function
+   * detects the descriptor enumerable and enumerable by the given propName.
+   * For propNames starts with _ the enumerable key will be set to false
+   * otherwise to true.
+   * For propNames with only upper case characters the writable key will be set
+   * to false otherwise to true.
+   * The keys get and set remain unset.
+   * The key configurable will be set to false by default.
+   *
+   * @param {Object} object
+   * @param {String} propName
+   * @param {*} value
+   */
+  Object.addProperty = function(object, propName, value) {
+    Object.defineProperty(
+      object, propName, Object.createDescriptor(propName, value));
+  };
+
+  /**
+   * The addProperties function is a special form of defineProperties. The
+   * argument props is a key value object wherein the key is the property name
+   * and the value is the property value. At this point addProperties works like
+   * as addProperty for all properties in props.
+   *
+   * @param {Object} object
+   * @param {Object.<String,*>} props
+   */
+  Object.addProperties = function(object, props) {
+    var descriptors = Object.keys(props).reduce(
+      function(descriptors, propName) {
+        descriptors[propName] =
+          Object.createDescriptor(propName, props[propName]);
+        return descriptors;
+      }, {});
+    Object.defineProperties( object, descriptors);
+  };
+
+  /**
+   * This function returns a descriptor for defineProperty by the rules that
+   * are defined in addProperty.
+   *
+   * @param propName
+   * @param value
+   */
+  Object.defineProperty(Object, 'createDescriptor', {
+    enumerable: false,
+    writable: false,
+    configurable: false,
+    value:    function(propName, value) {
+      return {
+        // If key starts with '_' then set enumerable to false.
+        enumerable: propName.indexOf('_') !== 0,
+        // If key indicates a constant then set writeable to false.
+        writable: !(/^[A-Z|_]*$/).test(propName),
+        // configurable is by default false
+        configurable: false,
+        value: value
+      };
+    }
+  });
 
 });
