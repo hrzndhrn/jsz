@@ -108,6 +108,7 @@
       "isFalse": true,
       "noop": true,
       "uniqueId": true,
-      "$http": true
+      "$http": true,
+      "object": true
     }
 }

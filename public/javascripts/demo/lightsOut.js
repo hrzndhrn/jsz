@@ -5,34 +5,34 @@ script({
   'use strict';
 
   /**
-   * A module for lights-out
+   * An object for lights-out
    */
-  module('lightsOut').def({
+  window.lightsOut = object( function () { // The object constructor.
+    // Get all lights or get all HTML elements with the class light.
+    this._lights = $$('.light');
+
+    // Add a click listener to all lights.
+    this._lights.onClick(this._onClick, this, {
+      returnType: 'element' // Call the event listener with the target as
+                            // as argument.
+    });
+
+    this.newGame();
+
+  },{
 
     /** The size of the game board. */
-    lightsSize: Object.freeze({
+    _gameBoardSize: Object.freeze({
       width: 5, height: 5
     }),
 
-    /**
-     * The init function of the module will be executed after the creation of
-     * the module.
-     */
-    lightsOut: function () {
-      // Get all lights or get all HTML elements with the class light.
-      this.lights = $$('.light');
+    _lights: null,
 
+    newGame: function() {
       // Set randomly the one of the classes on or off to the lights.
-      this.lights.forEach(function (element) {
+      this._lights.forEach(function (element) {
         element.addCssClass(jsz.util.random.array(['on', 'off']));
       }, this);
-
-      // Add a click listener to all lights.
-      this.lights.onClick(this._onClick, this, {
-        returnType: 'element' // Call the event listener with the target as
-                              // as argument.
-      });
-
     },
 
     /**
@@ -43,7 +43,7 @@ script({
     _onClick: function (element) {
       // Get neighbours of the clicked element and toggle lights for them.
       // The list contains also the clicked element.
-      this._neighbours(this.lights.indexOf(element)).forEach(
+      this._neighbours(this._lights.indexOf(element)).forEach(
         this._toogleLight, this);
     },
 
@@ -53,7 +53,7 @@ script({
      * @private
      */
     _toogleLight: function (index) {
-      this.lights.get(index).toggleCssClass('on', 'off');
+      this._lights.get(index).toggleCssClass('on', 'off');
     },
 
     /**
@@ -90,8 +90,8 @@ script({
      */
     _validCoordinate: function (coordinate) {
       return coordinate.x >= 0 && coordinate.y >= 0 &&
-        coordinate.x < this.lightsSize.width &&
-        coordinate.y < this.lightsSize.height;
+        coordinate.x < this._gameBoardSize.width &&
+        coordinate.y < this._gameBoardSize.height;
     },
 
     /**
@@ -102,10 +102,10 @@ script({
      * @private
      */
     _index2coordinate: function (index) {
-      var xCoordinate = index % this.lightsSize.width;
+      var xCoordinate = index % this._gameBoardSize.width;
       return {
         x: xCoordinate,
-        y: (index - xCoordinate) / this.lightsSize.width
+        y: (index - xCoordinate) / this._gameBoardSize.width
       };
     },
 
@@ -117,9 +117,7 @@ script({
      * @private
      */
     _coordinate2index: function (coordinate) {
-      return coordinate.y * this.lightsSize.width + coordinate.x;
+      return coordinate.y * this._gameBoardSize.width + coordinate.x;
     }
   });
-
-
 });

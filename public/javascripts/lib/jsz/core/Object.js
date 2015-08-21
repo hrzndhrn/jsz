@@ -1,8 +1,9 @@
 // TODO: Documentation
 
 /**
- * This script contains the implementation of jsz.Object and some static
- * functions for the built-in Object.
+ * This script contains the implementation of jsz.Object, some static
+ * functions for the built-in Object and the function object to create simple
+ * objects.
  */
 script({
   name: 'lib.jsz.core.Object',
@@ -114,13 +115,7 @@ script({
    * @param {Object.<String,*>} props
    */
   Object.addProperties = function(object, props) {
-    var descriptors = Object.keys(props).reduce(
-      function(descriptors, propName) {
-        descriptors[propName] =
-          Object.createDescriptor(propName, props[propName]);
-        return descriptors;
-      }, {});
-    Object.defineProperties( object, descriptors);
+    Object.defineProperties( object, Object.createDescriptors(props));
   };
 
   /**
@@ -146,5 +141,49 @@ script({
       };
     }
   });
+
+  /**
+   * This function returns a descriptors object for defineProperties by the
+   * rules that are defined in addProperty.
+   *
+   * @param propName
+   * @param value
+   */
+  Object.defineProperty(Object, 'createDescriptors', {
+    enumerable: false,
+    writable: false,
+    configurable: false,
+    value: function(props) {
+      return Object.keys(props).reduce(
+        function(descriptors, propName) {
+          descriptors[propName] =
+            Object.createDescriptor(propName, props[propName]);
+          return descriptors;
+        }, {});
+    }
+  });
+
+  // ===========================================================================
+  // window.object to create objects on the fly
+  /**
+   *
+   * @param {Function} [init]
+   * @param {Object} properties
+   * @returns {jsz.Object}
+   */
+  window.object = function(init, properties) {
+    if ( arguments.length === 1) {
+      properties = init;
+      init = null;
+    }
+    var object = Object.create(Object.prototype,
+      Object.createDescriptors(properties));
+
+    if (init !== null) {
+      init.apply(object);
+    }
+
+    return object;
+  };
 
 });
