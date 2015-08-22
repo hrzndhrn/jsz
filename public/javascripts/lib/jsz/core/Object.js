@@ -73,7 +73,29 @@ script({
     if (object === undefined) {
       throw new Error('Can not clone undefined!');
     }
-    return JSON.parse(JSON.stringify(object));
+
+    var newObject = {};
+
+    if (jsz.isPlainObject(object)) {
+      Object.keys(object).forEach(function(key) {
+        var value = object[key];
+
+        if (jsz.isPlainObject(value)) {
+          newObject[key] = Object.clone(value);
+        }
+        else {
+          newObject[key] = value;
+        }
+      });
+    }
+    else if (object.clone !== undefined) {
+      newObject = object.clone();
+    }
+    else {
+      throw new Error('Can not clone object!');
+    }
+
+    return newObject;
   };
 
   /**
