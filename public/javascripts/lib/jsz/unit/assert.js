@@ -12,6 +12,13 @@ script({
         message = JSZ.EMPTY_STRING;
       }
 
+      if (objectGet === undefined) {
+        throw new jsz.unit.AssertError(
+          'Not equal! ' + message + '\n' +
+          'get     : >' + objectGet + '<\n' +
+          'expected: >' + objectExpected + '<', 1);
+      }
+
       if (objectGet.equals === undefined) {
         if ( objectGet !== objectExpected ) {
           throw new jsz.unit.AssertError(

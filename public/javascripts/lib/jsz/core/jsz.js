@@ -86,7 +86,7 @@ script({
         });
       }
       else {
-        argsDef.forEach( function(argDef, index) {
+        argsDef.forEach( function(argDef) {
           var name = argDef.name;
           args[name] = undefined;
 

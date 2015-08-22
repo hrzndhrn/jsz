@@ -1,0 +1,14 @@
+@mainTest("jsz") {
+<script>
+  script({
+    require:['test.jsz.observer']
+  }, function() {
+    jsz.unit.Session
+      .get('jsz.Observer')
+      .run()
+      .logTo($('div.log'));
+  });
+</script>
+
+<h1>Test: jsz.Observer</h1>
+}

@@ -103,6 +103,25 @@ script({
 
           this.assert.isEqual(resultC.x, 0);
           this.assert.isEqual(resultC.y, 0);
+        },
+
+        defaults03: function() {
+          var config = {
+            callback: {
+              fn: noop,
+              scope: this
+            }
+          };
+
+          config = jsz.defaults(config, {
+            callback: {},
+            path: JSZ.EMPTY_STRING
+          });
+
+          this.assert.isEqual(config.callback.fn, noop);
+          this.assert.isInstanceOf(config.callback.scope, Object);
+          this.assert.isEqual(config.path, JSZ.EMPTY_STRING);
+
         }
 
       }

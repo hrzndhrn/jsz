@@ -25,6 +25,9 @@ script({
        * @member {String[]}
        */
       this._testsOrder = tests.map(function(test) {
+        if (test.name === undefined) {
+          throw new Error('Wrong configuration in "tests".');
+        }
         return test.name;
       });
       /**

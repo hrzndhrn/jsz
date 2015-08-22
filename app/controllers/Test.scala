@@ -22,6 +22,7 @@ class Test extends Controller {
       case "jsz/core/args" => Ok(views.html.test.jsz.core.args())
       case "jsz/core/json" => Ok(views.html.test.jsz.core.JSON())
       case "jsz/httpRequest" => Ok(views.html.test.jsz.httpRequest())
+      case "jsz/observer" => Ok(views.html.test.jsz.observer())
       case "itemStore" => {
         // Drop all items in item store for the test.
         Items.drop
