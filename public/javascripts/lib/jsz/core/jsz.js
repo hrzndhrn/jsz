@@ -90,23 +90,27 @@ script({
           var name = argDef.name;
           args[name] = undefined;
 
-          if ( argDef.type === String && jsz.isString(argsList[0])) {
-            args[name] = argsList.shift();
+          if ( argDef.type === String) {
+            if (jsz.isString(argsList[0])) {
+              args[name] = argsList.shift();
+            }
           }
-          else if (argsList[0] instanceof argDef.type) {
-            args[name] = argsList.shift();
+          else if (argDef.type === Object) {
+            if (jsz.isObject(argsList[0])) {
+              args[name] = argsList.shift();
+            }
           }
-          /* else if (argDef.type === Function && jsz.isFunction(argsList[0])) {
-            args[name] = argsList.shift();
+          else {
+            if (argsList[0] instanceof argDef.type) {
+              args[name] = argsList.shift();
+            }
           }
-          else if (argDef.type === Object && jsz.isObject(argsList[0])) {
-            args[name] = argsList.shift();
-          }*/
-          else if (argDef.optional !== true) {
+
+          if (args[name] === undefined && argDef.optional !== true) {
             throw new Error('Missing argument ' + name + '!');
           }
 
-          if (argDef.default && args[name] === undefined) {
+          if (argDef.default !== undefined && args[name] === undefined) {
             args[name] = argDef.default;
           }
 

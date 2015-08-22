@@ -169,6 +169,44 @@ script({
           this.SKIP_STACK_FRAMES
         );
       }
+    },
+
+    /**
+     *
+     * @param {Function} fn
+     * @param {Object} [scope]
+     * @param {Array} [args]
+     * @param {String} [message]
+     */
+    throwsError: function( fn, scope, args, message) {
+      var errorFlag = true,
+        params = jsz.args(arguments,
+          {name: 'fn', type: Function},
+          {name: 'scope', type: Object, optional: true, default: window},
+          {name: 'args', type: Array, optional: true, default: []},
+          {name: 'message', type: String, optional: true,
+            default: JSZ.EMPTY_STRING}
+        );
+
+      fn = params.fn;
+      scope = params.scope;
+      args = params.args;
+      message = params.message;
+
+      try {
+        fn.apply(scope, args);
+        errorFlag = false;
+      }
+      catch(error) {
+        // This is the excepted way.
+      }
+
+      if(!errorFlag) {
+        throw new jsz.unit.AssertError(
+          'No error thrown! ' + message,
+          this.SKIP_STACK_FRAMES
+        );
+      }
     }
 
   });

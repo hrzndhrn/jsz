@@ -6,12 +6,21 @@ script({
 }, function() {
   'use strict';
 
-  namespace('jsz').proto('Observer', {
+  namespace('jsz').class('Observer').def({
+
+    _path_: JSZ.EMPTY_STRING,
+    _callback_: {},
+    _data_: {},
 
     Observer: function(object, config) {
       if (arguments.length === 1) {
+        // internal: The observer holds the data
         config = object;
         object = this;
+      }
+      else {
+        // external: The data exist in a different object.
+        config.data = jsz.default(config.data, object);
       }
 
       config = jsz.defaults(config, {
@@ -19,10 +28,10 @@ script({
         path: JSZ.EMPTY_STRING
       });
 
-      var path = config.path === JSZ.EMPTY_STRING ?
+      this._path_ = config.path === JSZ.EMPTY_STRING ?
         config.path : config.path + '.';
 
-      var data = {
+      this._data_ = {
         current: {},
         snapshot: {}
       };
@@ -37,64 +46,32 @@ script({
           });
         }
         else {
-          data.snapshot[key] = config.data[key];
+          this._data_.snapshot[key] = config.data[key];
         }
 
-        data.current[key] = config.data[key];
-      });
+        this._data_.current[key] = config.data[key];
+      }, this);
 
-      Object.defineProperty(this, '_path_', {
-        enumerable: false,
-        configurable: false,
-        writable: false,
-        value: path
-      });
+      this._callback_ = {
+        setter: unite(config.callback.setter, config.callback.scope),
+        getter: unite(config.callback.getter, config.callback.scope)
+      };
 
-      Object.defineProperty(this, '_callback_', {
-        enumerable: false,
-        configurable: false,
-        writable: false,
-        value: {
-          setter: unite(config.callback.setter, config.callback.scope),
-          getter: unite(config.callback.getter, config.callback.scope)
-        }
-      });
+      jsz.Observer.defineProperties(this, object, config.data);
 
-      Object.defineProperty(this, '_data_', {
-        enumerable: false,
-        configurable: false,
-        writable: true,
-        value: {
-          snapshot: data.snapshot,
-          current: data.current
-        }
-      });
+      Object.freeze(object);
 
-      Object.defineProperty(this, '_getter_', {
-        enumerable: false,
-        configurable: false,
-        writable: false,
-        value: function(key) {
-          var value = this._data_.current[key];
-          this._callback_.getter(this._path_ + key, value);
-          return value;
-        }
-      });
+    },
 
-      Object.defineProperty(this, '_setter_', {
-        enumerable: false,
-        configurable: false,
-        // writable: false,
-        value: function(key, value) {
-          this._callback_.setter(this._path_ + key, value);
-          this._data_.current[key] = value;
-        }
-      });
+    _setter_: function(key, value) {
+      this._callback_.setter(this._path_ + key, value);
+      this._data_.current[key] = value;
+    },
 
-      jsz.Observer.addProperties(this, object, config.data);
-
-      Object.freeze(this);
-
+    _getter_: function(key) {
+      var value = this._data_.current[key];
+      this._callback_.getter(this._path_ + key, value);
+      return value;
     },
 
     hasNoChanges: function() {
@@ -121,12 +98,17 @@ script({
 
   });
 
-  jsz.Observer.addProperties = function(observer, object, properties) {
+  /**
+   *
+   * @param {jsz.Observer} observer
+   * @param {Object} object
+   * @param {Object} properties
+   */
+  jsz.Observer.defineProperties = function(observer, object, properties) {
     Object.keys(properties).forEach(function(key) {
       Object.defineProperty(object, key, {
         enumerable: true,
         configurable: false,
-        // writable: false,
         get: jsz.Observer.getter(observer, key),
         set: jsz.Observer.setter(observer, key)
       });

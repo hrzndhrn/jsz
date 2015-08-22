@@ -57,6 +57,65 @@ script({
 
       }
     })
+  ).add(
+    new jsz.unit.TestCase({
+      name: 'args02',
+      setup: function () {
+        this.assert = jsz.unit.assert;
+
+        this.fn = function(fn, scope, args, message) {
+          return jsz.args(arguments,
+            {name: 'fn', type: Function},
+            {name: 'scope', type: Object, optional: true, default: window},
+            {name: 'args', type: Array, optional: true, default: []},
+            {name: 'message', type: String, optional: true,
+              default: JSZ.EMPTY_STRING}
+          );
+        };
+      },
+      methods: {
+
+        oneArg: function () {
+          var args = this.fn(noop);
+
+          this.assert.isEqual(args.fn, noop);
+          this.assert.isEqual(args.scope, window);
+          this.assert.isEqualArray(args.args, []);
+          this.assert.isEqual(args.message, JSZ.EMPTY_STRING);
+        },
+
+        twoArgs01: function() {
+          var args = this.fn(noop, this);
+
+          this.assert.isEqual(args.fn, noop);
+          this.assert.isEqual(args.scope, this);
+          this.assert.isEqualArray(args.args, []);
+          this.assert.isEqual(args.message, JSZ.EMPTY_STRING);
+        },
+
+        twoArgs02: function() {
+          var args = this.fn(noop, [1,2]);
+
+          this.assert.isEqual(args.fn, noop);
+          this.assert.isEqual(args.scope, window);
+          this.assert.isEqualArray(args.args, [1,2]);
+          this.assert.isEqual(args.message, JSZ.EMPTY_STRING);
+        },
+
+        twoArgs03: function() {
+          var args = this.fn(noop, 'message');
+
+          this.assert.isEqual(args.fn, noop);
+          this.assert.isEqual(args.scope, window);
+          this.assert.isEqualArray(args.args, []);
+          this.assert.isEqual(args.message, 'message');
+        }
+
+
+
+      }
+    })
+
   );
 
 });

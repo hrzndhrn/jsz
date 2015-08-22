@@ -48,6 +48,9 @@ script({
             }
           });
           this.assert.isDefined(this.object);
+          this.assert.throwsError(function() {
+            this.object.x = 42;
+          }, this);
           this.assert.isEqualArray(
             Object.keys(this.object).sort(), ['a','b','c']);
         },
@@ -61,7 +64,8 @@ script({
         historyGet01: function() {
           this.assert.isEqual(this.history[0], 'get: a = 1');
           this.assert.isEqual(this.history[1], 'get: b = 2');
-          this.assert.isEqual(this.history[2], 'get: c = [object Object]');
+          this.assert.isEqual(
+            this.history[2], 'get: c = [object jsz.Observer]');
           this.assert.isEqual(this.history[3], 'get: c.d = 4');
         },
 
@@ -72,7 +76,8 @@ script({
 
           this.assert.isEqual(this.history[4], 'set: a = 11');
           this.assert.isEqual(this.history[5], 'set: b = 12');
-          this.assert.isEqual(this.history[6], 'get: c = [object Object]');
+          this.assert.isEqual(
+            this.history[6], 'get: c = [object jsz.Observer]');
           this.assert.isEqual(this.history[7], 'set: c.d = 14');
         },
 
@@ -85,7 +90,8 @@ script({
         historyGet02: function() {
           this.assert.isEqual(this.history[8], 'get: a = 11');
           this.assert.isEqual(this.history[9], 'get: b = 12');
-          this.assert.isEqual(this.history[10], 'get: c = [object Object]');
+          this.assert.isEqual(
+            this.history[10], 'get: c = [object jsz.Observer]');
           this.assert.isEqual(this.history[11], 'get: c.d = 14');
         }
 
@@ -133,6 +139,9 @@ script({
             }
           });
           this.assert.isDefined(this.object);
+          this.assert.throwsError(function() {
+            this.object.x = 42;
+          }, this);
           this.assert.isEqualArray(
             Object.keys(this.object).sort(), ['a','b','c']);
 
@@ -147,7 +156,8 @@ script({
         historyGet01: function() {
           this.assert.isEqual(this.history[0], 'get: a = 1');
           this.assert.isEqual(this.history[1], 'get: b = 2');
-          this.assert.isEqual(this.history[2], 'get: c = [object Object]');
+          this.assert.isEqual(
+            this.history[2], 'get: c = [object jsz.Observer]');
           this.assert.isEqual(this.history[3], 'get: c.d = 4');
         },
 
@@ -158,7 +168,8 @@ script({
 
           this.assert.isEqual(this.history[4], 'set: a = 11');
           this.assert.isEqual(this.history[5], 'set: b = 12');
-          this.assert.isEqual(this.history[6], 'get: c = [object Object]');
+          this.assert.isEqual(
+            this.history[6], 'get: c = [object jsz.Observer]');
           this.assert.isEqual(this.history[7], 'set: c.d = 14');
         },
 
@@ -171,7 +182,8 @@ script({
         historyGet02: function() {
           this.assert.isEqual(this.history[8], 'get: a = 11');
           this.assert.isEqual(this.history[9], 'get: b = 12');
-          this.assert.isEqual(this.history[10], 'get: c = [object Object]');
+          this.assert.isEqual(
+            this.history[10], 'get: c = [object jsz.Observer]');
           this.assert.isEqual(this.history[11], 'get: c.d = 14');
         }
 
@@ -207,7 +219,9 @@ script({
       ],
       methods: {
         create: function() {
-          this.object = {};
+          this.object = {
+            a:1,b:2,c:{d:4,e:5}
+          };
           new jsz.Observer( this.object, {
             callback: {
               setter: this.setter,
@@ -216,6 +230,9 @@ script({
             }
           });
           this.assert.isDefined(this.object);
+          this.assert.throwsError(function() {
+            this.object.x = 42;
+          }, this);
           this.assert.isEqualArray(
             Object.keys(this.object).sort(), ['a','b','c']);
         },
@@ -229,7 +246,8 @@ script({
         historyGet01: function() {
           this.assert.isEqual(this.history[0], 'get: a = 1');
           this.assert.isEqual(this.history[1], 'get: b = 2');
-          this.assert.isEqual(this.history[2], 'get: c = [object Object]');
+          this.assert.isEqual(
+            this.history[2], 'get: c = [object jsz.Observer]');
           this.assert.isEqual(this.history[3], 'get: c.d = 4');
         },
 
@@ -240,7 +258,8 @@ script({
 
           this.assert.isEqual(this.history[4], 'set: a = 11');
           this.assert.isEqual(this.history[5], 'set: b = 12');
-          this.assert.isEqual(this.history[6], 'get: c = [object Object]');
+          this.assert.isEqual(
+            this.history[6], 'get: c = [object jsz.Observer]');
           this.assert.isEqual(this.history[7], 'set: c.d = 14');
         },
 
@@ -253,7 +272,8 @@ script({
         historyGet02: function() {
           this.assert.isEqual(this.history[8], 'get: a = 11');
           this.assert.isEqual(this.history[9], 'get: b = 12');
-          this.assert.isEqual(this.history[10], 'get: c = [object Object]');
+          this.assert.isEqual(
+            this.history[10], 'get: c = [object jsz.Observer]');
           this.assert.isEqual(this.history[11], 'get: c.d = 14');
         }
 
