@@ -14,14 +14,10 @@ script({
         object = this;
       }
 
-      log.dir(config);
-
       config = jsz.defaults(config, {
         callback: {},
         path: JSZ.EMPTY_STRING
       });
-
-      log.dir(config);
 
       var path = config.path === JSZ.EMPTY_STRING ?
         config.path : config.path + '.';
