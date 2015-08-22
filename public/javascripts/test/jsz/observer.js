@@ -48,6 +48,8 @@ script({
             }
           });
           this.assert.isDefined(this.object);
+          this.assert.isEqualArray(
+            Object.keys(this.object).sort(), ['a','b','c']);
         },
 
         get01: function() {
@@ -131,6 +133,9 @@ script({
             }
           });
           this.assert.isDefined(this.object);
+          this.assert.isEqualArray(
+            Object.keys(this.object).sort(), ['a','b','c']);
+
         },
 
         get01: function() {
@@ -211,6 +216,8 @@ script({
             }
           });
           this.assert.isDefined(this.object);
+          this.assert.isEqualArray(
+            Object.keys(this.object).sort(), ['a','b','c']);
         },
 
         get01: function() {
