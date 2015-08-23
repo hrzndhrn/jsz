@@ -117,7 +117,8 @@ script({
     },
 
     /**
-     * Returns true if the object was not changed after observation was started.
+     * Returns true if the object was not changed after observation was started
+     * or a snapshot was taken.
      *
      * @returns {boolean}
      */
@@ -140,12 +141,30 @@ script({
     },
 
     /**
-     * Returns true if the object was changed after observation was started.
+     * Returns true if the object was changed after observation was started or
+     * a snapshot was taken.
      *
      * @returns {boolean}
      */
     hasChanges: function() {
       return !this.hasNoChanges();
+    },
+
+    /**
+     * This methods takes a snapshot of the observed object to mark the object
+     * as unchanged. After a snapshot the method hasChanges will return false
+     * until the object will be changed.
+     */
+    snapshot: function() {
+      Object.keys(this._data_.current).forEach(function(key) {
+        var value = this._data_.current[key];
+        if (value instanceof jsz.Observer) {
+          value.snapshot();
+        }
+        else {
+          this._data_.snapshot[key] = value;
+        }
+      }, this);
     }
 
   });
