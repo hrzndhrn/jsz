@@ -31,14 +31,14 @@ script({name: 'lib.jsz.util.format'}, function () {
       var string = Math.abs(value).toString(),
         negative = value < 0,
         sign = value < 0 ? '-' : JSZ.EMPTY_STRING;
-      log.debug('format: >' + format + '<');
+      log.debug('format: >' + format + '<, value = ' + value);
 
       if (format !== JSZ.EMPTY_STRING) {
         // Format the value.
         var flags = this._percentflags(format);
         var size = this._percentWidthPrecision(format);
 
-        log.dir({flags:flags,size:size});
+        // log.dir({flags:flags,size:size});
 
         if (flags.space && !flags.plus) {
           if (!negative) {
@@ -73,6 +73,8 @@ script({name: 'lib.jsz.util.format'}, function () {
       }
 
       string = sign + string;
+
+      log.debug('"' + string + '"');
 
       return string;
     },
