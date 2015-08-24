@@ -12,7 +12,8 @@ class Test extends Controller {
     page match {
       case "jsz/unit/testCase" => Ok(views.html.test.jsz.unit.testCase())
       case "jsz/util/timerTask" => Ok(views.html.test.jsz.util.timerTask())
-      case "jsz/util/format" => Ok(views.html.test.jsz.util.format())
+      case "jsz/util/format/dollar" => Ok(views.html.test.jsz.util.format.dollar())
+      case "jsz/util/format/percent" => Ok(views.html.test.jsz.util.format.percent())
       case "jsz/core/all" => Ok(views.html.test.jsz.core.all())
       case "jsz/core/isType" => Ok(views.html.test.jsz.core.isType())
       case "jsz/core/array" => Ok(views.html.test.jsz.core.array())
