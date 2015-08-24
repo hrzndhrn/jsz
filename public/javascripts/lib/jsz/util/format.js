@@ -35,24 +35,24 @@ script({name: 'lib.jsz.util.format'}, function () {
 
       if (format !== JSZ.EMPTY_STRING) {
         // Format the value.
-        var formatFlags = this._percentFormatFlags(format);
+        var flags = this._percentflags(format);
         var size = this._percentWidthPrecision(format);
 
-        log.dir({flags:formatFlags,size:size});
+        log.dir({flags:flags,size:size});
 
-        if (formatFlags.space && !formatFlags.plus) {
+        if (flags.space && !flags.plus) {
           if (!negative) {
             string = JSZ.BLANK + string;
           }
         }
-        if (formatFlags.plus && !negative) {
+        if (flags.plus && !negative) {
           sign = '+';
         }
 
         if ( string.length < size.width) {
           var fillWith = JSZ.BLANK;
 
-          if (formatFlags.zero) {
+          if (flags.zero) {
             fillWith = '0';
           }
           else {
@@ -62,7 +62,7 @@ script({name: 'lib.jsz.util.format'}, function () {
 
           var fill = fillWith.repeat(size.width - string.length - sign.length);
 
-          if ( formatFlags.minus) {
+          if ( flags.minus) {
             string = string + fill;
           }
           else {
@@ -77,7 +77,7 @@ script({name: 'lib.jsz.util.format'}, function () {
       return string;
     },
 
-    _percentFormatFlags: function(format) {
+    _percentflags: function(format) {
       return {
         space: /\s/.test(format),
         minus: /-/.test(format),
