@@ -72,4 +72,27 @@ script({name: 'lib.jsz.core.String'}, function () {
     };
   }
 
+  if (String.repeat === undefined) {
+    console.log('repeat');
+    String.prototype.repeat = function(times) {
+      var string = this.toString(),
+        result = JSZ.EMPTY_STRING,
+        i = 0;
+
+      if (isNaN(times)) {
+        throw new TypeError('Repeat times must be a number.');
+      }
+
+      if (times < 0) {
+        throw new Error('Repeat times must non-negative!');
+      }
+
+      while (i < times) {
+        result = result + string;
+        i++;
+      }
+
+      return result;
+    };
+  }
 });
