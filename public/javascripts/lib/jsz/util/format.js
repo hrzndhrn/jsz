@@ -18,13 +18,95 @@ script({name: 'lib.jsz.util.format'}, function () {
     _PERCENT_PLACEHOLDER: 'percentPlaceholder',
     _DOLLAR_PLACEHOLDER: 'dollarPlaceholder',
 
-    string: function () {
+    text: function() {
       var args = Array.from(arguments);
       var string = args.shift();
 
       var formatTokens = this._getFormatTokens(string);
 
       return this._format(formatTokens, args);
+    },
+
+    integer: function(format, value) {
+      var string = Math.abs(value).toString(),
+        negative = value < 0,
+        sign = value < 0 ? '-' : JSZ.EMPTY_STRING;
+      log.debug('format: >' + format + '<');
+
+      if (format !== JSZ.EMPTY_STRING) {
+        // Format the value.
+        var formatFlags = this._percentFormatFlags(format);
+        var size = this._percentWidthPrecision(format);
+
+        log.dir({flags:formatFlags,size:size});
+
+        if (formatFlags.space && !formatFlags.plus) {
+          if (!negative) {
+            string = JSZ.BLANK + string;
+          }
+        }
+        if (formatFlags.plus && !negative) {
+          sign = '+';
+        }
+
+        if ( string.length < size.width) {
+          var fillWith = JSZ.BLANK;
+
+          if (formatFlags.zero) {
+            fillWith = '0';
+          }
+          else {
+            string = sign + string;
+            sign = JSZ.EMPTY_STRING;
+          }
+
+          var fill = fillWith.repeat(size.width - string.length - sign.length);
+
+          if ( formatFlags.minus) {
+            string = string + fill;
+          }
+          else {
+            string = fill + string;
+          }
+
+        }
+      }
+
+      string = sign + string;
+
+      return string;
+    },
+
+    _percentFormatFlags: function(format) {
+      return {
+        space: /\s/.test(format),
+        minus: /-/.test(format),
+        plus: /\+/.test(format),
+        zero: /^[^d]*0/.test(format),
+        hash: /#/.test(format)
+      };
+    },
+
+    _percentWidthPrecision: function(format) {
+      var result = {
+        width: 0,
+        precision: 0
+      };
+
+      var widthPrecision = format.match(/(\d*)\.(\d*)$/);
+
+      if (widthPrecision === null) {
+        var width = format.match(/(\d+)$/);
+        if (width !== null) {
+          result.width = width[1];
+        }
+      }
+      else {
+        result.width = widthPrecision[1];
+        result.precision = widthPrecision[2];
+      }
+
+      return result;
     },
 
     _format: function(tokens, args) {
@@ -66,7 +148,33 @@ script({name: 'lib.jsz.util.format'}, function () {
     },
 
     _formatPercent: function(token, args, index) {
-      log.error('_formatPercent: Not implemented yet!');
+      log.warn('_formatPercent: Not fully implemented yet');
+      var content =  token.content.match(/^.(.*)(.)$/),
+        format = content[1],
+        type = content[2],
+        string = JSZ.EMPTY_STRING,
+        position = index;
+
+      var posInFormat = format.match(/^(\d*)\$(.*)$/);
+      if (posInFormat === null) {
+        index++;
+      }
+      else {
+        position = parseInt(posInFormat[1], 10) - 1;
+        format = posInFormat[2];
+      }
+
+      if ( type === 'd') {
+        string = this.integer(format, args[position]);
+      }
+      else {
+        throw new Error('Can not resolve %' + format + type + '!');
+      }
+
+      return {
+        content: string,
+        index: index
+      };
     },
 
     _formatDollar: function(token, args, index) {
@@ -89,8 +197,8 @@ script({name: 'lib.jsz.util.format'}, function () {
     },
 
     _getFormatTokens: function(string) {
-      var tokens = this._split(string, this._WHITE_SPACE);
-      tokens = this._split(tokens, this._PERCENT_SIGN);
+      // var tokens = this._split(string, this._WHITE_SPACE);
+      var tokens = this._split(string, this._PERCENT_SIGN);
       tokens = this._split(tokens, this._DOLLAR_SIGN);
       tokens = this._split(tokens, this._PERCENT_PLACEHOLDER);
       tokens = this._split(tokens, this._DOLLAR_PLACEHOLDER);
@@ -141,7 +249,7 @@ script({name: 'lib.jsz.util.format'}, function () {
   String.prototype.format = function() {
     var args = Array.from(arguments);
     args.unshift(this.toString());
-    return jsz.util.format.string.apply(jsz.util.format, args);
+    return jsz.util.format.text.apply(jsz.util.format, args);
   };
 
 });
