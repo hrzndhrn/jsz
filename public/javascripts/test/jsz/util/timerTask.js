@@ -99,6 +99,51 @@ script({
         }
       }
     })
+  ).add(
+    new jsz.unit.TestCase({
+      name: 'TimerTask:withParams',
+      setup: function(testCase) {
+        this.testCaseName = testCase.name;
+        this.callback = testCase.callback('callback');
+        this.assert = jsz.unit.assert;
+
+        this.obj = {
+          a: 0,
+          b: 0
+        }
+
+        this.timerTaskCallback = function(a,b) {
+          this.obj.a = a;
+          this.obj.b = b;
+          this.callback();
+        }
+
+        this.timerTask = new jsz.util.TimerTask({
+          delay: jsz.time.second().millis(),
+          callback: this.timerTaskCallback,
+          scope: this,
+          params: [1,2]
+        });
+      },
+      tests: [
+        {name:'start'},
+        {name:'callback'}
+      ],
+      methods: {
+        start: function() {
+          log.debug(this.testCaseName + ' - start');
+          this.timerTask.start();
+        },
+
+        callback: function() {
+          log.debug(this.testCaseName + ' - calllback');
+          log.dir({obj:this.obj});
+
+          this.assert.isEqual(this.obj.a,1);
+          this.assert.isEqual(this.obj.b,2);
+        }
+      }
+    })
   );
 
 });

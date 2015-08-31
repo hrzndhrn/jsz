@@ -85,8 +85,14 @@
         scope = window;
       }
 
+      // The function which the original function and the scope unite.
       uniteFun = function () {
-        return fun.apply(scope, arguments);
+        // This will be executed when the unite is called.
+        var args = arguments;
+        if (arguments[0] && jsz.isArguments(arguments[0])) {
+          args = arguments[0];
+        }
+        return fun.apply(scope, args);
       };
 
       uniteFun.isUnited = true;

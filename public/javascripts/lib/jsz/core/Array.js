@@ -146,6 +146,18 @@ script({name:'lib.jsz.core.Array'}, function () {
     }
   });
 
+  /**
+   * The mehotd toArguments returns an arguments object of this list.
+   * @returns {Arguments}
+   */
+  Object.defineProperty( Array.prototype, 'toArguments', {
+    enumerable: false,
+    configurable: false,
+    writable: false,
+    value: function () {
+      return jsz.listToArguments(this);
+    }
+  });
 
   /**
    * The contains method returns true if the given value is in the array. If the

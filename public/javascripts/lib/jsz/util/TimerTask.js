@@ -38,7 +38,7 @@ script({name: 'lib.jsz.util.TimerTask'}, function () {
        * */
       this._interval = jsz.default(config.interval, -1);
 
-      this._params = jsz.default(config.params, []);
+      this._params = jsz.default(config.params, []).toArguments();
 
       if (this._interval > 0 && this._delay >= 0) {
         throw new Error('Just one of the two values "delay" or ' +

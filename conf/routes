@@ -21,5 +21,5 @@ DELETE        /itemStore/items/:id        controllers.itemStore.Items.delete(id:
 
 # Map static resources from the /public folder to the /assets URL path
 GET           /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
-GET           /favicon.png                controllers.Assets.at(path="/public/images", file="favicon.png")
+GET           /favicon.ico                controllers.Assets.at(path="/public/images", file="favicon.png")
 

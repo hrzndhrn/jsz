@@ -120,6 +120,23 @@ script({
       return args;
     },
 
+    /**
+     * This function converts a list in a arguments object.
+     * @param list
+     */
+    listToArguments: function(list) {
+      return jsz._listToArguments.apply(this, list);
+    },
+
+    /**
+     * A helper for jsz.listToArguments.
+     * @returns {Arguments}
+     * @private
+     */
+    _listToArguments: function() {
+      return arguments;
+    },
+
     // =========================================================================
     // All isType functions are just convenience functions. These functions
     // save a typeof or instanceof.
