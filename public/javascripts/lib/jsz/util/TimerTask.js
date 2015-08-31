@@ -38,7 +38,7 @@ script({name: 'lib.jsz.util.TimerTask'}, function () {
        * */
       this._interval = jsz.default(config.interval, -1);
 
-      this._params = jsz.default(config.params, []).toArguments();
+      this._args = jsz.default(config.args, []).toArguments();
 
       if (this._interval > 0 && this._delay >= 0) {
         throw new Error('Just one of the two values "delay" or ' +
@@ -50,7 +50,7 @@ script({name: 'lib.jsz.util.TimerTask'}, function () {
     _callback: noop,
     _delay: -1,
     _interval: -1,
-    _params: [],
+    _args: [],
     _startTimestamp: null,
 
     /**
@@ -173,7 +173,7 @@ script({name: 'lib.jsz.util.TimerTask'}, function () {
      * @private
      */
     _apply: function () {
-      this._callback(this._params);
+      this._callback(this._args);
       if (this.isInterval() && this._timeoutId !== null) {
         this._timeoutId = null;
         this.start();

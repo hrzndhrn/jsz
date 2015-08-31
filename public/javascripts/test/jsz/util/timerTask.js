@@ -101,7 +101,7 @@ script({
     })
   ).add(
     new jsz.unit.TestCase({
-      name: 'TimerTask:withParams',
+      name: 'TimerTask:withArgs',
       setup: function(testCase) {
         this.testCaseName = testCase.name;
         this.callback = testCase.callback('callback');
@@ -110,19 +110,19 @@ script({
         this.obj = {
           a: 0,
           b: 0
-        }
+        };
 
         this.timerTaskCallback = function(a,b) {
           this.obj.a = a;
           this.obj.b = b;
           this.callback();
-        }
+        };
 
         this.timerTask = new jsz.util.TimerTask({
           delay: jsz.time.second().millis(),
           callback: this.timerTaskCallback,
           scope: this,
-          params: [1,2]
+          args: [1,2]
         });
       },
       tests: [
