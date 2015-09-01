@@ -282,11 +282,22 @@ script({
     },
 
     removeCssClass: function (cssClass) {
-      var cssClasses = this.getCssClasses();
-      this._apply(
-        HTMLElement.prototype.setAttribute, ['class',
-          cssClasses.filter(isNotEqual(cssClass)).join(JSZ.BLANK)]
-      );
+      if (arguments.length > 1) {
+        this.removeCssClasses(Array.from(arguments));
+      }
+      else {
+        var cssClasses = this.getCssClasses();
+        this._apply(
+          HTMLElement.prototype.setAttribute, ['class',
+            cssClasses.filter(isNotEqual(cssClass)).join(JSZ.BLANK)]
+        );
+      }
+    },
+
+    removeCssClasses: function(cssClasses) {
+      cssClasses.forEach( function(cssClass) {
+        this.removeCssClass(cssClass);
+      }, this);
     },
 
     toggleCssClass: function (cssClassA, cssClassB) {
