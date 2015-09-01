@@ -198,8 +198,13 @@ script({
       properties = init;
       init = null;
     }
-    var object = Object.create(Object.prototype,
+
+    var object = Object.create(jsz.Object.prototype,
       Object.createDescriptors(properties));
+
+    object.toString = function() {
+      return '[object Object]';
+    };
 
     if (init !== null) {
       init.apply(object);
