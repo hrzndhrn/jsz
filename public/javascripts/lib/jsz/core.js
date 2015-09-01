@@ -3,8 +3,6 @@
  * Just another JavScriptFramework
  *
  */
-
-
 (function () {
   'use strict';
 
@@ -18,7 +16,8 @@
     classes: {},
     version: '0.0.1',
     uniqueId: 0,
-    sealObjects: true
+    sealObjects: true,
+    config: {}
   };
 
   // === jsz-Configuration =====================================================
@@ -26,8 +25,14 @@
   // overwritten later.
   if (window.jsz !== undefined) {
     if ( jsz.log !== undefined) {
-      _jsz_.log = jsz.log;
+      _jsz_.config.log = jsz.log;
     }
+
+    if ( jsz.script !== undefined) {
+      _jsz_.config.script = jsz.script;
+    }
+
+    delete window.jsz;
   }
 
   // set configuration defaults
@@ -63,8 +68,7 @@
   window.uniqueId = function(prefix) {
     var id = ++_jsz_.uniqueId;
     return prefix === undefined ? 'ID:' + id : prefix + ':ID:' + id;
-
-  }
+  };
 
   /**
    * This functions joins an scope with a function. In most cases this will be
@@ -194,7 +198,7 @@
    * Adds a new script tag to the head of the site.
    */
   window.script = function (conf, fun) {
-    conf.fun = fun;
+    conf.fun = fun === undefined ? function(){} : fun;
     conf.evaluated = false;
     conf.loaded = true;
 
@@ -214,6 +218,10 @@
 
     delete conf.name;
 
+    if (conf.base !== undefined) {
+      this._setBase(conf.base);
+    }
+
     script._evalAll();
 
   };
@@ -226,35 +234,17 @@
   script._counter = 0;
 
   /**
-   *
-   * @param {object} config
-   * @param {string} config.name
-   * @param {array} config.require
-   * @param {string} config.base
-   * @param {boolean} config.default
-   * @param {function} fun
+   * @todo refactoring
    */
-  script.init = function (config, fun) {
-    if (config.defaultRequirements !== undefined) {
-      script._defaultRequirements =
-        script._defaultRequirements.concat(config.defaultRequirements);
-      delete config.defaultRequirements;
-    }
-
-    if (config.name !== undefined) {
-      if (fun === undefined) {
-        fun = function () {
-        };
-      }
-
-      script(config, fun);
-    }
-
+  script.init = function (config) {
     if (config.base !== undefined) {
-      script._base = JSZ.SLASH +
-      (/\/*(.*[^\/])\/*/).exec(config.base)[1] + JSZ.SLASH;
-      script._evalAll();
+      this._setBase(config.base);
     }
+  };
+
+  script._setBase = function(base) {
+    script._base = JSZ.SLASH +
+      (/\/*(.*[^\/])\/*/).exec(base)[1] + JSZ.SLASH;
   };
 
   script.load = function (scriptName) {
@@ -374,9 +364,11 @@
     return isDefault;
   };
 
-  // In core.js the other core scripts will be loaded here.
-  // The packed core-pack.js will have the code inserted.
-  script.init({
+  if (_jsz_.config.script !== undefined) {
+    script.init(_jsz_.config.script);
+  }
+
+  script({
     name: 'lib.jsz.core',
     default: true,
     require: [
