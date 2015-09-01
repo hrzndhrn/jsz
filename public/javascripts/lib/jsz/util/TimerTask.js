@@ -1,3 +1,6 @@
+/**
+ * TimerTask script.
+ */
 script({name: 'lib.jsz.util.TimerTask'}, function () {
   'use strict';
 

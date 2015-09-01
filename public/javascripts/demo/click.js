@@ -1,7 +1,8 @@
+/**
+ * A little demo for a click listener.
+ */
 script({name:'demo.click'}, function () {
   'use strict';
-
-  console.log('jsz - Demo: click.js');
 
   jsz.Listener.add('foo1', 'click', function () {
     alert('hello');

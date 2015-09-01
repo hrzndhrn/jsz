@@ -185,7 +185,6 @@ script({
      * @private
      */
     _parseStackEntry: function(entry) {
-      // console.log('entry: ' + entry);
       var entryObject = {}, codePointer, funAtPos;
 
       // Get the function name and the code pointer. The format of the stack

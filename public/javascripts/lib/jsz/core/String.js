@@ -73,7 +73,6 @@ script({name: 'lib.jsz.core.String'}, function () {
   }
 
   if (String.repeat === undefined) {
-    console.log('repeat');
     String.prototype.repeat = function(times) {
       var string = this.toString(),
         result = JSZ.EMPTY_STRING,
