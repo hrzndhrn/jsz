@@ -31,6 +31,7 @@ script({
     newGame: function() {
       // Set randomly the one of the classes on or off to the lights.
       this._lights.forEach(function (element) {
+        element.removeCssClass('on', 'off');
         element.addCssClass(jsz.util.random.array(['on', 'off']));
       }, this);
     },
