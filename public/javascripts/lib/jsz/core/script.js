@@ -4,6 +4,26 @@
 (function() {
   'use strict';
 
+  function isEqual(valueA) {
+    var fun;
+    if (typeof valueA.equal === 'function') {
+      fun = function (valueB) {
+        return valueA.equal(valueB);
+      };
+    }
+    else {
+      fun = function (valueB) {
+        return valueA === valueB;
+      };
+    }
+
+    return fun;
+  }
+
+  function isTrue(bool) {
+    return bool === true;
+  }
+
   /**
    * Adds a new script tag to the head of the site.
    */
@@ -20,7 +40,7 @@
       conf.name = uniqueId('SCRIPT');
     }
 
-    script.list[conf.name] = conf;
+    script.map[conf.name] = conf;
 
     // TODO: simplify
     script._addDefaultRequirements(conf.name);
@@ -36,29 +56,21 @@
 
   };
 
-  script.list = {};
+  script.map = {};
 
   script.SLASH = '/';
+  script.PERIOD = '.';
   script.PREFIX_JS = '.js';
 
   script._loadedScriptName = null;
   script._defaultRequirements = [];
   script._base = null;
   script._counter = 0;
+  script._srcToNameRegExp = new RegExp('^http.*//[^/]*.(.*).js$');
 
-  script._preloaded = (function() {
-    var scriptElements = document.getElementsByTagName('script'),
-      n = scriptElements.length, i = 0, preloaded = [];
+  script._preloaded = [];
 
-    for (i; i < n; i++) {
-      var src = scriptElements.item(i).src;
-      if (src !== '') {
-        preloaded.push(src);
-      }
-    }
 
-    return preloaded;
-  }());
 
   /**
    * @todo refactoring
@@ -67,6 +79,41 @@
     if (config.base !== undefined) {
       this._setBase(config.base);
     }
+
+    script._preloaded = (function() {
+      var scriptElements = document.getElementsByTagName('script'),
+        n = scriptElements.length, i = 0, preloaded = [];
+
+      for (i; i < n; i++) {
+        var src = scriptElements.item(i).src;
+        if (src !== '') {
+          var name = script._srcToNameRegExp.exec(src);
+          if (name !== null) {
+            preloaded.push(name[1]
+              .replace( new RegExp(script.SLASH,'g'), script.PERIOD)
+              .substr(script._base.length - 1)
+            );
+          }
+        }
+      }
+
+      return preloaded;
+    }());
+
+    if (config.preloaded !== undefined) {
+      script._preloaded = script._preloaded.concat(config.preloaded);
+    }
+
+    script._preloaded.forEach(function(preload) {
+      if (script.map[preload] === undefined) {
+        script.map[preload] = {
+          default: false,
+          loaded: true,
+          evaluated: true,
+          preloaded: true
+        };
+      }
+    });
   };
 
   script._setBase = function(base) {
@@ -87,8 +134,12 @@
 
     document.head.appendChild(scriptTag);
 
-    var conf = {loaded: false, evaluated: false};
-    script.list[scriptName] = conf;
+    var conf = {
+      loaded: false,
+      evaluated: false,
+      preloaded: false
+    };
+    script.map[scriptName] = conf;
     return conf;
   };
 
@@ -104,7 +155,7 @@
   };
 
   script._defaultRequirement = function (scriptName) {
-    var scriptObject = script.list[scriptName];
+    var scriptObject = script.map[scriptName];
 
     if (scriptObject.default === undefined) {
       scriptObject.default = script._isDefault(scriptName);
@@ -115,10 +166,10 @@
   };
 
   script._addDefaultRequirements = function (scriptName) {
-    var scriptObject = script.list[scriptName];
+    var scriptObject = script.map[scriptName];
 
     this._defaultRequirements.forEach(function (requirement) {
-      var requirementObject = script.list[requirement];
+      var requirementObject = script.map[requirement];
       if (!requirementObject.require.some(isEqual(scriptName))) {
         scriptObject.require.push(requirement);
       }
@@ -127,7 +178,7 @@
 
   script._evalAll = function () {
     script._evalStack = [];
-    Object.keys(script.list).forEach(script._eval);
+    Object.keys(script.map).forEach(script._eval);
   };
 
   script._eval = function (scriptName) {
@@ -143,7 +194,7 @@
         script._evalStack.push(scriptName);
       }
 
-      var scriptObject = script.list[scriptName];
+      var scriptObject = script.map[scriptName];
 
       if (scriptObject === undefined) {
         // The script has to be loaded

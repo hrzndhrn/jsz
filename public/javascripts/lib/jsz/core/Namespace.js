@@ -6,6 +6,7 @@
 script({
   name: 'lib.jsz.core.Namespace',
   require: [
+    'lib.jsz.core.main',
     'lib.jsz.core.Function'
   ]
 }, function () {

@@ -2,14 +2,18 @@
  * jsz init
  *
  */
-(function () {
+script({
+  name: 'lib.jsz.core.main'
+}, function () {
   'use strict';
 
+  // Workaround for the safari browser.
   if (console !== undefined) {
-    // console.clear();
+    console.clear();
   }
 
-  /** A namespace for jsz meta-data and configuration.
+  /**
+   * A namespace for jsz meta-data and configuration.
    */
   window._jsz_ = {
     classes: {},
@@ -111,10 +115,26 @@
     return uniteFun;
   };
 
+  /**
+   * A convenience function for Function.apply.
+   * @param {Fucntion} fun
+   * @param {Object} [scope]
+   * @param {Array} [args]
+   * @returns {*}
+   */
   window.apply = function (fun, scope, args) {
-    if (scope === undefined) {
-      scope = window;
+    if ( arguments.length === 2)  {
+      if (Array.isArray(scope)) {
+        args = scope;
+        scope = window;
+      }
     }
+    else {
+      if (scope === undefined) {
+        scope = window;
+      }
+    }
+
     return fun.apply(scope, args);
   };
 
@@ -143,7 +163,7 @@
   };
 
   /**
-   *
+   * A convenience function for Array.every and Array.some.
    * @param valueA
    * @returns {function}
    */
@@ -164,7 +184,7 @@
   };
 
   /**
-   *
+   * A convenience function for Array.every and Array.some.
    * @param valueA
    * @returns {function}
    */
@@ -193,4 +213,4 @@
     var name = this._jsz_.className;
     return '[' + path + '.' + name + ' Class]';
   };
-})();
+});
