@@ -15,3 +15,5 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.0")
 addSbtPlugin("com.typesafe.sbt" % "sbt-mocha" % "1.1.0")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-stylus" % "1.0.0")
+
+// addSbtPlugin("hrzndhrn" % "sbt-example" % "0.0.1-SNAPSHOT")
