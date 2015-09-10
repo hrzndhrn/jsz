@@ -16,7 +16,7 @@ script({name: 'lib.jsz.core.Function'}, function () {
    */
   Function.prototype.def = function (object) {
     this._jsz_.properties = {};
-    var key, enumerable, writeable, isFunction, isNoop;
+    var key, isFunction, isNoop;
     for (key in object) {
       if (object.hasOwnProperty(key)) {
         // Set new property to class.
