@@ -1,4 +1,7 @@
-script({name:'demo.jsz.loadedScripts'}, function () {
+script({
+  name:'demo.jsz.loadedScripts',
+  onReadyState: READY_STATE.COMPLETE
+}, function () {
   'use strict';
 
   $id('scripts').html(

@@ -7,11 +7,6 @@ script({
 }, function () {
   'use strict';
 
-  // Workaround for the safari browser.
-  if (console !== undefined) {
-    console.clear();
-  }
-
   /**
    * A namespace for jsz meta-data and configuration.
    */
@@ -22,6 +17,7 @@ script({
     sealObjects: true,
     config: {}
   };
+
 
   // === jsz-Configuration =====================================================
   // If jsz defined then it holds some configurations for jsz. This var will be

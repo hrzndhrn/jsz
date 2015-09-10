@@ -23,5 +23,7 @@ includeFilter in (Assets, StylusKeys.stylus) := "*.styl"
 
 javaOptions := Seq("-Duser.timezone=GMT")
 
+// pipelineStages in Assets := Seq(example)
+
 // fork in run := true
 

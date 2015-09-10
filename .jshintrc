@@ -109,6 +109,7 @@
       "noop": true,
       "uniqueId": true,
       "$http": true,
-      "object": true
+      "object": true,
+      "READY_STATE": true
     }
 }

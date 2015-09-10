@@ -84,6 +84,12 @@ jsz = {
 
   };
 
+  window.READY_STATE = {
+    LOADING: 'loading',
+    INTERACTIVE: 'interactive',
+    COMPLETE: 'complete'
+  };
+
   script.map = {};
 
   script.SLASH = '/';
@@ -209,6 +215,8 @@ jsz = {
     Object.keys(script.map).forEach(script._eval);
   };
 
+  document.onreadystatechange = script._evalAll
+
   script._eval = function (scriptName) {
     var evaluated = false;
 
@@ -229,20 +237,24 @@ jsz = {
         scriptObject = script.load(scriptName);
       }
       else if (scriptObject.loaded && !scriptObject.evaluated) {
+        // The script object is available. Try to evaluate script.
         var evaluate = false;
-        if (scriptObject.require === undefined) {
-          evaluate = true;
-        }
-        else {
-          evaluate = scriptObject.require.map(script._eval).every(isTrue);
-        }
 
-        if (evaluate) {
-          if (scriptObject.fun !== undefined) {
-            scriptObject.fun.apply(window);
+        if (script._isReadyToEval(scriptObject)) {
+          if (scriptObject.require === undefined) {
+            evaluate = true;
           }
-          scriptObject.evaluated = true;
-          delete scriptObject.fun;
+          else {
+            evaluate = scriptObject.require.map(script._eval).every(isTrue);
+          }
+
+          if (evaluate) {
+            if (scriptObject.fun !== undefined) {
+              scriptObject.fun.apply(window);
+            }
+            scriptObject.evaluated = true;
+            delete scriptObject.fun;
+          }
         }
       }
 
@@ -251,6 +263,40 @@ jsz = {
     }
 
     return evaluated;
+  };
+
+  /**
+   * This function checks the script definition object for the onReadyState key.
+   * If a onReadyState key available then the function return true if the
+   * document.readyState equal or higher.
+   *  # | onReadyState | document.readyState | return
+   * ---+--------------+---------------------+--------
+   *  1 | loading      | any                 | true
+   *  2 | interactive  | loading             | false
+   *  3 | complete     | loading             | false
+   *  4 | interactive  | interactive         | true
+   *  5 | complete     | interactive         | false
+   *  6 | any          | complete            | true
+   *
+   * @param {Object} scriptObject
+   * @private
+   */
+  script._isReadyToEval = function(scriptObject) {
+    var docState = document.readyState,
+      scriptState = scriptObject.onReadyState,
+      isReadyToEval = false;
+
+    if (scriptState === READY_STATE.LOADING || docState === READY_STATE.COMPLETE) {
+      // cases: #1, #6
+      isReadyToEval = true;
+    }
+    else if (scriptState === docState) {
+      // case: #4
+      isReadyToEval = true;
+    }
+    // else: isReadyToEval = false; cases: #2, #3, #5
+
+    return isReadyToEval;
   };
 
   script._isDefault = function (scriptName) {
@@ -337,11 +383,6 @@ script({
   name: 'lib.jsz.core.main'
 }, function () {
   'use strict';
-
-  // Workaround for the safari browser.
-  if (console !== undefined) {
-    console.clear();
-  }
 
   /**
    * A namespace for jsz meta-data and configuration.
@@ -905,7 +946,7 @@ script({name: 'lib.jsz.core.Function'}, function () {
    */
   Function.prototype.def = function (object) {
     this._jsz_.properties = {};
-    var key, enumerable, writeable, isFunction, isNoop;
+    var key, isFunction, isNoop;
     for (key in object) {
       if (object.hasOwnProperty(key)) {
         // Set new property to class.
