@@ -94,7 +94,7 @@ script({
      * @returns {Window.JSZ.EMPTY_STRING|*}
      * @private
      */
-    _prepareUriData: function(data) {
+    _prepareUriData: function() {
       var uriExtension = JSZ.EMPTY_STRING;
 
       return uriExtension;
@@ -168,9 +168,12 @@ script({
       this._onSuccess(data);
     },
 
-    _onResponseFailure: function(request) {
-
-    }
+    /**
+     * @todo implementation
+     * @param request
+     * @private
+     */
+    _onResponseFailure: function() {}
 
   }).static({
 

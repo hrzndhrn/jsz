@@ -37,7 +37,8 @@
     }
 
     if (conf.name === undefined) {
-      conf.name = uniqueId('SCRIPT');
+      conf.name = 'SCRIPT:' + script._number;
+      script._number++;
     }
 
     script.map[conf.name] = conf;
@@ -76,7 +77,7 @@
 
   script._preloaded = [];
 
-
+  script._number = 0;
 
   /**
    * @todo refactoring
@@ -187,7 +188,7 @@
     Object.keys(script.map).forEach(script._eval);
   };
 
-  document.onreadystatechange = script._evalAll
+  document.onreadystatechange = script._evalAll;
 
   script._eval = function (scriptName) {
     var evaluated = false;
@@ -258,7 +259,8 @@
       scriptState = scriptObject.onReadyState,
       isReadyToEval = false;
 
-    if (scriptState === READY_STATE.LOADING || docState === READY_STATE.COMPLETE) {
+    if (scriptState === READY_STATE.LOADING ||
+      docState === READY_STATE.COMPLETE) {
       // cases: #1, #6
       isReadyToEval = true;
     }

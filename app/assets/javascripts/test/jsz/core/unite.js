@@ -19,15 +19,15 @@ script({
 
         this._getX = function() {
           return this.x;
-        }
+        };
 
         this._incX = function() {
           this.x++;
-        }
+        };
 
         this._getThis = function() {
           return this;
-        }
+        };
       },
       tests: [
         {name: 'create'},
@@ -65,7 +65,7 @@ script({
         this._getArgs = function(a,b) {
           return {
             a:a, b:b
-          }
+          };
         };
       },
       tests: [

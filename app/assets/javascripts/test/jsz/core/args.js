@@ -13,7 +13,8 @@ script({
       setup: function () {
         this.assert = jsz.unit.assert;
 
-        this.fn = function(name, fn, scope) {
+        this.fn = function() {
+          // function(name, fn, scope)
           return jsz.args(arguments,
             {name: 'name', type: String, optional: true, default: 'bla'},
             {name: 'fn', type: Function},
@@ -63,7 +64,8 @@ script({
       setup: function () {
         this.assert = jsz.unit.assert;
 
-        this.fn = function(fn, scope, args, message) {
+        this.fn = function() {
+          // function(fn, scope, args, message)
           return jsz.args(arguments,
             {name: 'fn', type: Function},
             {name: 'scope', type: Object, optional: true, default: window},

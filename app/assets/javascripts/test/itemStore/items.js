@@ -84,9 +84,9 @@ script({
       name: 'ItemStore: get an item',
       timeout: jsz.time.second().millis(),
       setup: function (testCase) {
-        this.assert = jsz.unit.assert;
-        this.successList = testCase.callback('successList');
-        this.successGet = testCase.callback('successGet');
+          this.assert = jsz.unit.assert;
+          this.successList = testCase.callback('successList');
+          this.successGet = testCase.callback('successGet');
       },
       tests: [
         {name: 'requestList'},

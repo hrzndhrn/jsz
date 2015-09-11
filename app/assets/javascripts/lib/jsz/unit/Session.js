@@ -126,37 +126,37 @@ script({
     }
 
   }).static({
-      _sessions: {},
-      DEFAULT_SESSION_NAME: 'default',
 
-      getDefaultSession: function() {
-        return this.get(this.DEFAULT_SESSION_NAME);
-      },
-    
-      get: function(name) {
-        if (this._sessions[name] === undefined) {
-          this._sessions[name] =
-            new jsz.unit.Session(name);
-        }
-        return this._sessions[name];
-      },
+    _sessions: {},
+    DEFAULT_SESSION_NAME: 'default',
 
-      add: function (testCase) {
-        return this.getDefaultSession().add(testCase);
-      },
+    getDefaultSession: function() {
+      return this.get(this.DEFAULT_SESSION_NAME);
+    },
 
-      run: function (testName) {
-        return this.getDefaultSession().run(testName);
-      },
-
-      isSuccessful: function() {
-        return this.getDefaultSession().isSuccessful();
-      },
-
-      log: function() {
-        return this.getDefaultSession().log();
+    get: function(name) {
+      if (this._sessions[name] === undefined) {
+        this._sessions[name] =
+          new jsz.unit.Session(name);
       }
+      return this._sessions[name];
+    },
+
+    add: function (testCase) {
+      return this.getDefaultSession().add(testCase);
+    },
+
+    run: function (testName) {
+      return this.getDefaultSession().run(testName);
+    },
+
+    isSuccessful: function() {
+      return this.getDefaultSession().isSuccessful();
+    },
+
+    log: function() {
+      return this.getDefaultSession().log();
+    }
 
   });
-
 });

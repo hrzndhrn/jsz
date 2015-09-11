@@ -248,9 +248,8 @@ script({
       jsz.dom.setStyle(this._element, style, value);
     },
 
-    setStyles: function(object) {
-      // TODO: implement setStyles
-    },
+    // TODO: implement setStyles
+    // setStyles: function(object) {},
 
     hasType: function () {
       return Boolean(

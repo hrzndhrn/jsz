@@ -23,7 +23,8 @@ script({
 
     /** The size of the game board. */
     _gameBoardSize: Object.freeze({
-      width: 5, height: 5
+      width: 5,
+      height: 5
     }),
 
     _lights: null,
