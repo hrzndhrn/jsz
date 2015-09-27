@@ -3,7 +3,8 @@ script({
   require: [
     'lib.jsz.core.Array',
     'lib.jsz.core.Namespace',
-    'lib.jsz.core.Object'
+    'lib.jsz.core.Object',
+    'lib.jsz.core.HTMLElement'
   ]
 }, function () {
   'use strict';

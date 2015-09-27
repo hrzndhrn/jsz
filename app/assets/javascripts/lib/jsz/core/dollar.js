@@ -3,8 +3,7 @@ script({
   name: 'lib.jsz.core.dollar',
   require: [
     'lib.jsz.core.Array',
-    'lib.jsz.core.HTMLElement',
-    'lib.jsz.core.HTMLElementsList'
+    'lib.jsz.core.HTMLElement'
   ]
 }, function () {
   'use strict';
@@ -56,7 +55,7 @@ script({
    * @returns {jsz.HTMLElement}
    */
   window.$$ = function (selectors, htmlElement) {
-    var result = jsz.HTMLElementsList.empty,
+    var result = [],
       root = null;
 
     if (htmlElement === undefined) {
@@ -70,9 +69,8 @@ script({
     }
 
     if (root !== null) {
-      result = new jsz.HTMLElementsList(
-        Array.from(root.querySelectorAll(selectors))
-          .map(jsz.HTMLElement.build));
+      result = Array.from(root.querySelectorAll(selectors))
+        .map(jsz.HTMLElement.build);
     }
 
     return result;

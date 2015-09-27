@@ -11,10 +11,10 @@ script({
     // Get all lights or get all HTML elements with the class light.
     this._lights = $$('.light');
 
-    // Add a click listener to all lights.
-    this._lights.onClick(this._onClick, this, {
-      returnType: 'element' // Call the event listener with the target as
-                            // as argument.
+    // Add a click listener to the board for all lights.
+    $id('board').onClick(this._onClick, this, {
+      returnType: 'target' // Call the event listener with the target as
+                            // argument.
     });
 
     this.newGame();
@@ -45,8 +45,10 @@ script({
     _onClick: function (element) {
       // Get neighbours of the clicked element and toggle lights for them.
       // The list contains also the clicked element.
-      this._neighbours(this._lights.indexOf(element)).forEach(
-        this._toogleLight, this);
+      var lightIndex = element.indexInList(this._lights);
+      if (lightIndex > -1) {
+        this._neighbours(lightIndex).forEach( this._toogleLight, this);
+      }
     },
 
     /**
@@ -55,7 +57,7 @@ script({
      * @private
      */
     _toogleLight: function (index) {
-      this._lights.get(index).toggleCssClass('on', 'off');
+      this._lights[index].toggleCssClass('on', 'off');
     },
 
     /**

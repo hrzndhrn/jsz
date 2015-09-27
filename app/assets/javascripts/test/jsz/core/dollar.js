@@ -36,22 +36,22 @@ script({
 
         bySelectorAll: function() {
           var elements = $$('span.sub');
-          this.assert.isInstanceOf(elements, jsz.HTMLElementsList);
-          this.assert.isEqual(elements.size(), 3);
+          this.assert.isInstanceOf(elements, Array);
+          this.assert.isEqual(elements.length, 3);
         },
 
         bySelectorAllRoot: function() {
           var elementsA = $id('sub').$$('span');
-          this.assert.isInstanceOf(elementsA, jsz.HTMLElementsList);
-          this.assert.isEqual(elementsA.size(), 2);
+          this.assert.isInstanceOf(elementsA, Array);
+          this.assert.isEqual(elementsA.length, 2);
 
           var elementsB = $$('#sub span');
-          this.assert.isInstanceOf(elementsB, jsz.HTMLElementsList);
-          this.assert.isEqual(elementsB.size(), 2);
+          this.assert.isInstanceOf(elementsB, Array);
+          this.assert.isEqual(elementsB.length, 2);
 
           this.assert.isEqualArray(
-            elementsA.get().map(jsz.HTMLElement.get),
-            elementsB.get().map(jsz.HTMLElement.get)
+            elementsA.map(jsz.HTMLElement.get),
+            elementsB.map(jsz.HTMLElement.get)
           );
         }
 

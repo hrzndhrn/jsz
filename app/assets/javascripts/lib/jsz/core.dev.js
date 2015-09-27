@@ -392,7 +392,6 @@ jsz = {
       'lib.jsz.core.jsz',             // The jsz-namespace.
       'lib.jsz.core.Object',          // jsz.Object and ext. for the built-in.
       'lib.jsz.core.HTMLElement',     // A wrapper for the HTMLElements.
-      'lib.jsz.core.HTMLElementsList',// A wrapper for a list ofr HTMLElements.
       'lib.jsz.core.dollar',          // Functions: $, $id, $$, ...
       'lib.jsz.core.dom',             // Functions to manipulate the DOM.
       'lib.jsz.core.Error',           // The jsz.Error class.

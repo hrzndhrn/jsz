@@ -27,3 +27,6 @@ javaOptions := Seq("-Duser.timezone=GMT")
 
 // fork in run := true
 
+
+
+fork in run := true

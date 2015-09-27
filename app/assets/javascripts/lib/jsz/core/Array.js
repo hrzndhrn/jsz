@@ -109,7 +109,7 @@ script({name:'lib.jsz.core.Array'}, function () {
           item;
 
         while (index < length && item === undefined) {
-          if (callback(list[index]) === true) {
+          if (callback(list[index], index, list) === true) {
             item = list[index];
           }
           index++;
@@ -119,6 +119,53 @@ script({name:'lib.jsz.core.Array'}, function () {
       }
     });
   }
+
+  if (Array.findIndex === undefined) {
+    /**
+     * This method returns the index of the first item of the array that match
+     * the specified predicate.
+     *
+     * @param {Function} predicate
+     * @param {Object} scope
+     * @returns {*}
+     * ------------------------------------------------------------------------
+     * @compatibility
+     * @timestamp 2015-09-27
+     * @reference {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript
+     *  /Reference/Global_Objects/Array/find#Browser_compatibility}
+     * @ES 6
+     * @FF 25
+     * @CH 45
+     * @IE not supported
+     * @OP not supported
+     * @SF 7.1
+     */
+    Object.defineProperty(Array.prototype, 'findIndex', {
+      enumerable: false,
+      configurable: false,
+      writable: false,
+      value: function (predicate, scope) {
+        var callback = unite(predicate, scope);
+
+        var list = this,
+          index = 0,
+          length = list.length,
+          item;
+
+        while (index < length && item === undefined) {
+          if (callback(list[index], index, list) === true) {
+            item = list[index];
+          }
+          else {
+            index++;
+          }
+        }
+
+        return item === undefined ? -1 : index;
+      }
+    });
+  }
+
 
   /**
    * Array.isEmpty returns true if an array contains no values.

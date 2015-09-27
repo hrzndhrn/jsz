@@ -214,6 +214,19 @@ script({
       }, this);
     },
 
+    /**
+     * This methods returns the index of this element in a given list.
+     * @param {HTMLElement[]} list
+     * @returns {Integer} index The index of the HTMLElement in the given list
+     *  or -1.
+     */
+    indexInList: function(list) {
+      var thisElement = this._element;
+      return list.findIndex( function(htmlElement) {
+        return htmlElement._element === thisElement;
+      });
+    },
+
     setJszAttributes: function(attributes) {
       Object.keys(attributes).forEach(function(name) {
         var value = attributes[name];
