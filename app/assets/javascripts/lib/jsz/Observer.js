@@ -80,8 +80,8 @@ script({
       }, this);
 
       this._callback_ = {
-        setter: unite(config.callback.setter, config.callback.scope),
-        getter: unite(config.callback.getter, config.callback.scope)
+        setter: bind(config.callback.setter, config.callback.scope),
+        getter: bind(config.callback.getter, config.callback.scope)
       };
 
       // Define the properties for the observed object.

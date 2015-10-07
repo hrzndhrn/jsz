@@ -21,7 +21,7 @@ class Test extends Controller {
       case "jsz/core/attributes" => Ok(views.html.test.jsz.core.attributes())
       case "jsz/core/default" => Ok(views.html.test.jsz.core.default())
       case "jsz/core/args" => Ok(views.html.test.jsz.core.args())
-      case "jsz/core/unite" => Ok(views.html.test.jsz.core.unite())
+      case "jsz/core/bind" => Ok(views.html.test.jsz.core.bind())
       case "jsz/core/json" => Ok(views.html.test.jsz.core.JSON())
       case "jsz/httpRequest" => Ok(views.html.test.jsz.httpRequest())
       case "jsz/observer" => Ok(views.html.test.jsz.observer.observer())

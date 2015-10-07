@@ -24,11 +24,11 @@ script({
       this._uri = jsz.default(config.uri, JSZ.EMPTY_STRING);
       this._async = jsz.default(config.async, true);
       this._dataType = jsz.default(config.dataType, 'json');
-      this._onSuccess = unite(
+      this._onSuccess = bind(
         jsz.default(config.onSuccess, noop), config.scope);
-      this._onFailure = unite(
+      this._onFailure = bind(
         jsz.default(config.onFailure, noop), config.scope);
-      this._onLoading = unite(
+      this._onLoading = bind(
         jsz.default(config.onLoading, noop), config.scope);
       this._data = config.data;
       this._request = null;
@@ -74,7 +74,7 @@ script({
     },
 
     onSuccess: function(fn, scope) {
-      this._onSuccess = unite(fn, scope);
+      this._onSuccess = bind(fn, scope);
       return this;
     },
 

@@ -27,9 +27,9 @@ script({name: 'lib.jsz.util.TimerTask'}, function () {
       this.name = name;
 
       /**
-       * @member {jsz.unite}
+       * @member {Function}
        */
-      this._callback = unite(config.callback, config.scope);
+      this._callback = bind(config.callback, config.scope);
       /**
        * The delay in milliseconds or -1 for inactivity.
        * @member {Integer}

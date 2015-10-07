@@ -75,40 +75,18 @@ script({
   };
 
   /**
-   * This functions joins an scope with a function. In most cases this will be
-   * an object and one of his methods.
+   * This functions binds a function to a scope.
    */
-  window.unite = function (fun, scope) {
-    var uniteFun;
-
+  window.bind = function (fun, scope) {
     if (fun === undefined) {
       fun = noop;
     }
 
-    if (fun.isUnited) {
-      uniteFun = fun;
-    }
-    else {
-      if (scope === undefined) {
-        scope = window;
-      }
-
-      // The function which the original function and the scope unite.
-      uniteFun = function () {
-        // This will be executed when the unite is called.
-        var args = arguments;
-        if (arguments[0] && jsz.isArguments(arguments[0])) {
-          args = arguments[0];
-        }
-        return fun.apply(scope, args);
-      };
-
-      uniteFun.isUnited = true;
-
-      uniteFun = Object.freeze(uniteFun);
+    if (scope === undefined) {
+      scope = window;
     }
 
-    return uniteFun;
+    return fun.bind( scope);
   };
 
   /**

@@ -65,7 +65,7 @@ script({
     _onReady: noop,
 
     onReady: function(fun, scope) {
-      this._onReady = unite(fun, scope);
+      this._onReady = bind(fun, scope);
     },
 
     run: function() {

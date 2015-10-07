@@ -17,13 +17,11 @@ script({
 
         this.setter = function(key, value) {
           var string = 'set: ' + key + ' = ' + value;
-          log.debug(string);
           this.history.push(string);
         };
 
         this.getter = function(key, value) {
           var string = 'get: ' + key + ' = ' + value;
-          log.debug(string);
           this.history.push(string);
         };
       },
@@ -107,13 +105,11 @@ script({
 
         this.setter = function(key, value) {
           var string = 'set: ' + key + ' = ' + value;
-          log.debug(string);
           this.history.push(string);
         };
 
         this.getter = function(key, value) {
           var string = 'get: ' + key + ' = ' + value;
-          log.debug(string);
           this.history.push(string);
         };
       },
@@ -199,13 +195,11 @@ script({
 
         this.setter = function(key, value) {
           var string = 'set: ' + key + ' = ' + value;
-          log.debug(string);
           this.history.push(string);
         };
 
         this.getter = function(key, value) {
           var string = 'get: ' + key + ' = ' + value;
-          log.debug(string);
           this.history.push(string);
         };
       },

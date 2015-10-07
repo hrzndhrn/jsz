@@ -61,7 +61,7 @@ script({
      * @returns {jsz.unit.Session}
      */
     onReady: function(fn, scope) {
-      this._onReady = unite(fn, scope);
+      this._onReady = bind(fn, scope);
       return this;
     },
 

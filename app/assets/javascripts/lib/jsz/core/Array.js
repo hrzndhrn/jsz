@@ -101,7 +101,7 @@ script({name:'lib.jsz.core.Array'}, function () {
       configurable: false,
       writable: false,
       value: function (predicate, scope) {
-        var callback = unite(predicate, scope);
+        var callback = bind(predicate, scope);
 
         var list = this,
           index = 0,
@@ -145,7 +145,7 @@ script({name:'lib.jsz.core.Array'}, function () {
       configurable: false,
       writable: false,
       value: function (predicate, scope) {
-        var callback = unite(predicate, scope);
+        var callback = bind(predicate, scope);
 
         var list = this,
           index = 0,

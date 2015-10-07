@@ -1,5 +1,5 @@
 script({
-  name: 'test.jsz.core.unite',
+  name: 'test.jsz.core.bind',
   require: [
     'lib.jsz.unit',
     'lib.jsz.log'
@@ -9,7 +9,7 @@ script({
 
   jsz.unit.Session.get('jsz.core').add(
     new jsz.unit.TestCase({
-      name: 'unite',
+      name: 'bind',
       setup: function () {
         this.assert = jsz.unit.assert;
 
@@ -36,13 +36,13 @@ script({
       methods: {
 
         create: function() {
-          this.getX = unite(this._getX, this.obj);
+          this.getX = bind(this._getX, this.obj);
           this.assert.isTrue(jsz.isFunction(this.getX));
 
-          this.incX = unite(this._incX, this.obj);
+          this.incX = bind(this._incX, this.obj);
           this.assert.isTrue(jsz.isFunction(this.incX));
 
-          this.getThis = unite(this._getThis);
+          this.getThis = bind(this._getThis);
           this.assert.isTrue(jsz.isFunction(this.getThis));
         },
 
@@ -58,7 +58,7 @@ script({
     })
   ).add(
     new jsz.unit.TestCase({
-      name: 'unite',
+      name: 'bind',
       setup: function () {
         this.assert = jsz.unit.assert;
 
@@ -74,10 +74,10 @@ script({
       methods: {
 
         create: function() {
-          this.getArgs1 = unite(this._getArgs);
+          this.getArgs1 = bind(this._getArgs);
           this.assert.isTrue(jsz.isFunction(this.getArgs1));
 
-          this.getArgs2 = unite(this._getArgs, this);
+          this.getArgs2 = bind(this._getArgs, this);
           this.assert.isTrue(jsz.isFunction(this.getArgs2));
         },
 
@@ -113,16 +113,6 @@ script({
           this.assert.isEqual(args2.a[0], 1);
           this.assert.isEqual(args2.a[1], 2);
           this.assert.isEqual(args2.b, undefined);
-        },
-
-        call04: function() {
-          var args1 = this.getArgs1([1,2].toArguments());
-          this.assert.isEqual(args1.a, 1);
-          this.assert.isEqual(args1.b, 2);
-
-          var args2 = this.getArgs2([1,2].toArguments());
-          this.assert.isEqual(args2.a, 1);
-          this.assert.isEqual(args2.b, 2);
         }
 
       }

@@ -170,7 +170,7 @@ script({
       };
 
       if (scope instanceof jsz.Object || scope instanceof _jsz_.Namespace) {
-        object.callback = unite(object.callback, scope);
+        object.callback = bind(object.callback, scope);
         object.config = jsz.default(config, {});
       }
       else {

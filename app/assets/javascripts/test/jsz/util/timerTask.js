@@ -60,7 +60,7 @@ script({
         this.callbackCount = 1;
         this.times = 3;
 
-        this.callbackInterval = unite( function() {
+        this.callbackInterval = bind( function() {
           log.debug(this.testCaseName + ' - calllbackInterval');
 
           if (this.callbackCount < this.times) {

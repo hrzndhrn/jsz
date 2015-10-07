@@ -72,7 +72,7 @@
     "$": true,
     "$$": true,
     "$id": true,
-    "unite": true,
+    "bind": true,
     "module": true,
     "namespace": true,
     "log": true,
