@@ -22,24 +22,27 @@ script({
    * Returns a reference to to the first element that matches the given
    * selectors.
    *
-   * @param {String} selectors is a group of selectors to match on.
+   * @param {String} [selectors] is a group of selectors to match on.
    * @param {jsz.HTMLElement} [htmlElement=document] is the root element on
    *   which the query starts.
-   * @returns {jsz.HTMLElement}
+   * @returns {jsz.HTMLElement} Used without parameters, an empty element will
+   *   be returned..
    */
   window.$ = function (selectors, htmlElement) {
     var result = jsz.HTMLElement.empty,
       root = null;
 
-    if (htmlElement === undefined) {
-      root = document;
-    }
-    else if (!htmlElement.isEmpty()) {
-      root = htmlElement.get();
-    }
+    if (arguments.length > 0) {
+      if (htmlElement === undefined) {
+        root = document;
+      }
+      else if (!htmlElement.isEmpty()) {
+        root = htmlElement.get();
+      }
 
-    if (root !== null) {
-      result = new jsz.HTMLElement(root.querySelector(selectors));
+      if (root !== null) {
+        result = new jsz.HTMLElement(root.querySelector(selectors));
+      }
     }
 
     return result;

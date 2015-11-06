@@ -16,6 +16,7 @@ class Demo extends Controller {
       case "testSession" => Ok(views.html.demo.jsz.unit.testSession())
       case "loadedScripts/preload" => Ok(views.html.demo.jsz.loadedScripts.pre())
       case "loadedScripts/dev" => Ok(views.html.demo.jsz.loadedScripts.dev())
+      case "ui/box" => Ok(views.html.demo.jsz.ui.box())
       case _ => NotFound
     }
   }
