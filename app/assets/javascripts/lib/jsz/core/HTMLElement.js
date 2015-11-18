@@ -91,6 +91,10 @@ script({
      * @returns {*}
      */
     append: function(element) {
+      if ( jsz.ui && element instanceof jsz.ui.Component) {
+        element = element.getElement();
+      }
+
       return this._apply(HTMLElement.prototype.appendChild, [element.get()]);
     },
 
@@ -280,8 +284,11 @@ script({
     },
 
     getCssClasses: function () {
-      return this._apply(
-        HTMLElement.prototype.getAttribute, ['class']).split(JSZ.BLANK);
+      log.dir(this);
+      var classes = this._apply(
+        HTMLElement.prototype.getAttribute, ['class']);
+
+      return classes ? classes.split(JSZ.BLANK) : [];
     },
 
     addCssClass: function (cssClass) {
@@ -338,6 +345,24 @@ script({
       );
     },
 
+    getContent: function() {
+      if (this.isEmpty()) {
+        return null;
+      }
+      else {
+       return this._element.content;
+      }
+    },
+
+    import: function( template) {
+      log.debug('import');
+      var clone = document.importNode( template.getContent(), true);
+      return this._apply(
+        HTMLElement.prototype.appendChild, [
+          clone
+        ]);
+    },
+
     /**
      * Adds an event listener of type click to the element.
      */
@@ -359,7 +384,7 @@ script({
     return new jsz.HTMLElement(element);
   };
 
-  jsz.HTMLElement.make = function (tagName, attributes, content) {
+  jsz.HTMLElement.create = function (tagName, attributes, content) {
     if ( arguments.length === 1) {
       attributes = {};
       content = JSZ.EMPTY_STRING;

@@ -79,4 +79,11 @@ script({
     return result;
   };
 
+
+  window.$jsz = function( name, value, htmlElement) {
+    var selector = '[data-jsz-' + name + '="' + value + '"]';
+    return $(selector, htmlElement);
+  };
+
+
 });

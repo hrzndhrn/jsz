@@ -15,7 +15,7 @@ script({
     element: $(),
 
     Object: function() {
-      log.debug('conctructor Object');
+      log.debug('>>>>>>>>>> conctructor Object');
     }
   });
 

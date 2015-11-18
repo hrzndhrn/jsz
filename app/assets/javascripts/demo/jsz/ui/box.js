@@ -9,5 +9,8 @@ script({
   'use strict';
 
   log.debug('demo.jsz.ui.box');
+  var box = new jsz.ui.Box();
 
+  $id('panel2').append(box);
+   
 });

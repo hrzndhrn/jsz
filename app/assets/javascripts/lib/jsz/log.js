@@ -129,14 +129,14 @@ script({name: 'lib.jsz.log'}, function () {
           }
         }
         else {
-          var row = jsz.HTMLElement.make(
+          var row = jsz.HTMLElement.create(
             'div', {class:[logFunctionName]});
           if (showLocation) {
             row.append(
-              jsz.HTMLElement.make('span', {class:'location'}, location));
+              jsz.HTMLElement.create('span', {class:'location'}, location));
           }
           row.append(
-            jsz.HTMLElement.make('span', {class:'message'}, error.message));
+            jsz.HTMLElement.create('span', {class:'message'}, error.message));
           jsz.log.htmlElement.append( row);
         }
       };

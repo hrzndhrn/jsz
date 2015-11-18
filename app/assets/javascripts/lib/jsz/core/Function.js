@@ -39,6 +39,26 @@ script({name: 'lib.jsz.core.Function'}, function () {
       }
     }
 
+    console.log('::::::> ' + this);
+    var extend = this[JSZ.META].extend;
+    while(extend) {
+      var properties = extend[JSZ.META].properties;
+
+      for (key in properties) {
+        if (!this[JSZ.META].properties.hasOwnProperty(key)) {
+          console.debug('---------------------- key > ' + key);
+          this[JSZ.META].properties[key] = properties[key];
+        }
+        else {
+          console.debug('---------------------- key > ' + key);
+        }
+      }
+
+
+      extend = extend[JSZ.META].extend;
+    }
+
+
     return this;
   };
 
@@ -53,6 +73,7 @@ script({name: 'lib.jsz.core.Function'}, function () {
 
     for (key in object) {
       if (object.hasOwnProperty(key)) {
+        console.debug('static: ' + key);
         this[key] = object[key];
       }
     }

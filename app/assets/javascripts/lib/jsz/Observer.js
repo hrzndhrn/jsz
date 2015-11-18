@@ -1,5 +1,5 @@
 /**
- * This script contains teh jsz.Observer.
+ * This script contains the jsz.Observer.
  * @version: 0.1.0
  */
 script({

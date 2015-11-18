@@ -122,7 +122,26 @@ script({
    * class
    * TODO: Documentation
    */
-  _jsz_.Namespace.prototype.class = function (className, extend) {
+  _jsz_.Namespace.prototype.class = function () {
+    var className, extend = null;
+
+    // Check arguments
+    if (arguments.length === 1){
+      className = arguments[0];
+    }
+    else if (arguments.length === 2) {
+      className = arguments[0];
+      if (arguments[1]) {
+        extend = arguments[1];
+      }
+      else {
+        throw new Error('The class ' + className +
+          ' can not extend with undefined.');
+      }
+    }
+    else {
+      throw new Error('Wrong count of parameters for _jsz_.Namespace.Class!');
+    }
 
     var namespace = this,
       inners,
@@ -130,21 +149,17 @@ script({
       fullClassName = namespace._jsz_.path + '.' + className;
 
 
-    // Check arguments count.
-    if (!(arguments.length === 1 || arguments.length === 2)) {
-      throw new Error('Wrong count of parameters for _jsz_.Namespace.Class!');
-    }
-
     // Generate the new class.
     var newClass = _jsz_.Namespace.getNewClass(namespace, className, extend);
 
+    // Add the class to the jsz class direcotry.
     _jsz_.classes[fullClassName] = newClass;
 
     // toString for the class
     newClass.toString = _jsz_.classToString;
 
     // If the class will be extended
-    if (extend === undefined) {
+    if (extend === null) {
       // Every base class extends jsz.Object.
       newClass.prototype = Object.create(jsz.Object.prototype);
     }
@@ -185,6 +200,34 @@ script({
       }
     });
 
+    Object.defineProperty(newClass, 'getClassName', {
+      enumerable: false,
+      configurable: false,
+      writable: false,
+      value: function() {
+        return this[JSZ.META].namespace._jsz_.path +
+          JSZ.DOT + this[JSZ.META].className;
+      }
+    });
+
+    // Looking for a class-constructor
+    console.log('looking for the class-constructor for class ' + className);
+    while(extend) {
+      console.log(extend);
+      if (extend[extend[JSZ.META].className]) {
+        console.log('>>>>> has a class-constructor');
+        console.log(extend[extend[JSZ.META].className]);
+        // apply the class-constructor to the new class
+        // newClass.apply(extend[extend[JSZ.META].className]);
+        extend[extend[JSZ.META].className].apply(newClass);
+        extend = extend[extend[JSZ.META].extend];
+      }
+      else {
+        // go up to the hierarchy
+        extend = extend[extend[JSZ.META].extend];
+      }
+    }
+
     // Add new class to the namespace.
     this[className] = newClass;
 
@@ -213,7 +256,7 @@ script({
         value: {
           className: className,
           namespace: namespace,
-          extend: extension || false,
+          extend: extension || null,
           super: 0 // auxiliary variable for the constructor chain
         }
       });
@@ -229,7 +272,26 @@ script({
       if (newObject[className]) {
         newObject[className].apply(newObject, arguments);
       }
+      else {
+        log.debug('call the super');
+        var superClass = newObject[JSZ.META].extend;
+        while(superClass !== null) {
+          var superClassName = superClass[JSZ.META].className;
+          log.dir(superClass.prototype[superClassName]);
+          if( superClass.prototype[superClassName]) {
+            superClass.prototype[superClassName].apply(newObject, arguments);
+            log.dir(superClass[JSZ.META]);
+            superClass = null;
+          }
+          else {
+            superClass = superClass[JSZ.META].extend;
+          }
+          log.debug('superClassName: ' + superClassName);
+          // superClass = null;
+        }
+      }
 
+      // delete auxiliary variable for the constructor chain
       delete newObject[JSZ.META].super;
 
       if (_jsz_.sealObjects) {
