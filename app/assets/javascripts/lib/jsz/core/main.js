@@ -187,4 +187,24 @@ script({
     var name = this._jsz_.className;
     return '[' + path + '.' + name + ' Class]';
   };
+
+  /**
+   * A little function to check what was added to the global window object.
+   */
+  window._jsz_.addedWindowProperties = function() {
+    // Add an iFrame to get a reference window.
+    var iFrame = document.createElement('iframe');
+    document.body.appendChild(iFrame);
+
+    // Get all property names of the current window and filter all names that
+    // are properties of the reference.
+    var added = Object.getOwnPropertyNames(window).filter( function(name) {
+      return !iFrame.contentWindow.hasOwnProperty(name);
+    });
+
+    // clean up
+    document.body.removeChild(iFrame);
+
+    return added;
+  };
 });
